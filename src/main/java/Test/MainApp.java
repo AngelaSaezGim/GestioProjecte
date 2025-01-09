@@ -17,6 +17,8 @@ import javax.persistence.Query;
 import org.apache.logging.log4j.*;
 import java.util.List;
 
+import Service.Clientas01Service;
+
 /**
  *
  * @author angsaegim
@@ -28,24 +30,21 @@ public class MainApp {
     //patter de pattern = "%d{HH:mm:ss}[%t] %-5level %logger{36}-%msg%n" a pattern="%msg%n"/>/>
     static Logger log = LogManager.getFormatterLogger();
     
-    public static void main(String[] args) {
+   public static void main(String[] args) {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("GestioProjectePU");
-
         EntityManager em = emf.createEntityManager();
-
         EntityTransaction et = em.getTransaction();
-        
-          try {
+
+        try {
             // Iniciar transacción
             et.begin();
             
-            // Mostrar los diferentes elementos
-            showAllClients(em);
-            showAllFacturas(em);
-            showAllOperariosResponsables(em);
-            showAllProyectos(em);
-            showAllTareas(em);
+            // Crear los servicios
+            Clientas01Service clientService = new Clientas01Service(em);
+
+            // Mostrar los diferentes elementos usando los servicios
+            showAllClients(clientService);
 
             // Confirmar la transacción
             et.commit();
@@ -60,22 +59,17 @@ public class MainApp {
         }
     }
     
-    // Método genérico para obtener datos de cualquier entidad
-    private static <T> List<T> ShowAllFrom(EntityManager em, String namedQuery, Class<T> entityClass) {
-        Query query = em.createNamedQuery(namedQuery, entityClass);
-        return query.getResultList();
-    }
-    
-    private static void showAllClients(EntityManager em) {
+    private static void showAllClients(Clientas01Service clientService) {
         log.info("=== MOSTRANDO CLIENTES ===");
-        List<Clientas01> clientes = ShowAllFrom(em, "Clientas01.findAll", Clientas01.class);
+        List<Clientas01> clientes = clientService.getAllClients();
         clientes.forEach(cliente -> log.info(cliente));
         log.info("\n");
     }
 
-    private static void showAllFacturas(EntityManager em) {
+    /*
+    private static void showAllFacturas(Facturaas01Service facturaService) {
         log.info("=== MOSTRANDO FACTURAS ===");
-        List<Facturaas01> facturas = ShowAllFrom(em, "Facturaas01.findAll", Facturaas01.class);
+        List<Facturaas01> facturas = facturaService.getAllFacturas();
         facturas.forEach(factura -> log.info(factura));
         log.info("\n");
     }
@@ -100,5 +94,5 @@ public class MainApp {
         List<Tascaas01> tareas = ShowAllFrom(em, "Tascaas01.findAll", Tascaas01.class);
         tareas.forEach(tarea -> log.info(tarea));
         log.info("\n"); 
-    }
+    }*/
 }

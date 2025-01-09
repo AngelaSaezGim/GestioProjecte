@@ -4,10 +4,21 @@
  */
 package DAO;
 
+import java.util.List;
+
 /**
  *
  * @author angsaegim
  */
-public class GenericDAO {
-    
+public interface GenericDAO<T> {
+
+    void create(T entity);
+
+    void update(T entity);
+
+    void delete(T entity);
+
+    T findById(Object id);
+
+    List<T> findAll();
 }
