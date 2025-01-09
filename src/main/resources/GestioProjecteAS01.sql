@@ -38,13 +38,13 @@ CREATE TABLE IF NOT EXISTS OperariResponsableAS01 (
     FOREIGN KEY (idTasca) REFERENCES TascaAS01(idTasca)
 );
 
-/*5. Factura: IdFactura (PK AI) , IdTasca (NN), IdClient (NN), data (NN), import, observacions */
+/*5. Factura: IdFactura (PK AI) , IdTasca (NN), IdClient (NN), data (NN), importTotal, observacions */
 CREATE TABLE IF NOT EXISTS FacturaAS01 (
     idFactura INT PRIMARY KEY AUTO_INCREMENT,
     idTasca INT NOT NULL,
     idClient INT NOT NULL,
     data DATE NOT NULL,
-    import DOUBLE NOT NULL,
+    importTotal DOUBLE NOT NULL,
     observacions VARCHAR(255),
     FOREIGN KEY (idTasca) REFERENCES TascaAS01(idTasca),
     FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient)
@@ -81,7 +81,7 @@ VALUES
 
 
 -- FACTURA:Emet una factura amb data 31/12/2017 i una altra amb data 30/11/2024.
-INSERT INTO FacturaAS01 (idTasca, idClient, data, import, observacions)
+INSERT INTO FacturaAS01 (idTasca, idClient, data, importTotal, observacions)
 VALUES 
     (1, 1, '2017-12-31', 200, 'Pago de antemano' ),
     (3, 1, '2024-11-30', 256, 'Pago por plazos');

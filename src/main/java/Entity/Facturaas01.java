@@ -31,7 +31,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Facturaas01.findAll", query = "SELECT f FROM Facturaas01 f"),
     @NamedQuery(name = "Facturaas01.findByIdFactura", query = "SELECT f FROM Facturaas01 f WHERE f.idFactura = :idFactura"),
     @NamedQuery(name = "Facturaas01.findByData", query = "SELECT f FROM Facturaas01 f WHERE f.data = :data"),
-    @NamedQuery(name = "Facturaas01.findByImport1", query = "SELECT f FROM Facturaas01 f WHERE f.import = :import"),
+    @NamedQuery(name = "Facturaas01.findByImport1", query = "SELECT f FROM Facturaas01 f WHERE f.importTotal = :importTotal"),
     @NamedQuery(name = "Facturaas01.findByObservacions", query = "SELECT f FROM Facturaas01 f WHERE f.observacions = :observacions")})
 
 public class Facturaas01 implements Serializable {
@@ -50,7 +50,7 @@ public class Facturaas01 implements Serializable {
     private Date data;
 
     @Basic(optional = false)
-    @Column(name = "import")
+    @Column(name = "importTotal")
     private double importTotal;
 
     @Column(name = "observacions")
@@ -73,10 +73,10 @@ public class Facturaas01 implements Serializable {
         this.idFactura = idFactura;
     }
 
-    public Facturaas01(Integer idFactura, Date data, double import1) {
+    public Facturaas01(Integer idFactura, Date data, double importTotal) {
         this.idFactura = idFactura;
         this.data = data;
-        this.importTotal = import1;
+        this.importTotal = importTotal;
     }
 
     public Integer getIdFactura() {
@@ -99,8 +99,8 @@ public class Facturaas01 implements Serializable {
         return importTotal;
     }
 
-    public void setImportTotal(double import1) {
-        this.importTotal = import1;
+    public void setImportTotal(double importTotal) {
+        this.importTotal = importTotal;
     }
 
     public String getObservacions() {

@@ -16,14 +16,16 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.apache.logging.log4j.*;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  *
  * @author angsaegim
  */
+
 public class MainApp {
     
+    //para no mostrar hora y tal y los mensajes molestos he cambiado 
+    //patter de pattern = "%d{HH:mm:ss}[%t] %-5level %logger{36}-%msg%n" a pattern="%msg%n"/>/>
     static Logger log = LogManager.getFormatterLogger();
     
     public static void main(String[] args) {
@@ -37,31 +39,13 @@ public class MainApp {
           try {
             // Iniciar transacción
             et.begin();
-
-            log.info("=== MOSTRANDO CLIENTES ===");
-            Query showAllClients = em.createNamedQuery("Clientas01.findAll");
-            List<Clientas01> clientes = showAllClients.getResultList();
-            clientes.forEach(cliente -> log.info(cliente));
-
-            log.info("=== MOSTRANDO FACTURAS ===");
-            Query showAllFacturas = em.createNamedQuery("Facturaas01.findAll");
-            List<Facturaas01> facturas = showAllFacturas.getResultList();
-            facturas.forEach(factura -> log.info(factura));
-
-            log.info("=== MOSTRANDO OPERARIOS RESPONSABLES ===");
-            Query showAllOperariResponsable = em.createNamedQuery("Operariresponsableas01.findAll");
-            List<Operariresponsableas01> operarios = showAllOperariResponsable.getResultList();
-            operarios.forEach(operario -> log.info(operario));
-
-            log.info("=== MOSTRANDO PROYECTOS ===");
-            Query showAllProjects = em.createNamedQuery("Projecteas01.findAll");
-            List<Projecteas01> proyectos = showAllProjects.getResultList();
-            proyectos.forEach(proyecto -> log.info(proyecto));
-
-            log.info("=== MOSTRANDO TAREAS ===");
-            Query showAllTascas = em.createNamedQuery("Tascaas01.findAll");
-            List<Tascaas01> tareas = showAllTascas.getResultList();
-            tareas.forEach(tarea -> log.info(tarea));
+            
+            // Mostrar los diferentes elementos
+            showAllClients(em);
+            showAllFacturas(em);
+            showAllOperariosResponsables(em);
+            showAllProyectos(em);
+            showAllTareas(em);
 
             // Confirmar la transacción
             et.commit();
@@ -74,5 +58,47 @@ public class MainApp {
             em.close();
             emf.close();
         }
+    }
+    
+    // Método genérico para obtener datos de cualquier entidad
+    private static <T> List<T> ShowAllFrom(EntityManager em, String namedQuery, Class<T> entityClass) {
+        Query query = em.createNamedQuery(namedQuery, entityClass);
+        return query.getResultList();
+    }
+    
+    private static void showAllClients(EntityManager em) {
+        log.info("=== MOSTRANDO CLIENTES ===");
+        List<Clientas01> clientes = ShowAllFrom(em, "Clientas01.findAll", Clientas01.class);
+        clientes.forEach(cliente -> log.info(cliente));
+        log.info("\n");
+    }
+
+    private static void showAllFacturas(EntityManager em) {
+        log.info("=== MOSTRANDO FACTURAS ===");
+        List<Facturaas01> facturas = ShowAllFrom(em, "Facturaas01.findAll", Facturaas01.class);
+        facturas.forEach(factura -> log.info(factura));
+        log.info("\n");
+    }
+
+    private static void showAllOperariosResponsables(EntityManager em) {
+        log.info("=== MOSTRANDO OPERARIOS RESPONSABLES ===");
+        List<Operariresponsableas01> operarios = ShowAllFrom(em, "Operariresponsableas01.findAll", Operariresponsableas01.class);
+        operarios.forEach(operario -> log.info(operario));
+        log.info("\n");
+    }
+
+    private static void showAllProyectos(EntityManager em) {
+        log.info("=== MOSTRANDO PROYECTOS ===");
+        List<Projecteas01> proyectos = ShowAllFrom(em, "Projecteas01.findAll", Projecteas01.class);
+        proyectos.forEach(proyecto -> log.info(proyecto));
+        log.info("\n");
+    }
+
+    // Método para obtener y mostrar las tareas
+    private static void showAllTareas(EntityManager em) {
+        log.info("=== MOSTRANDO TAREAS ===");
+        List<Tascaas01> tareas = ShowAllFrom(em, "Tascaas01.findAll", Tascaas01.class);
+        tareas.forEach(tarea -> log.info(tarea));
+        log.info("\n"); 
     }
 }
