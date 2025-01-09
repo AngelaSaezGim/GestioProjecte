@@ -26,10 +26,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "projecteas01")
 @NamedQueries({
+    // BUSCA TODOS LOS PROYECTOS O LOS PROYECTOS POR SUS ATRIBUTOS
     @NamedQuery(name = "Projecteas01.findAll", query = "SELECT p FROM Projecteas01 p"),
     @NamedQuery(name = "Projecteas01.findByIdProjecte", query = "SELECT p FROM Projecteas01 p WHERE p.idProjecte = :idProjecte"),
     @NamedQuery(name = "Projecteas01.findByDescripcio", query = "SELECT p FROM Projecteas01 p WHERE p.descripcio = :descripcio"),
-    @NamedQuery(name = "Projecteas01.findByEstat", query = "SELECT p FROM Projecteas01 p WHERE p.estat = :estat")})
+    @NamedQuery(name = "Projecteas01.findByEstat", query = "SELECT p FROM Projecteas01 p WHERE p.estat = :estat"
+    )})
+
 public class Projecteas01 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,12 +41,18 @@ public class Projecteas01 implements Serializable {
     @Basic(optional = false)
     @Column(name = "idProjecte")
     private Integer idProjecte;
+
     @Column(name = "descripcio")
     private String descripcio;
+
     @Column(name = "estat")
     private String estat;
+
+    //Un proyecto puede estar asociado a varias tareas
     @OneToMany(mappedBy = "idProjecte")
     private Collection<Tascaas01> tascaas01Collection;
+
+    //Varios proyectos pueden estar asociados a un cliente
     @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     @ManyToOne
     private Clientas01 idClient;
@@ -96,28 +105,14 @@ public class Projecteas01 implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idProjecte != null ? idProjecte.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Projecteas01)) {
-            return false;
-        }
-        Projecteas01 other = (Projecteas01) object;
-        if ((this.idProjecte == null && other.idProjecte != null) || (this.idProjecte != null && !this.idProjecte.equals(other.idProjecte))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Entity.Projecteas01[ idProjecte=" + idProjecte + " ]";
+        return "Proyecto {"
+                + "idProjecte= " + idProjecte
+                + ", descripcio= " + descripcio + '\''
+                + ", estat= " + estat + '\''
+                + ", tascaas01Collection= " + (tascaas01Collection != null ? tascaas01Collection.size() + " tareas" : "null")
+                + ", idClient= " + (idClient != null ? idClient.getIdClient() : "null")
+                + '}';
     }
-    
+
 }

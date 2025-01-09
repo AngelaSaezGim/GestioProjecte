@@ -25,29 +25,38 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "clientas01")
 @NamedQueries({
+    // BUSCA TODOS LOS CLIENTES O CLIENTES POR SUS ATRIBUTOS
     @NamedQuery(name = "Clientas01.findAll", query = "SELECT c FROM Clientas01 c"),
     @NamedQuery(name = "Clientas01.findByIdClient", query = "SELECT c FROM Clientas01 c WHERE c.idClient = :idClient"),
     @NamedQuery(name = "Clientas01.findByNom", query = "SELECT c FROM Clientas01 c WHERE c.nom = :nom"),
     @NamedQuery(name = "Clientas01.findByCognom", query = "SELECT c FROM Clientas01 c WHERE c.cognom = :cognom"),
-    @NamedQuery(name = "Clientas01.findByNif", query = "SELECT c FROM Clientas01 c WHERE c.nif = :nif")})
+    @NamedQuery(name = "Clientas01.findByNif", query = "SELECT c FROM Clientas01 c WHERE c.nif = :nif")
+})
+
 public class Clientas01 implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
+    @Basic(optional = false) 
     @Column(name = "idClient")
     private Integer idClient;
-    @Basic(optional = false)
-    @Column(name = "nom")
+    
+    @Basic(optional = false) // valor no puede ser null
+    @Column(name = "nom") 
     private String nom;
+    
     @Column(name = "cognom")
     private String cognom;
+    
     @Basic(optional = false)
     @Column(name = "nif")
     private String nif;
+    
+    //Un cliente puede tener muchas facturas
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
     private Collection<Facturaas01> facturaas01Collection;
+    //Un cliente puede tener muchos proyectos
     @OneToMany(mappedBy = "idClient")
     private Collection<Projecteas01> projecteas01Collection;
 
@@ -96,6 +105,7 @@ public class Clientas01 implements Serializable {
         this.nif = nif;
     }
 
+    //Conseguir facturas y proyectos de sus entidades
     public Collection<Facturaas01> getFacturaas01Collection() {
         return facturaas01Collection;
     }
@@ -113,28 +123,15 @@ public class Clientas01 implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idClient != null ? idClient.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Clientas01)) {
-            return false;
-        }
-        Clientas01 other = (Clientas01) object;
-        if ((this.idClient == null && other.idClient != null) || (this.idClient != null && !this.idClient.equals(other.idClient))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Entity.Clientas01[ idClient=" + idClient + " ]";
-    }
+    return "Cliente {" +
+            "idClient=" + idClient +
+            ", nom='" + nom + '\'' +
+            ", cognom='" + cognom + '\'' +
+            ", nif='" + nif + '\'' +
+            ", Facturas de " + nom +" =" + facturaas01Collection +
+            ", Proyectos de " + nom + " =" + projecteas01Collection +
+            '}';
+}
     
 }

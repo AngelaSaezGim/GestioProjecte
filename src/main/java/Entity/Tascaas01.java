@@ -27,10 +27,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tascaas01")
 @NamedQueries({
+    // BUSCA TODAS LAS TAREAS O LAS TAREAS POR SUS ATRIBUTOS
     @NamedQuery(name = "Tascaas01.findAll", query = "SELECT t FROM Tascaas01 t"),
     @NamedQuery(name = "Tascaas01.findByIdTasca", query = "SELECT t FROM Tascaas01 t WHERE t.idTasca = :idTasca"),
     @NamedQuery(name = "Tascaas01.findByDescripcio", query = "SELECT t FROM Tascaas01 t WHERE t.descripcio = :descripcio"),
-    @NamedQuery(name = "Tascaas01.findByEstat", query = "SELECT t FROM Tascaas01 t WHERE t.estat = :estat")})
+    @NamedQuery(name = "Tascaas01.findByEstat", query = "SELECT t FROM Tascaas01 t WHERE t.estat = :estat"
+    )})
+
 public class Tascaas01 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,15 +42,22 @@ public class Tascaas01 implements Serializable {
     @Basic(optional = false)
     @Column(name = "idTasca")
     private Integer idTasca;
+    
     @Column(name = "descripcio")
     private String descripcio;
+    
     @Column(name = "estat")
     private String estat;
+    //Muchas tareas pueden estar asociadas a un proyecto
     @JoinColumn(name = "idProjecte", referencedColumnName = "idProjecte")
     @ManyToOne
     private Projecteas01 idProjecte;
+    
+    //Una tarea puede estar asociada a varias facturas
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
+    
+    //Una tarea puede estar asociada a varias responsabilidades de operarios
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Operariresponsableas01> operariresponsableas01Collection;
 
@@ -107,28 +117,14 @@ public class Tascaas01 implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTasca != null ? idTasca.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Tascaas01)) {
-            return false;
-        }
-        Tascaas01 other = (Tascaas01) object;
-        if ((this.idTasca == null && other.idTasca != null) || (this.idTasca != null && !this.idTasca.equals(other.idTasca))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Entity.Tascaas01[ idTasca=" + idTasca + " ]";
-    }
-    
+    return "Tarea {"
+            + "idTasca= " + idTasca
+            + ", descripcio= " + descripcio + '\''
+            + ", estat= " + estat + '\''
+            + ", idProjecte= " + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
+            + ", facturaas01Collection= " + (facturaas01Collection != null ? facturaas01Collection.size() + " facturas" : "null")
+            + ", operariresponsableas01Collection= " + (operariresponsableas01Collection != null ? operariresponsableas01Collection.size() + " responsabilidades" : "null")
+            + '}';
+        }
 }

@@ -27,11 +27,13 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "facturaas01")
 @NamedQueries({
+    // BUSCA TODAS LAS FACTURAS O FACTURAS POR SUS ATRIBUTOS
     @NamedQuery(name = "Facturaas01.findAll", query = "SELECT f FROM Facturaas01 f"),
     @NamedQuery(name = "Facturaas01.findByIdFactura", query = "SELECT f FROM Facturaas01 f WHERE f.idFactura = :idFactura"),
     @NamedQuery(name = "Facturaas01.findByData", query = "SELECT f FROM Facturaas01 f WHERE f.data = :data"),
-    @NamedQuery(name = "Facturaas01.findByImport1", query = "SELECT f FROM Facturaas01 f WHERE f.import1 = :import1"),
+    @NamedQuery(name = "Facturaas01.findByImport1", query = "SELECT f FROM Facturaas01 f WHERE f.import = :import"),
     @NamedQuery(name = "Facturaas01.findByObservacions", query = "SELECT f FROM Facturaas01 f WHERE f.observacions = :observacions")})
+
 public class Facturaas01 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,18 +42,26 @@ public class Facturaas01 implements Serializable {
     @Basic(optional = false)
     @Column(name = "idFactura")
     private Integer idFactura;
+
     @Basic(optional = false)
     @Column(name = "data")
+
     @Temporal(TemporalType.DATE)
     private Date data;
+
     @Basic(optional = false)
     @Column(name = "import")
-    private double import1;
+    private double importTotal;
+
     @Column(name = "observacions")
     private String observacions;
+
+    //Varias facturas pueden estar asociadas a una tarea
     @JoinColumn(name = "idTasca", referencedColumnName = "idTasca")
     @ManyToOne(optional = false)
     private Tascaas01 idTasca;
+
+    //Varias facturas pueden estas asociadas a un cliente
     @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     @ManyToOne(optional = false)
     private Clientas01 idClient;
@@ -66,7 +76,7 @@ public class Facturaas01 implements Serializable {
     public Facturaas01(Integer idFactura, Date data, double import1) {
         this.idFactura = idFactura;
         this.data = data;
-        this.import1 = import1;
+        this.importTotal = import1;
     }
 
     public Integer getIdFactura() {
@@ -85,12 +95,12 @@ public class Facturaas01 implements Serializable {
         this.data = data;
     }
 
-    public double getImport1() {
-        return import1;
+    public double getImportTotal() {
+        return importTotal;
     }
 
-    public void setImport1(double import1) {
-        this.import1 = import1;
+    public void setImportTotal(double import1) {
+        this.importTotal = import1;
     }
 
     public String getObservacions() {
@@ -118,28 +128,15 @@ public class Facturaas01 implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idFactura != null ? idFactura.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Facturaas01)) {
-            return false;
-        }
-        Facturaas01 other = (Facturaas01) object;
-        if ((this.idFactura == null && other.idFactura != null) || (this.idFactura != null && !this.idFactura.equals(other.idFactura))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Entity.Facturaas01[ idFactura=" + idFactura + " ]";
+        return "Factura {"
+                + "idFactura = " + idFactura
+                + ", data = " + data
+                + ", import = " + importTotal
+                + ", observacions = " + observacions + '\''
+                + ", Cliente asociado = " + (idClient != null ? idClient.getNom() + " " + idClient.getCognom() : "N/A")
+                + ", Tarea asociada = " + (idTasca != null ? idTasca.toString() : "N/A")
+                + '}';
     }
-    
+
 }

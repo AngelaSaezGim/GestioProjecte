@@ -24,12 +24,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "operariresponsableas01")
 @NamedQueries({
+    // BUSCA TODAS LAS RESPONSABILIDADES DE OPERARIOS O LAS RESPONSABILIDADES POR SUS ATRIBUTOS
     @NamedQuery(name = "Operariresponsableas01.findAll", query = "SELECT o FROM Operariresponsableas01 o"),
     @NamedQuery(name = "Operariresponsableas01.findByIdOperariTasca", query = "SELECT o FROM Operariresponsableas01 o WHERE o.idOperariTasca = :idOperariTasca"),
     @NamedQuery(name = "Operariresponsableas01.findByNom", query = "SELECT o FROM Operariresponsableas01 o WHERE o.nom = :nom"),
     @NamedQuery(name = "Operariresponsableas01.findByCognom", query = "SELECT o FROM Operariresponsableas01 o WHERE o.cognom = :cognom"),
     @NamedQuery(name = "Operariresponsableas01.findByNifOperari", query = "SELECT o FROM Operariresponsableas01 o WHERE o.nifOperari = :nifOperari"),
-    @NamedQuery(name = "Operariresponsableas01.findByObservacions", query = "SELECT o FROM Operariresponsableas01 o WHERE o.observacions = :observacions")})
+    @NamedQuery(name = "Operariresponsableas01.findByObservacions", query = "SELECT o FROM Operariresponsableas01 o WHERE o.observacions = :observacions"
+    )})
 public class Operariresponsableas01 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,15 +40,21 @@ public class Operariresponsableas01 implements Serializable {
     @Basic(optional = false)
     @Column(name = "idOperariTasca")
     private Integer idOperariTasca;
+
     @Column(name = "nom")
     private String nom;
+
     @Column(name = "cognom")
     private String cognom;
+
     @Basic(optional = false)
     @Column(name = "nifOperari")
     private String nifOperari;
+
     @Column(name = "observacions")
     private String observacions;
+
+    //Varias responsabilidades de operario pueden estar vinculadas a una tarea
     @JoinColumn(name = "idTasca", referencedColumnName = "idTasca")
     @ManyToOne(optional = false)
     private Tascaas01 idTasca;
@@ -112,28 +120,15 @@ public class Operariresponsableas01 implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idOperariTasca != null ? idOperariTasca.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Operariresponsableas01)) {
-            return false;
-        }
-        Operariresponsableas01 other = (Operariresponsableas01) object;
-        if ((this.idOperariTasca == null && other.idOperariTasca != null) || (this.idOperariTasca != null && !this.idOperariTasca.equals(other.idOperariTasca))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Entity.Operariresponsableas01[ idOperariTasca=" + idOperariTasca + " ]";
+        return "Tarea y responsable { "
+                + "idOperariTasca=" + idOperariTasca
+                + ", nom='" + nom + '\''
+                + ", cognom='" + cognom + '\''
+                + ", nifOperari='" + nifOperari + '\''
+                + ", observacions='" + observacions + '\''
+                + ", idTasca=" + (idTasca != null ? idTasca.getIdTasca() : "null")
+                + '}';
     }
-    
+
 }
