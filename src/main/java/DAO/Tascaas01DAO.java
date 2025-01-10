@@ -1,0 +1,72 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package DAO;
+
+import Entity.Tascaas01;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.List;
+
+/**
+ *
+ * @author angsaegim
+ */
+public class Tascaas01DAO implements GenericDAO<Tascaas01> {
+
+    private EntityManager em;
+
+    public Tascaas01DAO(EntityManager em) {
+        this.em = em;
+    }
+
+    @Override
+    public void create(Tascaas01 entity) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.persist(entity);
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            throw new RuntimeException("Error al crear tarea", e);
+        }
+    }
+
+    @Override
+    public void update(Tascaas01 entity) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.merge(entity);
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            throw new RuntimeException("Error al actualizar tarea", e);
+        }
+    }
+
+    @Override
+    public void delete(Tascaas01 entity) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.remove(em.contains(entity) ? entity : em.merge(entity));
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            throw new RuntimeException("Error al eliminar tarea", e);
+        }
+    }
+
+    @Override
+    public Tascaas01 findById(Object id) {
+        return em.find(Tascaas01.class, id);
+    }
+
+    @Override
+    public List<Tascaas01> findAll() {
+        return em.createNamedQuery("Tascaas01.findAll", Tascaas01.class).getResultList();
+    }
+}
