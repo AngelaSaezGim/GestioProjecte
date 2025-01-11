@@ -8,6 +8,7 @@ import Entity.Tascaas01;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
+import javax.persistence.PersistenceException;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class Tascaas01DAO implements GenericDAO<Tascaas01> {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     public Tascaas01DAO(EntityManager em) {
         this.em = em;
@@ -30,7 +31,7 @@ public class Tascaas01DAO implements GenericDAO<Tascaas01> {
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al crear tarea", e);
+            throw new PersistenceException("Error al crear tarea", e);
         }
     }
 
@@ -43,7 +44,7 @@ public class Tascaas01DAO implements GenericDAO<Tascaas01> {
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al actualizar tarea", e);
+            throw new PersistenceException("Error al actualizar tarea", e);
         }
     }
 
@@ -56,7 +57,7 @@ public class Tascaas01DAO implements GenericDAO<Tascaas01> {
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al eliminar tarea", e);
+            throw new PersistenceException("Error al eliminar tarea", e);
         }
     }
 

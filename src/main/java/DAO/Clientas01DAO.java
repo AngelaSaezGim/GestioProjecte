@@ -8,6 +8,7 @@ import Entity.Clientas01;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
+import javax.persistence.PersistenceException;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class Clientas01DAO implements GenericDAO<Clientas01> {
     
-    private EntityManager em;
+    private final EntityManager em;
 
     public Clientas01DAO(EntityManager em) {
         this.em = em;
@@ -30,7 +31,7 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al crear cliente", e);
+            throw new PersistenceException("Error al crear cliente", e);
         }
     }
 
@@ -43,7 +44,7 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al actualizar cliente", e);
+            throw new PersistenceException("Error al actualizar cliente", e);
         }
     }
 
@@ -56,7 +57,7 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al eliminar cliente", e);
+            throw new PersistenceException("Error al eliminar cliente", e);
         }
     }
 

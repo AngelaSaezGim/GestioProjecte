@@ -23,8 +23,10 @@ import Entity.Tascaas01;
  *
  * @author angsaegim
  */
-public class MethodsMain {
+public class MethodsMainMenu {
     
+    
+    //******************* LISTAR **********************************************
     protected static void showAllClients(Clientas01Service clientService) {
         log.info("=== MOSTRANDO CLIENTES ===");
         List<Clientas01> clientes = clientService.getAllClients();
@@ -61,4 +63,5 @@ public class MethodsMain {
         log.info("\n"); 
     }
     
+    //******************* FIN LISTAR **********************************************
 }

@@ -8,13 +8,14 @@ import Entity.Operariresponsableas01;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
+import javax.persistence.PersistenceException;
 /**
  *
  * @author angsaegim
  */
 public class Operariresponsableas01DAO implements GenericDAO<Operariresponsableas01> {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     public Operariresponsableas01DAO(EntityManager em) {
         this.em = em;
@@ -29,7 +30,7 @@ public class Operariresponsableas01DAO implements GenericDAO<Operariresponsablea
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al crear operario responsable", e);
+            throw new PersistenceException("Error al crear operario responsable", e);
         }
     }
 
@@ -42,7 +43,7 @@ public class Operariresponsableas01DAO implements GenericDAO<Operariresponsablea
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al actualizar operario responsable", e);
+            throw new PersistenceException("Error al actualizar operario responsable", e);
         }
     }
 
@@ -55,7 +56,7 @@ public class Operariresponsableas01DAO implements GenericDAO<Operariresponsablea
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
-            throw new RuntimeException("Error al eliminar operario responsable", e);
+            throw new PersistenceException("Error al eliminar operario responsable", e);
         }
     }
 
