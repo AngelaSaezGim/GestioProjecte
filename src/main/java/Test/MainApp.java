@@ -17,7 +17,6 @@ import Service.Facturaas01Service;
 import Service.Operariresponsableas01Service;
 import Service.Projecteas01Service;
 import Service.Tascaas01Service;
-import static Test.MethodsMainMenu.*;
 import static Test.MehtodsMainEntities.*;
 import Utils.EntityManagerProvider;
 
@@ -36,11 +35,11 @@ public class MainApp {
     private enum MenuOptionInsert {
         QUERY_INSERT_CLIENT, QUERY_INSERT_FACTURAS, QUERY_INSERT_OPERARI, QUERY_INSERT_PROJECTE, QUERY_INSERT_TASCA, EXIT
     };
-    
+
     private enum MenuOptionList {
         QUERY_LIST_CLIENT, QUERY_LIST_FACTURAS, QUERY_LIST_OPERARI, QUERY_LIST_PROJECTE, QUERY_LIST_TASCA, EXIT
     };
-    
+
     private enum MenuOptionDelete {
         QUERY_DELETE_CLIENT, QUERY_DELETE_FACTURAS, QUERY_DELETE_OPERARI, QUERY_DELETE_PROJECTE, QUERY_DELETE_TASCA, EXIT
     };
@@ -60,19 +59,13 @@ public class MainApp {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("GestioProjectePU");
 
-        try (EntityManagerProvider emp = new EntityManagerProvider(emf)){
+        //el EntityManager es autocloseable - aunque no lo cierre explicitamente no se perderán recursos
+        try ( EntityManagerProvider emp = new EntityManagerProvider(emf)) {
 
             EntityManager em = emp.getEntityManager();
             EntityTransaction et = em.getTransaction();
-            
-            /*
-            // Usar el EntityManager
-            em.getTransaction().begin();
-            // Operaciones de persistencia (consultas, actualizaciones, etc.)
-            em.getTransaction().commit();
-            */
-             
-            // Iniciamos los servicios
+
+            // Inicio servicios (dividos en entidades)
             Clientas01Service clientService = new Clientas01Service(em);
             Facturaas01Service facturaService = new Facturaas01Service(em);
             Operariresponsableas01Service operariResponsableService = new Operariresponsableas01Service(em);
@@ -80,20 +73,23 @@ public class MainApp {
             Tascaas01Service tascaService = new Tascaas01Service(em);
 
             do {
-                showContador();
+                showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
                 printOptions();
                 opcionElegidaPrincipal = readChoiceMain();
 
                 switch (opcionElegidaPrincipal) {
                     case QUERY_CLEAN_ALL:
+                        truncateAllTables(clientService, facturaService, operariResponsableService, projecteService, tascaService);
                         esperarIntro();
                         break;
                     case QUERY_INSERT:
                         do {
+                            showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
                             printOptionsEntity();
                             opcionElegidaInsert = readChoiceInsert();
                             switch (opcionElegidaInsert) {
                                 case QUERY_INSERT_CLIENT:
+                                    agregarCliente(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_FACTURAS:
@@ -116,10 +112,12 @@ public class MainApp {
                         break;
                     case QUERY_LIST:
                         do {
+                            showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
                             printOptionsEntity();
                             opcionElegidaList = readChoiceList();
                             switch (opcionElegidaList) {
                                 case QUERY_LIST_CLIENT:
+                                    listClients(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_FACTURAS:
@@ -142,10 +140,12 @@ public class MainApp {
                         break;
                     case QUERY_DELETE:
                         do {
+                            showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
                             printOptionsEntity();
                             opcionElegidaDelete = readChoiceDelete();
                             switch (opcionElegidaDelete) {
                                 case QUERY_DELETE_CLIENT:
+                                    eliminarClientes(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_FACTURAS:
@@ -178,25 +178,15 @@ public class MainApp {
             emf.close();
         }
     }
-
-    protected static void showContador() {
-        System.out.println("Entidades Contador");
-        System.out.println("*****************************");
-        System.out.println("Nº Clientes");
-        System.out.println("Nº Facturas");
-        System.out.println("Nº Operarios responsables");
-        System.out.println("Nº Proyectos");
-        System.out.println("Nº Tareas");
-        System.out.println("*****************************");
-    }
-
-    protected static void esperarIntro() {
+    
+     protected static void esperarIntro() {
         System.out.println("Presione Enter para continuar...");
         tcl.nextLine();
     }
 
     protected static void printOptions() {
         StringBuilder sb = new StringBuilder()
+                .append(" - GESTOR DE ENTIDADES - ")
                 .append("\nElija una opción:\n")
                 .append("\t1) Vaciar TODAS las tablas \n")
                 .append("\t2) Añadir nuevos elementos \n")
@@ -219,53 +209,53 @@ public class MainApp {
                 .append("Opción: ");
         System.out.print(sb.toString());
     }
-
-    protected static MenuOption readChoiceMain() {
+    
+    protected static MainApp.MenuOption readChoiceMain() {
         try {
             int choiceInt = Integer.valueOf(tcl.nextLine());
             if (choiceInt == 0) {
-                return MenuOption.EXIT;
+                return MainApp.MenuOption.EXIT;
             }
-            return MenuOption.values()[choiceInt - 1];
+            return MainApp.MenuOption.values()[choiceInt - 1];
         } catch (RuntimeException re) {
             System.out.println("Opción inválida... Inténtelo otra vez.");
             return readChoiceMain();
         }
     }
 
-    protected static MenuOptionInsert readChoiceInsert() {
+    protected static MainApp.MenuOptionInsert readChoiceInsert() {
         try {
             int choiceInt = Integer.valueOf(tcl.nextLine());
             if (choiceInt == 0) {
-                return MenuOptionInsert.EXIT;
+                return MainApp.MenuOptionInsert.EXIT;
             }
-            return MenuOptionInsert.values()[choiceInt - 1];
+            return MainApp.MenuOptionInsert.values()[choiceInt - 1];
         } catch (RuntimeException re) {
             System.out.println("Opción de añadir inválida... Inténtelo otra vez.");
             return readChoiceInsert();
         }
     }
-    
-    protected static MenuOptionList readChoiceList() {
+
+    protected static MainApp.MenuOptionList readChoiceList() {
         try {
             int choiceInt = Integer.valueOf(tcl.nextLine());
             if (choiceInt == 0) {
-                return MenuOptionList.EXIT;
+                return MainApp.MenuOptionList.EXIT;
             }
-            return MenuOptionList.values()[choiceInt - 1];
+            return MainApp.MenuOptionList.values()[choiceInt - 1];
         } catch (RuntimeException re) {
             System.out.println("Opción de listado inválida... Inténtelo otra vez.");
             return readChoiceList();
         }
     }
-    
-    protected static MenuOptionDelete readChoiceDelete() {
+
+    protected static MainApp.MenuOptionDelete readChoiceDelete() {
         try {
             int choiceInt = Integer.valueOf(tcl.nextLine());
             if (choiceInt == 0) {
-                return MenuOptionDelete.EXIT;
+                return MainApp.MenuOptionDelete.EXIT;
             }
-            return MenuOptionDelete.values()[choiceInt - 1];
+            return MainApp.MenuOptionDelete.values()[choiceInt - 1];
         } catch (RuntimeException re) {
             System.out.println("Opción de borrado inválida... Inténtelo otra vez.");
             return readChoiceDelete();

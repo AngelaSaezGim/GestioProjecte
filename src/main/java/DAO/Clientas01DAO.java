@@ -15,7 +15,7 @@ import javax.persistence.PersistenceException;
  * @author angsaegim
  */
 public class Clientas01DAO implements GenericDAO<Clientas01> {
-    
+
     private final EntityManager em;
 
     public Clientas01DAO(EntityManager em) {
@@ -30,7 +30,9 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
             em.persist(entity);
             et.commit();
         } catch (Exception e) {
-            if (et.isActive()) et.rollback();
+            if (et.isActive()) {
+                et.rollback();
+            }
             throw new PersistenceException("Error al crear cliente", e);
         }
     }
@@ -43,7 +45,9 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
             em.merge(entity);
             et.commit();
         } catch (Exception e) {
-            if (et.isActive()) et.rollback();
+            if (et.isActive()) {
+                et.rollback();
+            }
             throw new PersistenceException("Error al actualizar cliente", e);
         }
     }
@@ -56,7 +60,9 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
             em.remove(em.contains(entity) ? entity : em.merge(entity));
             et.commit();
         } catch (Exception e) {
-            if (et.isActive()) et.rollback();
+            if (et.isActive()) {
+                et.rollback();
+            }
             throw new PersistenceException("Error al eliminar cliente", e);
         }
     }
@@ -69,5 +75,21 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
     @Override
     public List<Clientas01> findAll() {
         return em.createNamedQuery("Clientas01.findAll", Clientas01.class).getResultList();
+    }
+
+    //Falta manejar la entidad
+    public void truncateTable() {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            // Para tablas con claves foráneas, usar DELETE en lugar de TRUNCATE.
+            em.createQuery("DELETE FROM Clientas01").executeUpdate(); 
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            throw new PersistenceException("Error al vaciar la tabla de clientes", e);
+        }
     }
 }

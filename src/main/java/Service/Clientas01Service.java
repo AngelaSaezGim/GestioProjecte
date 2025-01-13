@@ -66,4 +66,11 @@ public class Clientas01Service {
         }
     }
     
+    public void truncateTable() {
+    try {
+        clientDAO.truncateTable();
+    } catch (Exception e) {
+        throw new RuntimeException("Error al vaciar la tabla de clientes", e);
+    }
+}
 }
