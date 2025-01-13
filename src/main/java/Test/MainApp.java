@@ -80,6 +80,7 @@ public class MainApp {
             Tascaas01Service tascaService = new Tascaas01Service(em);
 
             do {
+                showContador();
                 printOptions();
                 opcionElegidaPrincipal = readChoiceMain();
 
@@ -180,6 +181,13 @@ public class MainApp {
 
     protected static void showContador() {
         System.out.println("Entidades Contador");
+        System.out.println("*****************************");
+        System.out.println("Nº Clientes");
+        System.out.println("Nº Facturas");
+        System.out.println("Nº Operarios responsables");
+        System.out.println("Nº Proyectos");
+        System.out.println("Nº Tareas");
+        System.out.println("*****************************");
     }
 
     protected static void esperarIntro() {
