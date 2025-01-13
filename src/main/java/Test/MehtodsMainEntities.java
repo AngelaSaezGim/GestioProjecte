@@ -66,13 +66,15 @@ public class MehtodsMainEntities {
         String continueAdding = "yes";
 
         while (continueAdding.equalsIgnoreCase("yes")) {
-            // Pedir los datos al usuario para crear un newClient
             System.out.println("Introduce los datos del cliente:");
 
-            //(puede ser vacío)
-            System.out.print("Nombre: ");
-            String nom = tcl.nextLine();
-
+            //NO PUEDE SER NULO
+            String nom = "";
+            while (nom.isEmpty()){
+            System.out.print("Nombre (No puede estar vacío): ");
+            nom = tcl.nextLine();
+            }
+            
             // (puede ser vacío)
             System.out.print("Apellido: ");
             String cognom = tcl.nextLine();

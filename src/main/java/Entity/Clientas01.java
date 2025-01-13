@@ -46,17 +46,21 @@ public class Clientas01 implements Serializable {
     @Column(name = "nom") 
     private String nom;
     
-    @Column(name = "cognom")
+    @Column(name = "cognom") //PUEDE SER NULO
     private String cognom;
     
+    //(Valido nif desde service)
     @Basic(optional = false)
     @Column(name = "nif")
     private String nif;
     
     //Un cliente puede tener muchas facturas
+    //cascade - Cuando un cliente se elimina, todas las facturas asociadas también se eliminarán automáticamente
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
     private Collection<Facturaas01> facturaas01Collection;
+    
     //Un cliente puede tener muchos proyectos
+    //**** FALTA EL CASCADE
     @OneToMany(mappedBy = "idClient")
     private Collection<Projecteas01> projecteas01Collection;
 

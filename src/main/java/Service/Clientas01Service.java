@@ -22,6 +22,7 @@ public class Clientas01Service {
     }
 
     // Crear un cliente
+    //VALIDACIONES AQUI 
     public void createClient(Clientas01 client) {
         try {
             clientDAO.create(client);
