@@ -93,15 +93,19 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_FACTURAS:
+                                    agregarFactura(facturaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_OPERARI:
+                                    agregarOperari(operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_PROJECTE:
+                                    agregarProjecte(projecteService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_TASCA:
+                                    agregarTasca(tascaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
@@ -121,15 +125,19 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_FACTURAS:
+                                    listFacturas(facturaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_OPERARI:
+                                    listOperariosResponsables(operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_PROJECTE:
+                                    listProyectos(projecteService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_TASCA:
+                                    listTasques(tascaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
@@ -149,15 +157,19 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_FACTURAS:
+                                    eliminarFacturas(facturaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_OPERARI:
+                                    eliminarOperariosResponsables(operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_PROJECTE:
+                                    eliminarProjectes(projecteService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_TASCA:
+                                    eliminarTasques(tascaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
