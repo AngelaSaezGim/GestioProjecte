@@ -28,17 +28,21 @@ public class MehtodsMainEntities {
 
     //*************** CONTADOR DE LAS 5 ENTIDADES *****************************
     protected static void showContador(Clientas01Service clientService, Facturaas01Service facturaService,
-            Operariresponsableas01Service operariResponsableService, Projecteas01Service projecteService, Tascaas01Service tascaService) {
-        System.out.println("Entidades Contador");
-        System.out.println("*****************************");
-        System.out.println("Nº Clientes " + clientService.getAllClients().size());
-        System.out.println("Nº Facturas " + facturaService.getAllFacturas().size());
-        System.out.println("Nº Operarios responsables " + operariResponsableService.getAllOperaris().size());
-        System.out.println("Nº Proyectos " + projecteService.getAllProjects().size());
-        System.out.println("Nº Tareas " + tascaService.getAllTasques().size());
-        System.out.println("*****************************");
+        Operariresponsableas01Service operariResponsableService, Projecteas01Service projecteService, Tascaas01Service tascaService) {
+    String border = "**************************************";
+    String title = "          Entidades Contador          ";
+    
+    System.out.println(border);
+    System.out.println(title);
+    System.out.println(border);
+    System.out.printf("* %-35s *\n", "Nº Clientes: " + clientService.getAllClients().size());
+    System.out.printf("* %-35s *\n", "Nº Facturas: " + facturaService.getAllFacturas().size());
+    System.out.printf("* %-35s *\n", "Nº Operarios responsables: " + operariResponsableService.getAllOperaris().size());
+    System.out.printf("* %-35s *\n", "Nº Proyectos: " + projecteService.getAllProjects().size());
+    System.out.printf("* %-35s *\n", "Nº Tareas: " + tascaService.getAllTasques().size());
+    System.out.println(border);
     }
-
+    
     //*************** VACIAR TODAS LAS TABLAS  *****************************
     protected static void truncateAllTables(Clientas01Service clientService,
             Facturaas01Service facturaService,

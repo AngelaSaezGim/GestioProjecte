@@ -190,38 +190,49 @@ public class MainApp {
             emf.close();
         }
     }
-    
-     protected static void esperarIntro() {
+
+    protected static void esperarIntro() {
         System.out.println("Presione Enter para continuar...");
         tcl.nextLine();
     }
 
     protected static void printOptions() {
-        StringBuilder sb = new StringBuilder()
-                .append(" - GESTOR DE ENTIDADES - ")
-                .append("\nElija una opción:\n")
-                .append("\t1) Vaciar TODAS las tablas \n")
-                .append("\t2) Añadir nuevos elementos \n")
-                .append("\t3) Listar elementos \n")
-                .append("\t4) Borrar elementos \n")
-                .append("\t0) Salir \n")
-                .append("Opción: ");
-        System.out.print(sb.toString());
+        String border = "========================================";
+        String title = "          GESTOR DE ENTIDADES           ";
+
+        System.out.println("\n" + border);
+        System.out.println(title);
+        System.out.println(border);
+        System.out.println("Elija una opción:");
+        System.out.println("\t1) Vaciar TODAS las tablas");
+        System.out.println("\t2) Añadir nuevos elementos");
+        System.out.println("\t3) Listar elementos");
+        System.out.println("\t4) Borrar elementos");
+        System.out.println("\t0) Salir");
+        System.out.println(border);
+        System.out.print("Opción: ");
     }
 
     protected static void printOptionsEntity() {
-        StringBuilder sb = new StringBuilder()
-                .append("\n Elija una entidad a gestionar :\n")
-                .append("\t1) Cliente \n")
-                .append("\t2) Factura \n")
-                .append("\t3) Operari Responsable \n")
-                .append("\t4) Projecte \n")
-                .append("\t5) Tarea \n")
-                .append("\t0) Atrás \n")
-                .append("Opción: ");
-        System.out.print(sb.toString());
+        String border = "----------------------------------------";
+        String corner = "+--------------------------------------+";
+        String title = "|    >> SELECCIÓN DE ENTIDAD <<       |";
+
+        System.out.println(corner);
+        System.out.println(title);
+        System.out.println(corner);
+        System.out.println("| Elija una entidad a gestionar:       |");
+        System.out.println("|--------------------------------------|");
+        System.out.println("|  1) Cliente                          |");
+        System.out.println("|  2) Factura                          |");
+        System.out.println("|  3) Operario Responsable             |");
+        System.out.println("|  4) Proyecto                         |");
+        System.out.println("|  5) Tarea                            |");
+        System.out.println("|  0) Atrás                            |");
+        System.out.println(corner);
+        System.out.print("Opción: ");
     }
-    
+
     protected static MainApp.MenuOption readChoiceMain() {
         try {
             int choiceInt = Integer.valueOf(tcl.nextLine());
