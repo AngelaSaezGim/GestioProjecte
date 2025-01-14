@@ -44,25 +44,25 @@ public class Facturaas01 implements Serializable {
     private Integer idFactura;
 
     @Basic(optional = false)
-    @Column(name = "data")
+    @Column(name = "data", nullable = false)
 
     @Temporal(TemporalType.DATE)
     private Date data;
 
     @Basic(optional = false)
-    @Column(name = "importTotal")
+    @Column(name = "importTotal", nullable = false)
     private double importTotal;
 
     @Column(name = "observacions")
     private String observacions;
 
     //Varias facturas pueden estar asociadas a una tarea
-    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca")
+    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca", nullable = false)
     @ManyToOne(optional = false)
     private Tascaas01 idTasca;
 
     //Varias facturas pueden estas asociadas a un cliente
-    @JoinColumn(name = "idClient", referencedColumnName = "idClient")
+    @JoinColumn(name = "idClient", referencedColumnName = "idClient", nullable = false)
     @ManyToOne(optional = false)
     private Clientas01 idClient;
 

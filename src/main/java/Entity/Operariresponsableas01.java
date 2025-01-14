@@ -48,7 +48,7 @@ public class Operariresponsableas01 implements Serializable {
     private String cognom;
 
     @Basic(optional = false)
-    @Column(name = "nifOperari")
+    @Column(name = "nifOperari", nullable = false, unique = true)
     private String nifOperari;
 
     @Column(name = "observacions")

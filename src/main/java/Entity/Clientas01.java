@@ -42,16 +42,16 @@ public class Clientas01 implements Serializable {
     @Column(name = "idClient")
     private Integer idClient;
     
-    @Basic(optional = false) // valor no puede ser null
-    @Column(name = "nom") 
+    @Basic(optional = false) 
+    @Column(name = "nom", nullable = false) //NN
     private String nom;
     
-    @Column(name = "cognom") //PUEDE SER NULO
+    @Column(name = "cognom") 
     private String cognom;
     
     //(Valido nif desde service)
     @Basic(optional = false)
-    @Column(name = "nif")
+    @Column(name = "nif", nullable = false, unique = true)
     private String nif;
     
     //Un cliente puede tener muchas facturas

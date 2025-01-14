@@ -89,23 +89,21 @@ public class MainApp {
                             opcionElegidaInsert = readChoiceInsert();
                             switch (opcionElegidaInsert) {
                                 case QUERY_INSERT_CLIENT:
-                                    agregarCliente(clientService);
+                                    agregarClienteBasic(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_FACTURAS:
-                                    agregarFactura(facturaService);
+                                    agregarFacturaMenu(facturaService, tascaService, clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_OPERARI:
-                                    agregarOperari(operariResponsableService);
+                                    agregarOperariResponsableMenu(operariResponsableService, tascaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_PROJECTE:
-                                    agregarProjecte(projecteService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_TASCA:
-                                    agregarTasca(tascaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
