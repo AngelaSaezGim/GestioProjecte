@@ -58,8 +58,7 @@ public class Tascaas01 implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
 
-    
-    @ManyToOne 
+    @OneToOne 
     @JoinColumn(name = "IdTasca", nullable = false , insertable = false, updatable = false)
     private Operariresponsableas01 operariResponsable;
 
