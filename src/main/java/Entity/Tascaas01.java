@@ -43,24 +43,24 @@ public class Tascaas01 implements Serializable {
     @Basic(optional = false)
     @Column(name = "idTasca")
     private Integer idTasca;
-    
+
     @Column(name = "descripcio")
     private String descripcio;
-    
+
     @Column(name = "estat")
     private String estat;
     //Muchas tareas pueden estar asociadas a un proyecto
     @JoinColumn(name = "idProjecte", referencedColumnName = "idProjecte")
     @ManyToOne
     private Projecteas01 idProjecte;
-    
+
     //Una tarea puede estar asociada a varias facturas
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
+
     
-    //Una tarea esta asociada a UN OPERARIO
-    @OneToOne
-    @JoinColumn(name = "idOperari", referencedColumnName = "idOperari", nullable = false)
+    @ManyToOne 
+    @JoinColumn(name = "IdTasca", nullable = false , insertable = false, updatable = false)
     private Operariresponsableas01 operariResponsable;
 
     public Tascaas01() {
@@ -111,22 +111,22 @@ public class Tascaas01 implements Serializable {
     }
 
     public Operariresponsableas01 getOperariResponsable() {
-    return operariResponsable;
-}
+        return operariResponsable;
+    }
 
     public void setOperariResponsable(Operariresponsableas01 operariResponsable) {
-    this.operariResponsable = operariResponsable;
+        this.operariResponsable = operariResponsable;
     }
 
     @Override
     public String toString() {
-    return "Tarea {"
-            + "idTasca= " + idTasca
-            + ", descripcio= " + descripcio + '\''
-            + ", estat= " + estat + '\''
-            + ", idProjecte= " + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
-            + ", facturaas01Collection= " + (facturaas01Collection != null ? facturaas01Collection.size() + " facturas" : "null")
-            + ", operariresponsablea= " + operariResponsable +
-            + '}';
-        }
+        return "Tarea {"
+                + "idTasca= " + idTasca
+                + ", descripcio= " + descripcio + '\''
+                + ", estat= " + estat + '\''
+                + ", idProjecte= " + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
+                + ", facturaas01Collection= " + (facturaas01Collection != null ? facturaas01Collection.size() + " facturas" : "null")
+                + ", operariResponsable=" + operariResponsable
+                + '}';
+    }
 }

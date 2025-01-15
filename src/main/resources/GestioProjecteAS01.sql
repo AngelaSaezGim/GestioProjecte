@@ -91,3 +91,5 @@ SELECT * FROM ProjecteAS01;
 SELECT * FROM TascaAS01;
 SELECT * FROM OperariResponsableAS01;
 SELECT * FROM FacturaAS01;
+
+DESCRIBE tascaas01

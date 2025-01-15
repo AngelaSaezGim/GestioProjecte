@@ -58,7 +58,7 @@ public class Operariresponsableas01 implements Serializable {
     private String observacions;
 
     //UN (Y SOLO UNO) OPERARIO RESPONSABLE PUEDE TENER VARIAS TAREAS
-    @OneToMany(mappedBy = "operariResponsable", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "operariResponsable")
     private Collection<Tascaas01> tasques;
 
     public Operariresponsableas01() {
