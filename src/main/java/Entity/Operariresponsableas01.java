@@ -55,7 +55,7 @@ public class Operariresponsableas01 implements Serializable {
     private String observacions;
 
     //Varias responsabilidades de operario pueden estar vinculadas a una tarea
-    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca")
+    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca", nullable = false)
     @ManyToOne(optional = false)
     private Tascaas01 idTasca;
 

@@ -21,7 +21,6 @@ import static Test.MehtodsMainEntities.*;
 import Utils.EntityManagerProvider;
 
 import java.util.Scanner;
-
 /**
  *
  * @author angsaegim
@@ -63,7 +62,6 @@ public class MainApp {
         try ( EntityManagerProvider emp = new EntityManagerProvider(emf)) {
 
             EntityManager em = emp.getEntityManager();
-            EntityTransaction et = em.getTransaction();
 
             // Inicio servicios (dividos en entidades)
             Clientas01Service clientService = new Clientas01Service(em);
@@ -89,21 +87,23 @@ public class MainApp {
                             opcionElegidaInsert = readChoiceInsert();
                             switch (opcionElegidaInsert) {
                                 case QUERY_INSERT_CLIENT:
-                                    agregarClienteBasic(clientService);
+                                    MethodsMainClient.agregarClienteBasic(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_FACTURAS:
-                                    agregarFacturaMenu(facturaService, tascaService, clientService);
+                                    MethodsMainFactura.agregarFacturaMenu(facturaService, tascaService, clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_OPERARI:
-                                    agregarOperariResponsableMenu(operariResponsableService, tascaService);
+                                    MethodsMainOperari.agregarOperariResponsableMenu(operariResponsableService, tascaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_PROJECTE:
+                                    MethodsMainProjecte.agregarProjecteMenu(projecteService, clientService, tascaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_TASCA:
+                                    MethodsMainTasca.agregarTascaMenu(tascaService, projecteService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
@@ -119,23 +119,23 @@ public class MainApp {
                             opcionElegidaList = readChoiceList();
                             switch (opcionElegidaList) {
                                 case QUERY_LIST_CLIENT:
-                                    listClients(clientService);
+                                    MethodsMainClient.listClients(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_FACTURAS:
-                                    listFacturas(facturaService);
+                                    MethodsMainFactura.listFacturas(facturaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_OPERARI:
-                                    listOperariosResponsables(operariResponsableService);
+                                    MethodsMainOperari.listOperariosResponsables(operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_PROJECTE:
-                                    listProyectos(projecteService);
+                                    MethodsMainProjecte.listProyectos(projecteService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_TASCA:
-                                    listTasques(tascaService);
+                                    MethodsMainTasca.listTasques(tascaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
@@ -151,23 +151,23 @@ public class MainApp {
                             opcionElegidaDelete = readChoiceDelete();
                             switch (opcionElegidaDelete) {
                                 case QUERY_DELETE_CLIENT:
-                                    eliminarClientes(clientService);
+                                    MethodsMainClient.eliminarClientes(clientService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_FACTURAS:
-                                    eliminarFacturas(facturaService);
+                                    MethodsMainFactura.eliminarFacturas(facturaService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_OPERARI:
-                                    eliminarOperariosResponsables(operariResponsableService);
+                                    MethodsMainOperari.eliminarOperariosResponsables(operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_PROJECTE:
-                                    eliminarProjectes(projecteService);
+                                    MethodsMainProjecte.eliminarProjectes(projecteService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_TASCA:
-                                    eliminarTasques(tascaService);
+                                    MethodsMainTasca.eliminarTasques(tascaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
