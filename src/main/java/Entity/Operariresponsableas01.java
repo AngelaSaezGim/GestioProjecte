@@ -6,6 +6,7 @@ package Entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Collection;
 
 /**
  *
@@ -54,10 +57,9 @@ public class Operariresponsableas01 implements Serializable {
     @Column(name = "observacions")
     private String observacions;
 
-    //Varias responsabilidades de operario pueden estar vinculadas a una tarea
-    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca", nullable = false)
-    @ManyToOne(optional = false)
-    private Tascaas01 idTasca;
+    //UN (Y SOLO UNO) OPERARIO RESPONSABLE PUEDE TENER VARIAS TAREAS
+    @OneToMany(mappedBy = "operariResponsable", cascade = CascadeType.ALL)
+    private Collection<Tascaas01> tasques;
 
     public Operariresponsableas01() {
     }
@@ -111,24 +113,24 @@ public class Operariresponsableas01 implements Serializable {
         this.observacions = observacions;
     }
 
-    public Tascaas01 getIdTasca() {
-        return idTasca;
+    public Collection<Tascaas01> getTasques() {
+    return tasques;
     }
 
-    public void setIdTasca(Tascaas01 idTasca) {
-        this.idTasca = idTasca;
+    public void setTasques(Collection<Tascaas01> tasques) {
+    this.tasques = tasques;
     }
 
     @Override
     public String toString() {
-        return "Tarea y responsable { "
-                + "idOperariTasca=" + idOperariTasca
-                + ", nom='" + nom + '\''
-                + ", cognom='" + cognom + '\''
-                + ", nifOperari='" + nifOperari + '\''
-                + ", observacions='" + observacions + '\''
-                + ", idTasca=" + (idTasca != null ? idTasca.getIdTasca() : "null")
-                + '}';
+    return "Operariresponsableas01 { "
+            + "idOperariTasca=" + idOperariTasca
+            + ", nom='" + nom + '\''
+            + ", cognom='" + cognom + '\''
+            + ", nifOperari='" + nifOperari + '\''
+            + ", observacions='" + observacions + '\''
+            + ", tasques vinculadas=" + (tasques != null ? tasques.size() + " tareas" : "null")
+            + '}';
     }
 
 }

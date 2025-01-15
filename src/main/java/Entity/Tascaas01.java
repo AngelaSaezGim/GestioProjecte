@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -57,9 +58,10 @@ public class Tascaas01 implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
     
-    //Una tarea puede estar asociada a varias responsabilidades de operarios
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
-    private Collection<Operariresponsableas01> operariresponsableas01Collection;
+    //Una tarea esta asociada a UN OPERARIO
+    @OneToOne
+    @JoinColumn(name = "idOperari", referencedColumnName = "idOperari", nullable = false)
+    private Operariresponsableas01 operariResponsable;
 
     public Tascaas01() {
     }
@@ -108,12 +110,12 @@ public class Tascaas01 implements Serializable {
         this.facturaas01Collection = facturaas01Collection;
     }
 
-    public Collection<Operariresponsableas01> getOperariresponsableas01Collection() {
-        return operariresponsableas01Collection;
-    }
+    public Operariresponsableas01 getOperariResponsable() {
+    return operariResponsable;
+}
 
-    public void setOperariresponsableas01Collection(Collection<Operariresponsableas01> operariresponsableas01Collection) {
-        this.operariresponsableas01Collection = operariresponsableas01Collection;
+    public void setOperariResponsable(Operariresponsableas01 operariResponsable) {
+    this.operariResponsable = operariResponsable;
     }
 
     @Override
@@ -124,7 +126,7 @@ public class Tascaas01 implements Serializable {
             + ", estat= " + estat + '\''
             + ", idProjecte= " + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
             + ", facturaas01Collection= " + (facturaas01Collection != null ? facturaas01Collection.size() + " facturas" : "null")
-            + ", operariresponsableas01Collection= " + (operariresponsableas01Collection != null ? operariresponsableas01Collection.size() + " responsabilidades" : "null")
+            + ", operariresponsablea= " + operariResponsable +
             + '}';
         }
 }

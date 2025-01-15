@@ -5,23 +5,24 @@
 package Test;
 
 import Entity.Operariresponsableas01;
+import Entity.Tascaas01;
 import Service.Operariresponsableas01Service;
 import Service.Tascaas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import static Test.MehtodsMainEntities.esNifValido;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author angsaegim
  */
 public class MethodsMainOperari {
-    
+
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
-    
-    
     //*************** AGREGAR OPERARI  *****************************//
     public static void agregarOperariResponsableMenu(Operariresponsableas01Service operariService, Tascaas01Service tascaService) {
 
@@ -74,18 +75,30 @@ public class MethodsMainOperari {
                 }
             }
 
-            Integer idTasca = null;
-            while (idTasca == null) {
+            List<Tascaas01> tasques = new ArrayList<>();
+            boolean addingTasks = true;
+
+            while (addingTasks) {
                 System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
                 String inputIdTasca = tcl.nextLine();
+
                 try {
-                    idTasca = Integer.parseInt(inputIdTasca);
-                    if (tascaService.findTascaById(idTasca) == null) {
+                    Integer idTasca = Integer.parseInt(inputIdTasca);
+                    Tascaas01 tasca = tascaService.findTascaById(idTasca);
+                    if (tasca == null) {
                         System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
-                        idTasca = null;
+                    } else {
+                        tasques.add(tasca);
+                        System.out.println("Tarea con ID " + idTasca + " asociada exitosamente.");
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("ID de tarea inválido. Inténtalo nuevamente.");
+                }
+
+                System.out.print("¿Deseas agregar otra tarea para este operario? (si/no): ");
+                String addMoreTasks = tcl.nextLine().trim().toLowerCase();
+                if (!addMoreTasks.equals("si")) {
+                    addingTasks = false;
                 }
             }
 
@@ -96,7 +109,7 @@ public class MethodsMainOperari {
             newOperari.setNom(nom);
             newOperari.setCognom(cognom);
             newOperari.setNifOperari(nifOperari);
-            newOperari.setIdTasca(tascaService.findTascaById(idTasca));
+            newOperari.setTasques(tasques);
             newOperari.setObservacions(observacions);
 
             try {
@@ -145,18 +158,30 @@ public class MethodsMainOperari {
                 }
             }
 
-            Integer idTasca = null;
-            while (idTasca == null) {
+            List<Tascaas01> tasques = new ArrayList<>();
+            boolean addingTasks = true;
+
+            while (addingTasks) {
                 System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
                 String inputIdTasca = tcl.nextLine();
+
                 try {
-                    idTasca = Integer.parseInt(inputIdTasca);
-                    if (tascaService.findTascaById(idTasca) == null) {
+                    Integer idTasca = Integer.parseInt(inputIdTasca);
+                    Tascaas01 tasca = tascaService.findTascaById(idTasca);
+                    if (tasca == null) {
                         System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
-                        System.out.println("Deseas crear una tasca con id " + idTasca + " ?");
+                    } else {
+                        tasques.add(tasca);
+                        System.out.println("Tarea con ID " + idTasca + " asociada exitosamente.");
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("ID de tarea inválido. Inténtalo nuevamente.");
+                }
+
+                System.out.print("¿Deseas agregar otra tarea para este operario? (si/no): ");
+                String addMoreTasks = tcl.nextLine().trim().toLowerCase();
+                if (!addMoreTasks.equals("si")) {
+                    addingTasks = false;
                 }
             }
 
@@ -167,7 +192,7 @@ public class MethodsMainOperari {
             newOperari.setNom(nom);
             newOperari.setCognom(cognom);
             newOperari.setNifOperari(nifOperari);
-            newOperari.setIdTasca(tascaService.findTascaById(idTasca));
+            newOperari.setTasques(tasques);
             newOperari.setObservacions(observacions);
 
             boolean validInput = false;
@@ -184,12 +209,11 @@ public class MethodsMainOperari {
         }
 
     }
-    
-     //*****************************************************************//
+
+    //*****************************************************************//
     //********************** FIND ************************************//
     //*****************************************************************//
-    
-        //*************** LISTAR OPERARIOS RESPONSABLES  *****************************//
+    //*************** LISTAR OPERARIOS RESPONSABLES  *****************************//
     protected static void listOperariosResponsables(Operariresponsableas01Service operariResponsableService) {
 
         System.out.println("¿Cómo deseas ver los operarios responsables?");
@@ -213,11 +237,10 @@ public class MethodsMainOperari {
                 break;
         }
     }
-    
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
-    
     //*************** DELETE OPERARI  *****************************//
     protected static void eliminarOperariosResponsables(Operariresponsableas01Service operariResponsableService) {
         System.out.println("¿Cómo deseas eliminar los operarios responsables?");
@@ -237,5 +260,5 @@ public class MethodsMainOperari {
                 break;
         }
     }
-    
+
 }
