@@ -22,6 +22,7 @@ import java.util.List;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -77,7 +78,7 @@ public class MehtodsMainEntities {
         while (continueAdding.equalsIgnoreCase("si")) {
             System.out.println("Introduce los datos del cliente:");
 
-            //NO PUEDE SER NULO - no puede estar vaccío
+            //NO PUEDE SER NULO - no puede estar vacío
             String nom = "";
             while (nom.isEmpty()) {
                 System.out.print("Nombre (No puede estar vacío): ");
@@ -516,7 +517,7 @@ public class MehtodsMainEntities {
     }
 
     //*************** AGREGAR PROJECTE  *****************************//
-    public static void agregarProjecteMenu(Projecteas01Service projecteService, Clientas01Service clientasService) {
+    public static void agregarProjecteMenu(Projecteas01Service projecteService, Clientas01Service clientasService, Tascaas01Service tascaService) {
 
         System.out.println("¿Cómo deseas agregar a los proyectos?");
         System.out.println("1. Básico (Solo creamos el proyecto)");
@@ -529,12 +530,12 @@ public class MehtodsMainEntities {
             case 1:
                 System.out.println("=== CREACIÓN PROYECTOS ===");
                 System.out.println("*=== [MODO BÁSICO] ===*");
-                agregarProjecteBasic(projecteService, clientasService);
+                agregarProjecteBasic(projecteService, clientasService, tascaService);
                 break;
             case 2:
                 System.out.println("=== CREACIÓN PROYECTOS ===");
                 System.out.println("*=== [MODO COMPLETO] ===*");
-                agregarProjecteComplete(projecteService, clientasService);
+                agregarProjecteComplete(projecteService, clientasService,tascaService);
                 break;
 
             default:
@@ -543,7 +544,7 @@ public class MehtodsMainEntities {
         }
     }
 
-    public static void agregarProjecteBasic(Projecteas01Service projecteService, Clientas01Service clientasService) {
+    public static void agregarProjecteBasic(Projecteas01Service projecteService, Clientas01Service clientasService, Tascaas01Service tascaService) {
 
         String continueAdding = "si";
 
@@ -577,11 +578,31 @@ public class MehtodsMainEntities {
                     System.out.println("ID de cliente inválido. Inténtalo nuevamente.");
                 }
             }
+            
+            Integer idTasca = null;
+            while (idTasca == null) {
+            System.out.print("ID de la tasca (debe ser un número válido): ");
+            String inputIdTasca = tcl.nextLine();
+            try {
+                idTasca = Integer.parseInt(inputIdTasca);
+                // Aquí puedes verificar si `idTasca` es válido según tu lógica de negocio.
+                if (tascaService.findTascaById(idTasca) == null) {
+                    System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
+                    idTasca = null;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("ID de tasca inválido. Inténtalo nuevamente.");
+            }
+            }
+        
+
 
             Projecteas01 newProjecte = new Projecteas01();
             newProjecte.setDescripcio(descripcio);
             newProjecte.setEstat(estat);
+            newProjecte.setTascaas01Collection((Collection<Tascaas01>) tascaService.findTascaById(idTasca));
             newProjecte.setIdClient(clientasService.findClientById(idClient));
+            
 
             try {
                 projecteService.createProject(newProjecte);
@@ -604,7 +625,7 @@ public class MehtodsMainEntities {
         }
     }
 
-    public static void agregarProjecteComplete(Projecteas01Service projecteService, Clientas01Service clientasService) {
+    public static void agregarProjecteComplete(Projecteas01Service projecteService, Clientas01Service clientasService, Tascaas01Service tascaService) {
 
         String continueAdding = "si";
 
