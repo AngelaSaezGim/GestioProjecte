@@ -49,6 +49,25 @@ public class Facturaas01DAO implements GenericDAO<Facturaas01> {
     }
 
     @Override
+    public Facturaas01 findById(Object id) {
+        return em.find(Facturaas01.class, id);
+    }
+
+    @Override
+    public List<Facturaas01> findAll() {
+        return em.createNamedQuery("Facturaas01.findAll", Facturaas01.class).getResultList();
+    }
+    
+    public List<Facturaas01> findAllWithDetails() {
+        return em.createQuery(
+            "SELECT DISTINCT f FROM Facturaas01 f "
+            + "LEFT JOIN FETCH f.idTasca "
+            + "LEFT JOIN FETCH f.idClient",
+            Facturaas01.class
+        ).getResultList();
+    }
+    
+    @Override
     public void delete(Facturaas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
@@ -60,14 +79,18 @@ public class Facturaas01DAO implements GenericDAO<Facturaas01> {
             throw new PersistenceException("Error al eliminar factura", e);
         }
     }
-
-    @Override
-    public Facturaas01 findById(Object id) {
-        return em.find(Facturaas01.class, id);
-    }
-
-    @Override
-    public List<Facturaas01> findAll() {
-        return em.createNamedQuery("Facturaas01.findAll", Facturaas01.class).getResultList();
+    
+     public void deleteTable() {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.createQuery("DELETE FROM Facturaas01").executeUpdate();
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            throw new PersistenceException("Error al vaciar la tabla de facturas", e);
+        }
     }
 }

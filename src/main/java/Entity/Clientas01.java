@@ -55,7 +55,7 @@ public class Clientas01 implements Serializable {
     private String nif;
     
     //Un cliente puede tener muchas facturas
-    //cascade - Cuando un cliente se elimina, todas las facturas asociadas también se eliminarán automáticamente
+    //***cascade - Cuando un cliente se elimina, todas las facturas asociadas también se eliminarán automáticamente
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
     private Collection<Facturaas01> facturaas01Collection;
     

@@ -4,6 +4,7 @@
  */
 package Test;
 
+import Entity.Tascaas01;
 import Service.Projecteas01Service;
 import Service.Tascaas01Service;
 import static Test.MainApp.log;
@@ -14,13 +15,11 @@ import static Test.MainApp.tcl;
  * @author angsaegim
  */
 public class MethodsMainTasca {
-    
+
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
-
     //*************** AGREGAR TASCA  *****************************//
-    
     public static void agregarTascaMenu(Tascaas01Service tascaService, Projecteas01Service projecteService) {
 
         System.out.println("¿Cómo deseas agregar las tascas?");
@@ -53,6 +52,83 @@ public class MethodsMainTasca {
         String continueAdding = "si";
 
         while (continueAdding.equalsIgnoreCase("si")) {
+
+            System.out.println("Introduce los datos de la tasca:");
+
+            System.out.print("Descripción de la tasca: ");
+            String descripcio = tcl.nextLine();
+
+            String estat = "";
+            while (true) {
+                System.out.println("Selecciona el estado de la tasca:");
+                System.out.println("1. No iniciat");
+                System.out.println("2. En procés");
+                System.out.println("3. Finalitzat");
+                System.out.print("Introduce el número correspondiente al estado: ");
+                int opcion = tcl.nextInt();
+                tcl.nextLine();
+
+                switch (opcion) {
+                    case 1:
+                        estat = "No iniciat";
+                        break;
+                    case 2:
+                        estat = "En procés";
+                        break;
+                    case 3:
+                        estat = "Finalitzat";
+                        break;
+                    default:
+                        System.out.println("Opción no válida. Intenta nuevamente.");
+                        continue;
+                }
+                break;
+            }
+
+            Integer idProjecte = null;
+            while (idProjecte == null) {
+                System.out.print("ID del proyecto asociado (debe ser válido y existir): ");
+                System.out.println("¿Quieres ver la lista de proyectos disponibles? (si/no): ");
+                String verLista;
+                boolean validInput = false;
+
+                while (!validInput) {
+                    verLista = tcl.nextLine().trim().toLowerCase();
+
+                    if (verLista.equals("si")) {
+                        projecteService.getAllProjects().forEach(System.out::println);
+                        validInput = true; 
+                    } else if (verLista.equals("no")) {
+                        System.out.println("No se mostrará la lista.");
+                        validInput = true;
+                    } else {
+                        System.out.println("Respuesta no válida. Por favor, responde 'si' o 'no': \n ");
+                        System.out.print("ID del proyecto asociado (debe ser válido y existir): ");
+                    }
+                }
+                String inputIdProjecte = tcl.nextLine();
+                try {
+                    idProjecte = Integer.parseInt(inputIdProjecte);
+                    if (projecteService.findProjectById(idProjecte) == null) {
+                        System.out.println("El proyecto con ID " + idProjecte + " no existe. Inténtalo nuevamente.");
+                        idProjecte = null;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("ID de proyecto inválido. Inténtalo nuevamente.");
+                }
+            }
+
+            Tascaas01 newTasca = new Tascaas01();
+            newTasca.setDescripcio(descripcio);
+            newTasca.setEstat(estat);
+            newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
+
+            try {
+                tascaService.createTasca(newTasca);
+                System.out.println("Tasca agregada exitosamente.");
+            } catch (Exception e) {
+                System.out.println("Error al agregar la tasca: " + e.getMessage());
+            }
 
             boolean validInput = false;
             while (!validInput) {
@@ -89,12 +165,11 @@ public class MethodsMainTasca {
         }
 
     }
-    
-     //*****************************************************************//
+
+    //*****************************************************************//
     //********************** FIND ************************************//
     //*****************************************************************//
-    
-     protected static void listTasques(Tascaas01Service tascaService) {
+    protected static void listTasques(Tascaas01Service tascaService) {
 
         System.out.println("¿Cómo deseas ver las tasques?");
         System.out.println("1. Básico (Solo datos de la tasca)");
@@ -117,11 +192,10 @@ public class MethodsMainTasca {
                 break;
         }
     }
-     
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
-     
     //*************** DELETE TASCA  *****************************//
     protected static void eliminarTasques(Tascaas01Service tascaService) {
         System.out.println("¿Cómo deseas eliminar las tasques?");
@@ -141,5 +215,5 @@ public class MethodsMainTasca {
                 break;
         }
     }
-    
+
 }

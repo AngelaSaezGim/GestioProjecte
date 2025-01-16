@@ -5,10 +5,13 @@
 package Test;
 
 import Entity.Clientas01;
+import Entity.Facturaas01;
+import Entity.Projecteas01;
 import Service.Clientas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import static Test.MehtodsMainEntities.esNifValido;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,15 +19,12 @@ import java.util.List;
  * @author angsaegim
  */
 public class MethodsMainClient {
-    
+
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
-    
     //*************** AGREGAR CLIENTE  *****************************//
-    
     // BASICO Y COMPLETO (Compleyto = upsert)
-    
     public static void agregarClienteBasic(Clientas01Service clientasService) {
         String continueAdding = "si";
 
@@ -80,13 +80,11 @@ public class MethodsMainClient {
             }
         }
     }
-    
-     //*****************************************************************//
+
+    //*****************************************************************//
     //********************** FIND ************************************//
     //*****************************************************************//
-    
     //*************** LISTAR CLIENTE  *****************************//
-    
     protected static void listClients(Clientas01Service clientService) {
 
         System.out.println("¿Cómo deseas ver los clientes?");
@@ -100,29 +98,51 @@ public class MethodsMainClient {
             case 1:
                 log.info("=== MOSTRANDO CLIENTES ===");
                 log.info("*=== [MODO BÁSICO] ===*");
-                for (Clientas01 cliente : clientService.getAllClients()) {
-                    System.out.println(cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+                for (Clientas01 cliente : clientService.findAllClients()) {
+                    System.out.println("---> " + "[" + cliente.getIdClient() + "] " + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
                 }
                 break;
             case 2:
                 log.info("=== MOSTRANDO CLIENTES ===");
                 log.info("*=== [MODO COMPLETO] ===*");
-                List<Clientas01> clientes = clientService.getAllClients();
-                clientes.forEach(cliente -> log.info(cliente));
-                log.info("\n");
+                listClientsComplete(clientService);
                 break;
             default:
                 System.out.println("Opción no válida.");
                 break;
         }
     }
-    
+
+    public static void listClientsComplete(Clientas01Service clientService) {
+        List<Clientas01> clientes = clientService.findAllWithDetails();
+        clientes.forEach(cliente -> {
+
+            log.info("-> Cliente: " + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+            // Proyectos
+            Collection<Projecteas01> proyectos = cliente.getProjecteas01Collection();
+            if (proyectos == null || proyectos.isEmpty()) {
+                log.info("\t -" +"Proyectos: No hay proyectos.");
+            } else {
+                log.info("\t -" +"Proyectos de " + cliente.getNom() + " = ");
+                proyectos.forEach(proyecto
+                        -> log.info("\t -" + proyecto.toString()));
+            }
+
+            // Facturas
+            Collection<Facturaas01> facturas = cliente.getFacturaas01Collection();
+            if (facturas == null || facturas.isEmpty()) {
+                log.info("\t -" + "Facturas: No hay facturas.");
+            } else {
+                log.info("\t -" + "Facturas de " + cliente.getNom() + " = ");
+                facturas.forEach(factura -> log.info("\t -" + factura.toString()));
+            }
+        });
+    }
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
-    
     //*************** DELETE CLIENT  *****************************//
-    
     protected static void eliminarClientes(Clientas01Service clientasService) {
         System.out.println("¿Cómo deseas eliminar los clientes?");
         System.out.println("1. Eliminar todos los clientes");
@@ -133,8 +153,27 @@ public class MethodsMainClient {
 
         switch (opcion) {
             case 1:
+                // SI NO HAY, MOSTRAR MENSAJE
+                System.out.print("Eliminando todos los clientes... ");
+                clientasService.deleteTable();
                 break;
             case 2:
+                System.out.print("Introduce el ID del cliente a eliminar: ");
+                System.out.println("Clientes disponibles; ");
+                for (Clientas01 cliente : clientasService.findAllClients()) {
+                    System.out.println("[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+                }
+                System.out.println("Id del cliente a eliminar;");
+                int idCliente = tcl.nextInt();
+                tcl.nextLine();
+
+                Clientas01 cliente = clientasService.findClientById(idCliente);
+                if (cliente != null) {
+                    clientasService.deleteClient(cliente);
+                    System.out.println("Cliente con ID " + idCliente + " ha sido eliminado.");
+                } else {
+                    System.out.println("No se encontró un cliente con ese ID.");
+                }
                 break;
             default:
                 System.out.println("Opción no válida.");

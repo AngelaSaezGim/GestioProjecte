@@ -110,8 +110,8 @@ public class Projecteas01 implements Serializable {
                 + "idProjecte= " + idProjecte
                 + ", descripcio= " + descripcio + '\''
                 + ", estat= " + estat + '\''
-                + ", tascaas01Collection= " + (tascaas01Collection != null ? tascaas01Collection.size() + " tareas" : "null")
-                + ", idClient= " + (idClient != null ? idClient.getIdClient() : "null")
+                + ", tasques = " + (tascaas01Collection != null ? tascaas01Collection.size() + " tareas" : "null")
+                + ", idClient = " + (idClient != null ? idClient.getIdClient() : "null")
                 + '}';
     }
 

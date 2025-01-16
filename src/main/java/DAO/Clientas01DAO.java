@@ -53,6 +53,25 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
     }
 
     @Override
+    public Clientas01 findById(Object id) {
+        return em.find(Clientas01.class, id);
+    }
+
+    @Override
+    public List<Clientas01> findAll() {
+        return em.createNamedQuery("Clientas01.findAll", Clientas01.class).getResultList();
+    }
+
+    public List<Clientas01> findAllWithDetails() {
+        return em.createQuery(
+                "SELECT DISTINCT c FROM Clientas01 c "
+                + "LEFT JOIN FETCH c.projecteas01Collection "
+                + "LEFT JOIN FETCH c.facturaas01Collection",
+                Clientas01.class
+        ).getResultList();
+    }
+
+    @Override
     public void delete(Clientas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
@@ -67,23 +86,11 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
         }
     }
 
-    @Override
-    public Clientas01 findById(Object id) {
-        return em.find(Clientas01.class, id);
-    }
-
-    @Override
-    public List<Clientas01> findAll() {
-        return em.createNamedQuery("Clientas01.findAll", Clientas01.class).getResultList();
-    }
-
-    //Falta manejar la entidad
-    public void truncateTable() {
+    public void deleteTable() {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            // Para tablas con claves foráneas, usar DELETE en lugar de TRUNCATE.
-            em.createQuery("DELETE FROM Clientas01").executeUpdate(); 
+            em.createQuery("DELETE FROM Clientas01").executeUpdate();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {

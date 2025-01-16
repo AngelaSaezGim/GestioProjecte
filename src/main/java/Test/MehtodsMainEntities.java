@@ -40,8 +40,8 @@ public class MehtodsMainEntities {
         System.out.println(border);
         System.out.println(title);
         System.out.println(border);
-        System.out.printf("* %-35s *\n", "Nº Clientes: " + clientService.getAllClients().size());
-        System.out.printf("* %-35s *\n", "Nº Facturas: " + facturaService.getAllFacturas().size());
+        System.out.printf("* %-35s *\n", "Nº Clientes: " + clientService.findAllClients().size());
+        System.out.printf("* %-35s *\n", "Nº Facturas: " + facturaService.findAllFacturas().size());
         System.out.printf("* %-35s *\n", "Nº Operarios responsables: " + operariResponsableService.getAllOperaris().size());
         System.out.printf("* %-35s *\n", "Nº Proyectos: " + projecteService.getAllProjects().size());
         System.out.printf("* %-35s *\n", "Nº Tareas: " + tascaService.getAllTasques().size());
@@ -56,11 +56,11 @@ public class MehtodsMainEntities {
             Tascaas01Service tascaService) {
         System.out.println("Vaciando todas las tablas...");
         try {
-            //clientService.truncateTable();
-            //facturaService.truncateTable();
-            //operariResponsableService.truncateTable();
-            //projecteService.truncateTable();
-            //tascaService.truncateTable();
+            //clientService.deleteTable();
+            //facturaService.deleteTable();
+            //operariResponsableService.deleteTable();
+            //projecteService.deleteTable();
+            //tascaService.deleteTable();
             System.out.println("Todas las tablas han sido vaciadas.");
         } catch (Exception e) {
             log.error("Error al vaciar las tablas: ", e);

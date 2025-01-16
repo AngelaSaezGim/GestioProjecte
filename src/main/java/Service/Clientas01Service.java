@@ -40,15 +40,6 @@ public class Clientas01Service {
         }
     }
 
-    // Eliminar un cliente
-    public void deleteClient(Clientas01 client) {
-        try {
-            clientDAO.delete(client);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar cliente", e);
-        }
-    }
-
     // Encontrar un cliente por su ID
     public Clientas01 findClientById(Object id) {
         try {
@@ -59,7 +50,7 @@ public class Clientas01Service {
     }
 
     // Obtener todos los clientes
-    public List<Clientas01> getAllClients() {
+    public List<Clientas01> findAllClients() {
         try {
             return clientDAO.findAll();
         } catch (Exception e) {
@@ -67,9 +58,27 @@ public class Clientas01Service {
         }
     }
     
-    public void truncateTable() {
+     public List<Clientas01> findAllWithDetails() {
+         try {
+            return clientDAO.findAllWithDetails();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todos los clientes y las tablas relacionadas", e);
+        }
+     }
+     
+         // Eliminar un cliente
+    public void deleteClient(Clientas01 client) {
+        try {
+            clientDAO.delete(client);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar cliente", e);
+        }
+    }
+
+    
+    public void deleteTable() {
     try {
-        clientDAO.truncateTable();
+        clientDAO.deleteTable();
     } catch (Exception e) {
         throw new RuntimeException("Error al vaciar la tabla de clientes", e);
     }

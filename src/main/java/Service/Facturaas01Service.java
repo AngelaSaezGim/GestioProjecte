@@ -38,15 +38,6 @@ public class Facturaas01Service {
         }
     }
 
-    // Eliminar una factura
-    public void deleteFactura(Facturaas01 factura) {
-        try {
-            facturaDAO.delete(factura);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar factura", e);
-        }
-    }
-
     // Encontrar una factura por su ID
     public Facturaas01 findFacturaById(Object id) {
         try {
@@ -57,11 +48,36 @@ public class Facturaas01Service {
     }
 
     // Obtener todas las facturas
-    public List<Facturaas01> getAllFacturas() {
+    public List<Facturaas01> findAllFacturas() {
         try {
             return facturaDAO.findAll();
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener todas las facturas", e);
         }
+    }
+    
+     public List<Facturaas01> findAllWithDetails() {
+         try {
+            return facturaDAO.findAllWithDetails();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todas las facturas y las tablas relacionadas", e);
+        }
+     }
+    
+    // Eliminar una factura
+    public void deleteFactura(Facturaas01 factura) {
+        try {
+            facturaDAO.delete(factura);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar factura", e);
+        }
+    }
+    
+    public void deleteTable() {
+    try {
+        facturaDAO.deleteTable();
+    } catch (Exception e) {
+        throw new RuntimeException("Error al vaciar la tabla de facturas", e);
+    }
     }
 }

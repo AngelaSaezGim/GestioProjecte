@@ -4,7 +4,9 @@
  */
 package Test;
 
+import Entity.Clientas01;
 import Entity.Facturaas01;
+import Entity.Tascaas01;
 import Service.Clientas01Service;
 import Service.Facturaas01Service;
 import Service.Tascaas01Service;
@@ -12,20 +14,20 @@ import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author angsaegim
  */
 public class MethodsMainFactura {
-    
-     //*****************************************************************//
+
+    //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
-    
     //*************** AGREGAR FACTURA  *****************************//
-    
     public static void agregarFacturaMenu(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientasService) {
 
         System.out.println("¿Cómo deseas agregar las facturas?");
@@ -64,6 +66,8 @@ public class MethodsMainFactura {
             Integer idTasca = null;
             while (idTasca == null) {
                 System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
+                System.out.println("Quieres ver la lista de tareas existentes ? ");
+                System.out.println("Factura asociada a tarea...");
                 String inputIdTasca = tcl.nextLine();
                 try {
                     idTasca = Integer.parseInt(inputIdTasca);
@@ -79,6 +83,8 @@ public class MethodsMainFactura {
             Integer idClient = null;
             while (idClient == null) {
                 System.out.print("ID del Cliente (No puede estar vacío y debe existir): ");
+                System.out.println("Quieres ver la lista de clientes ? ");
+                System.out.println("Factura asociada a cliente...");
                 String inputIdCliente = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(inputIdCliente);
@@ -153,7 +159,7 @@ public class MethodsMainFactura {
     }
 
     public static void agregarFacturaComplete(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientasService) {
-        
+
         String continueAdding = "si";
 
         while (continueAdding.equalsIgnoreCase("si")) {
@@ -250,12 +256,11 @@ public class MethodsMainFactura {
             }
         }
     }
-    
+
     //*****************************************************************//
     //********************** FIND ************************************//
     //*****************************************************************//
-   
-     //*************** LISTAR FACTURAS  *****************************//
+    //*************** LISTAR FACTURAS  *****************************//
     protected static void listFacturas(Facturaas01Service facturaService) {
 
         System.out.println("¿Cómo deseas ver las facturas?");
@@ -269,11 +274,15 @@ public class MethodsMainFactura {
             case 1:
                 log.info("=== MOSTRANDO FACTURAS ===");
                 log.info("*=== [MODO BÁSICO] ===*");
+                for (Facturaas01 factura : facturaService.findAllFacturas()) {
+                    System.out.println("---> " + "[" + factura.getIdFactura() + "]" + " " + factura.getObservacions() + " | " + factura.getData() + " | " + factura.getImportTotal());
+                }
                 break;
 
             case 2:
                 log.info("=== MOSTRANDO FACTURAS ===");
                 log.info("*=== [MODO COMPLETO] ===*");
+                listFacturaComplete(facturaService);
                 break;
 
             default:
@@ -281,11 +290,35 @@ public class MethodsMainFactura {
                 break;
         }
     }
-    
+
+    public static void listFacturaComplete(Facturaas01Service facturaService) {
+        List<Facturaas01> facturas = facturaService.findAllWithDetails();
+        facturas.forEach(factura -> {
+
+            System.out.println("- > FACTURA Nº [" + factura.getIdFactura() + "]" + " " + factura.getObservacions() + " | " + factura.getData() + " | " + factura.getImportTotal());
+
+            System.out.println("\t" +"Factura nº " + factura.getIdFactura() + " es del cliente: ");
+            Clientas01 cliente = factura.getIdClient();
+            if (cliente != null) {
+                System.out.println("\t -" + "["+ cliente.getIdClient() + "]" +cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+                //HE DE IMPRIMIR TAMBIEN SUS FACTURAS Y PROYECTOS???
+            } else {
+                System.out.println("\t" +"Cliente asociado no encontrado.");
+            }
+
+            System.out.println("\t" +"Factura nº " + factura.getIdFactura() + " es de la tarea : ");
+            Tascaas01 tarea = factura.getIdTasca();
+            if (tarea != null) {
+                System.out.println("\t -" + "["+ tarea.getIdTasca()+ "]" + tarea.getDescripcio() + "|" + tarea.getEstat());
+            } else {
+                System.out.println("\t" +"Tarea asociada no encontrada.");
+            }
+        });
+    }
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
-    
     //*************** DELETE FACTURAS  *****************************//
     protected static void eliminarFacturas(Facturaas01Service facturaService) {
         System.out.println("¿Cómo deseas eliminar las facturas?");
@@ -305,5 +338,5 @@ public class MethodsMainFactura {
                 break;
         }
     }
-    
+
 }

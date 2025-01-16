@@ -93,6 +93,8 @@ public class MethodsMainProjecte {
             Integer idClient = null;
             while (idClient == null) {
                 System.out.print("ID del cliente (debe ser válido y existir): ");
+                System.out.println("Quieres ver la lista de clientes ? ");
+                System.out.println("Proyecto asociado a cliente...");
                 String inputIdClient = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(inputIdClient);
@@ -108,10 +110,11 @@ public class MethodsMainProjecte {
             Integer idTasca = null;
             while (idTasca == null) {
                 System.out.print("ID de la tasca (debe ser un número válido): ");
+                System.out.println("Quieres ver la lista de tareas ? ");
+                System.out.println("Proyecto asociado a tarea...");
                 String inputIdTasca = tcl.nextLine();
                 try {
                     idTasca = Integer.parseInt(inputIdTasca);
-                    // Aquí puedes verificar si `idTasca` es válido según tu lógica de negocio.
                     if (tascaService.findTascaById(idTasca) == null) {
                         System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
                         idTasca = null;

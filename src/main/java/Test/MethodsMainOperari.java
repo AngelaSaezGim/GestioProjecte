@@ -80,6 +80,9 @@ public class MethodsMainOperari {
 
             while (addingTasks) {
                 System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
+                /// DUDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
+                System.out.print("Quieres ver la lista de tareas existentes sin operarios asignados ? ");
+                System.out.println("Tarea a agregar al proyecto nuevo; ");
                 String inputIdTasca = tcl.nextLine();
 
                 try {

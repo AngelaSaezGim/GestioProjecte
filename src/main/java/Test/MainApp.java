@@ -26,6 +26,11 @@ import java.util.Scanner;
  * @author angsaegim
  */
 public class MainApp {
+    
+    // TODOS TIENEN QUE TENER LA MISMA ESTRUCTURA QUE CLIENTE
+    // ARREGLAR DELETES Y RELACIONES
+    //ARREGLAR LISTADOS Y PONERLES UNA ESTRUCTURA
+    //CAMBIAR IDIOMA Y ARREGLAR VARIABLES
 
     private enum MenuOption {
         QUERY_CLEAN_ALL, QUERY_INSERT, QUERY_LIST, QUERY_DELETE, EXIT
@@ -214,7 +219,7 @@ public class MainApp {
     protected static void printOptionsEntity() {
         String border = "----------------------------------------";
         String corner = "+--------------------------------------+";
-        String title = "|    >> SELECCIÓN DE ENTIDAD <<       |";
+        String title = "|    >> SELECCIÓN DE ENTIDAD <<        |";
 
         System.out.println(corner);
         System.out.println(title);
