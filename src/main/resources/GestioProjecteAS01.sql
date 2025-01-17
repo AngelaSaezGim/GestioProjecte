@@ -68,7 +68,7 @@ VALUES
 -- OPERARI RESPONSABLE: Registra a Pepe Goteras com a responsable de les dues tasques. NIF 12345678A.
 INSERT INTO OperariResponsableAS01 (nifOperari, nom, cognom, observacions)
 VALUES 
-    ('12345678A', 'Pepe', 'Goteras', 'Tasques inicials completades per Pepe Goteras'),
+    ('12345678A', 'Pepe', 'Goteras', 'Tasques inicials completades per Pepe Goteras');
     
 -- TASCA: Inventa 2 tasques per 2 dels projectes anteriors i els altres 2 els deixes sense tasques. Finalitza 1 tasca per cadascun del 2 projectes amb tasques.
 INSERT INTO TascaAS01 (descripcio, estat, idProjecte, idOperari)
@@ -90,4 +90,10 @@ SELECT * FROM TascaAS01;
 SELECT * FROM OperariResponsableAS01;
 SELECT * FROM FacturaAS01;
 
-DESCRIBE tascaas01
+DESCRIBE tascaas01;
+
+DROP TABLE IF EXISTS FacturaAS01;
+DROP TABLE IF EXISTS TascaAS01;
+DROP TABLE IF EXISTS OperariResponsableAS01;
+DROP TABLE IF EXISTS ProjecteAS01;
+DROP TABLE IF EXISTS ClientAS01;

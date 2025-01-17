@@ -275,7 +275,10 @@ public class MethodsMainFactura {
                 log.info("=== MOSTRANDO FACTURAS ===");
                 log.info("*=== [MODO BÁSICO] ===*");
                 for (Facturaas01 factura : facturaService.findAllFacturas()) {
-                    System.out.println("---> " + "[" + factura.getIdFactura() + "]" + " " + factura.getObservacions() + " | " + factura.getData() + " | " + factura.getImportTotal());
+                    System.out.println("---> [" + factura.getIdFactura() + "] "
+                            + factura.getObservacions() + " | "
+                            + factura.getData() + " | "
+                            + factura.getImportTotal());
                 }
                 break;
 
@@ -295,22 +298,29 @@ public class MethodsMainFactura {
         List<Facturaas01> facturas = facturaService.findAllWithDetails();
         facturas.forEach(factura -> {
 
-            System.out.println("- > FACTURA Nº [" + factura.getIdFactura() + "]" + " " + factura.getObservacions() + " | " + factura.getData() + " | " + factura.getImportTotal());
+            System.out.println("- > FACTURA Nº [" + factura.getIdFactura() + "] "
+                    + factura.getObservacions() + " | "
+                    + factura.getData() + " | "
+                    + factura.getImportTotal());
 
-            System.out.println("\t" + "Factura nº " + factura.getIdFactura() + " es del cliente: ");
+            System.out.println("\tFactura nº " + factura.getIdFactura() + " es del cliente:");
             Clientas01 cliente = factura.getIdClient();
             if (cliente != null) {
-                System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+                System.out.println("\t  - [" + cliente.getIdClient() + "] "
+                        + cliente.getNom() + " " + cliente.getCognom()
+                        + " - NIF: " + cliente.getNif());
             } else {
-                System.out.println("\t" + "Cliente asociado no encontrado.");
+                System.out.println("\t  Cliente asociado no encontrado.");
             }
 
-            System.out.println("\t" + "Factura nº " + factura.getIdFactura() + " es de la tarea : ");
+            System.out.println("\tFactura nº " + factura.getIdFactura() + " es de la tarea:");
             Tascaas01 tarea = factura.getIdTasca();
             if (tarea != null) {
-                System.out.println("\t -" + "[" + tarea.getIdTasca() + "]" + tarea.getDescripcio() + "|" + tarea.getEstat());
+                System.out.println("\t  - [" + tarea.getIdTasca() + "] "
+                        + tarea.getDescripcio() + " | "
+                        + tarea.getEstat());
             } else {
-                System.out.println("\t" + "Tarea asociada no encontrada.");
+                System.out.println("\t  Tarea asociada no encontrada.");
             }
         });
     }
@@ -318,10 +328,9 @@ public class MethodsMainFactura {
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
-    
     //*************** DELETE FACTURAS  *****************************//
     protected static void eliminarFacturas(Facturaas01Service facturaService) {
-        
+
         System.out.println("¿Cómo deseas eliminar las facturas?");
         System.out.println("1. Eliminar todas las facturas");
         System.out.println("2. Eliminar una factura por ID");
@@ -348,7 +357,7 @@ public class MethodsMainFactura {
                 }
                 System.out.print("ID de la factura a eliminar: ");
                 int idFactura = tcl.nextInt();
-                tcl.nextLine(); 
+                tcl.nextLine();
 
                 Facturaas01 factura = facturaService.findFacturaById(idFactura);
                 if (factura != null) {

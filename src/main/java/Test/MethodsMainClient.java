@@ -99,7 +99,9 @@ public class MethodsMainClient {
                 log.info("=== MOSTRANDO CLIENTES ===");
                 log.info("*=== [MODO BÁSICO] ===*");
                 for (Clientas01 cliente : clientService.findAllClients()) {
-                    System.out.println("---> " + "[" + cliente.getIdClient() + "] " + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+                    System.out.println("---> [" + cliente.getIdClient() + "] "
+                            + cliente.getNom() + " " + cliente.getCognom()
+                            + " - NIF: " + cliente.getNif());
                 }
                 break;
             case 2:
@@ -117,24 +119,24 @@ public class MethodsMainClient {
         List<Clientas01> clientes = clientService.findAllWithDetails();
         clientes.forEach(cliente -> {
 
-            log.info("-> Cliente: " + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+            log.info("-> Cliente: " + cliente.getNom() + " "
+                    + cliente.getCognom() + " - NIF: " + cliente.getNif());
             // Proyectos
             Collection<Projecteas01> proyectos = cliente.getProjecteas01Collection();
             if (proyectos == null || proyectos.isEmpty()) {
-                log.info("\t -" +"Proyectos: No hay proyectos.");
+                log.info("\t- Proyectos: No hay proyectos.");
             } else {
-                log.info("\t -" +"Proyectos de " + cliente.getNom() + " = ");
-                proyectos.forEach(proyecto
-                        -> log.info("\t -" + proyecto.toString()));
+                log.info("\t- Proyectos de " + cliente.getNom() + ":");
+                proyectos.forEach(proyecto -> log.info("\t  - " + proyecto.toString()));
             }
 
             // Facturas
             Collection<Facturaas01> facturas = cliente.getFacturaas01Collection();
             if (facturas == null || facturas.isEmpty()) {
-                log.info("\t -" + "Facturas: No hay facturas.");
+                log.info("\t- Facturas: No hay facturas.");
             } else {
-                log.info("\t -" + "Facturas de " + cliente.getNom() + " = ");
-                facturas.forEach(factura -> log.info("\t -" + factura.toString()));
+                log.info("\t- Facturas de " + cliente.getNom() + ":");
+                facturas.forEach(factura -> log.info("\t  - " + factura.toString()));
             }
         });
     }
@@ -155,11 +157,11 @@ public class MethodsMainClient {
             case 1:
                 System.out.print("Eliminando todos los clientes... ");
                 if (clientasService.findAllClients().isEmpty()) {
-                System.out.println("No hay clientes para eliminar.");
+                    System.out.println("No hay clientes para eliminar.");
                 } else {
-                System.out.println("Eliminando...");
-                clientasService.deleteTable();
-                System.out.println("Todos los clientes han sido eliminados.");
+                    System.out.println("Eliminando...");
+                    clientasService.deleteTable();
+                    System.out.println("Todos los clientes han sido eliminados.");
                 }
                 break;
             case 2:
