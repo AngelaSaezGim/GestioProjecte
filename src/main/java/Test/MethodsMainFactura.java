@@ -297,21 +297,21 @@ public class MethodsMainFactura {
 
             System.out.println("- > FACTURA Nº [" + factura.getIdFactura() + "]" + " " + factura.getObservacions() + " | " + factura.getData() + " | " + factura.getImportTotal());
 
-            System.out.println("\t" +"Factura nº " + factura.getIdFactura() + " es del cliente: ");
+            System.out.println("\t" + "Factura nº " + factura.getIdFactura() + " es del cliente: ");
             Clientas01 cliente = factura.getIdClient();
             if (cliente != null) {
-                System.out.println("\t -" + "["+ cliente.getIdClient() + "]" +cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+                System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
                 //HE DE IMPRIMIR TAMBIEN SUS FACTURAS Y PROYECTOS???
             } else {
-                System.out.println("\t" +"Cliente asociado no encontrado.");
+                System.out.println("\t" + "Cliente asociado no encontrado.");
             }
 
-            System.out.println("\t" +"Factura nº " + factura.getIdFactura() + " es de la tarea : ");
+            System.out.println("\t" + "Factura nº " + factura.getIdFactura() + " es de la tarea : ");
             Tascaas01 tarea = factura.getIdTasca();
             if (tarea != null) {
-                System.out.println("\t -" + "["+ tarea.getIdTasca()+ "]" + tarea.getDescripcio() + "|" + tarea.getEstat());
+                System.out.println("\t -" + "[" + tarea.getIdTasca() + "]" + tarea.getDescripcio() + "|" + tarea.getEstat());
             } else {
-                System.out.println("\t" +"Tarea asociada no encontrada.");
+                System.out.println("\t" + "Tarea asociada no encontrada.");
             }
         });
     }
@@ -330,8 +330,32 @@ public class MethodsMainFactura {
 
         switch (opcion) {
             case 1:
+                System.out.print("Eliminando todas las facturas... ");
+                if (facturaService.findAllFacturas().isEmpty()) {
+                    System.out.println("No hay facturas para eliminar.");
+                } else {
+                    System.out.println("Eliminando...");
+                    facturaService.deleteTable();
+                    System.out.println("Todos los clientes han sido eliminados.");
+                }
                 break;
             case 2:
+                System.out.print("Introduce el ID de la factura a eliminar: ");
+                System.out.println("Facturas disponibles: ");
+                for (Facturaas01 factura : facturaService.findAllFacturas()) {
+                    System.out.println("[" + factura.getIdFactura() + "] Fecha: " + factura.getData() + " - Total: " + factura.getImportTotal() + "€" + "Observacions: " + factura.getObservacions());
+                }
+                System.out.print("ID de la factura a eliminar: ");
+                int idFactura = tcl.nextInt();
+                tcl.nextLine(); 
+
+                Facturaas01 factura = facturaService.findFacturaById(idFactura);
+                if (factura != null) {
+                    facturaService.deleteFactura(factura);
+                    System.out.println("Factura con ID " + idFactura + " ha sido eliminada.");
+                } else {
+                    System.out.println("No se encontró una factura con ese ID.");
+                }
                 break;
             default:
                 System.out.println("Opción no válida.");

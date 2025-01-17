@@ -153,9 +153,14 @@ public class MethodsMainClient {
 
         switch (opcion) {
             case 1:
-                // SI NO HAY, MOSTRAR MENSAJE
                 System.out.print("Eliminando todos los clientes... ");
+                if (clientasService.findAllClients().isEmpty()) {
+                System.out.println("No hay clientes para eliminar.");
+                } else {
+                System.out.println("Eliminando...");
                 clientasService.deleteTable();
+                System.out.println("Todos los clientes han sido eliminados.");
+                }
                 break;
             case 2:
                 System.out.print("Introduce el ID del cliente a eliminar: ");
