@@ -76,8 +76,8 @@ INSERT INTO TascaAS01 (descripcio, estat, idProjecte, idOperari)
 VALUES 
     ('Preparar el terreny', 'Finalitzat', 2, 1),
     ('Construir els fonaments', 'En procés', 2, 1),
-    ('Dissenyar plànols', 'Finalitzat', 3),
-    ('Organitzar subministraments', 'En procés', 3);
+    ('Dissenyar plànols', 'Finalitzat', 3, 1),
+    ('Organitzar subministraments', 'En procés', 3, 1);
 
 -- FACTURA:Emet una factura amb data 31/12/2017 i una altra amb data 30/11/2024.
 INSERT INTO FacturaAS01 (idTasca, idClient, data, importTotal, observacions)
