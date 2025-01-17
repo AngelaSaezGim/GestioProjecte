@@ -122,6 +122,7 @@ public class MethodsMainTasca {
             newTasca.setDescripcio(descripcio);
             newTasca.setEstat(estat);
             newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
+            //Falta idOperari
 
             try {
                 tascaService.createTasca(newTasca);

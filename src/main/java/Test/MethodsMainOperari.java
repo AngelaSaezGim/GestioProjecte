@@ -75,7 +75,7 @@ public class MethodsMainOperari {
                 }
             }
 
-            List<Tascaas01> tasques = new ArrayList<>();
+            /*List<Tascaas01> tasques = new ArrayList<>();
             boolean addingTasks = true;
 
             while (addingTasks) {
@@ -103,7 +103,7 @@ public class MethodsMainOperari {
                 if (!addMoreTasks.equals("si")) {
                     addingTasks = false;
                 }
-            }
+            }*/
 
             System.out.print("Observaciones: ");
             String observacions = tcl.nextLine();
@@ -112,7 +112,6 @@ public class MethodsMainOperari {
             newOperari.setNom(nom);
             newOperari.setCognom(cognom);
             newOperari.setNifOperari(nifOperari);
-            newOperari.setTasques(tasques);
             newOperari.setObservacions(observacions);
 
             try {
@@ -161,6 +160,7 @@ public class MethodsMainOperari {
                 }
             }
 
+            /*
             List<Tascaas01> tasques = new ArrayList<>();
             boolean addingTasks = true;
 
@@ -186,7 +186,7 @@ public class MethodsMainOperari {
                 if (!addMoreTasks.equals("si")) {
                     addingTasks = false;
                 }
-            }
+            }*/
 
             System.out.print("Observaciones: ");
             String observacions = tcl.nextLine();
@@ -195,7 +195,7 @@ public class MethodsMainOperari {
             newOperari.setNom(nom);
             newOperari.setCognom(cognom);
             newOperari.setNifOperari(nifOperari);
-            newOperari.setTasques(tasques);
+            //newOperari.setTasques(tasques);
             newOperari.setObservacions(observacions);
 
             boolean validInput = false;
