@@ -28,7 +28,7 @@ public class Operariresponsableas01Service {
             throw new RuntimeException("Error al crear operario responsable", e);
         }
     }
-
+    
     // Actualizar un operario responsable
     public void updateOperari(Operariresponsableas01 operari) {
         try {
@@ -37,16 +37,7 @@ public class Operariresponsableas01Service {
             throw new RuntimeException("Error al actualizar operario responsable", e);
         }
     }
-
-    // Eliminar un operario responsable
-    public void deleteOperari(Operariresponsableas01 operari) {
-        try {
-            operariDAO.delete(operari);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar operario responsable", e);
-        }
-    }
-
+    
     // Encontrar un operario responsable por su ID
     public Operariresponsableas01 findOperariById(Object id) {
         try {
@@ -57,11 +48,37 @@ public class Operariresponsableas01Service {
     }
 
     // Obtener todos los operarios responsables
-    public List<Operariresponsableas01> getAllOperaris() {
+    public List<Operariresponsableas01> findAllOperaris() {
         try {
             return operariDAO.findAll();
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener todos los operarios responsables", e);
         }
     }
+     public List<Operariresponsableas01> findAllWithDetails() {
+         try {
+            return operariDAO.findAllWithDetails();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todos los operarios y las tablas relacionadas", e);
+        }
+         
+     }
+
+    // Eliminar un operario responsable
+    public void deleteOperari(Operariresponsableas01 operari) {
+        try {
+            operariDAO.delete(operari);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar operario responsable", e);
+        }
+    }
+    
+    public void deleteTable() {
+    try {
+        operariDAO.deleteTable();
+    } catch (Exception e) {
+        throw new RuntimeException("Error al vaciar la tabla de operaris", e);
+    }
+    }
+    
 }

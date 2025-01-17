@@ -301,7 +301,6 @@ public class MethodsMainFactura {
             Clientas01 cliente = factura.getIdClient();
             if (cliente != null) {
                 System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
-                //HE DE IMPRIMIR TAMBIEN SUS FACTURAS Y PROYECTOS???
             } else {
                 System.out.println("\t" + "Cliente asociado no encontrado.");
             }
@@ -319,8 +318,10 @@ public class MethodsMainFactura {
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
+    
     //*************** DELETE FACTURAS  *****************************//
     protected static void eliminarFacturas(Facturaas01Service facturaService) {
+        
         System.out.println("¿Cómo deseas eliminar las facturas?");
         System.out.println("1. Eliminar todas las facturas");
         System.out.println("2. Eliminar una factura por ID");

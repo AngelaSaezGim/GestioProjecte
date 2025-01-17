@@ -17,58 +17,65 @@ public class Tascaas01Service {
 
     private final Tascaas01DAO tascaas01DAO;
 
-    /**
-     * Constructor que inicializa el servicio con un EntityManager.
-     *
-     * @param em EntityManager para gestionar la persistencia
-     */
+
     public Tascaas01Service(EntityManager em) {
         this.tascaas01DAO = new Tascaas01DAO(em);
     }
 
-    /**
-     * Crea una nueva tarea en la base de datos.
-     *
-     * @param tascaas01 la entidad Tascaas01 a crear
-     */
     public void createTasca(Tascaas01 tascaas01) {
-        tascaas01DAO.create(tascaas01);
+        try {
+            tascaas01DAO.create(tascaas01);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear tarea", e);
+        }
     }
 
-    /**
-     * Actualiza una tarea existente en la base de datos.
-     *
-     * @param tascaas01 la entidad Tascaas01 con los nuevos datos
-     */
     public void updateTasca(Tascaas01 tascaas01) {
-        tascaas01DAO.update(tascaas01);
+        try {
+           tascaas01DAO.update(tascaas01);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar tarea", e);
+        }
     }
-
-    /**
-     * Elimina una tarea de la base de datos.
-     *
-     * @param tascaas01 la entidad Tascaas01 a eliminar
-     */
-    public void deleteTasca(Tascaas01 tascaas01) {
-        tascaas01DAO.delete(tascaas01);
-    }
-
-    /**
-     * Busca una tarea por su ID.
-     *
-     * @param id el identificador de la tarea
-     * @return la entidad Tascaas01 encontrada, o null si no existe
-     */
+    
     public Tascaas01 findTascaById(Object id) {
-        return tascaas01DAO.findById(id);
+          try {
+            return tascaas01DAO.findById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar una tarea por ID", e);
+        }
     }
 
-    /**
-     * Obtiene todas las tareas de la base de datos.
-     *
-     * @return una lista de entidades Tascaas01
-     */
-    public List<Tascaas01> getAllTasques() {
-        return tascaas01DAO.findAll();
+    public List<Tascaas01> findAllTasques() {
+        try {
+            return tascaas01DAO.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todas las tareas", e);
+        }
+    }
+    
+    public List<Tascaas01> findAllWithDetails() {
+         try {
+            return tascaas01DAO.findAllWithDetails();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todas las tareas y las tablas relacionadas", e);
+        }
+         
+     }
+    
+     public void deleteTasca(Tascaas01 tascaas01) {
+         try {
+            tascaas01DAO.delete(tascaas01);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar proyecto", e);
+        }
+    }
+     
+     public void deleteTable() {
+    try {
+        tascaas01DAO.deleteTable();
+    } catch (Exception e) {
+        throw new RuntimeException("Error al vaciar la tabla de tasques", e);
+    }
     }
 }

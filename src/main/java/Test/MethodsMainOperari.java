@@ -13,6 +13,7 @@ import static Test.MainApp.tcl;
 import static Test.MehtodsMainEntities.esNifValido;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -75,36 +76,6 @@ public class MethodsMainOperari {
                 }
             }
 
-            /*List<Tascaas01> tasques = new ArrayList<>();
-            boolean addingTasks = true;
-
-            while (addingTasks) {
-                System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
-                /// DUDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
-                System.out.print("Quieres ver la lista de tareas existentes sin operarios asignados ? ");
-                System.out.println("Tarea a agregar al proyecto nuevo; ");
-                String inputIdTasca = tcl.nextLine();
-
-                try {
-                    Integer idTasca = Integer.parseInt(inputIdTasca);
-                    Tascaas01 tasca = tascaService.findTascaById(idTasca);
-                    if (tasca == null) {
-                        System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
-                    } else {
-                        tasques.add(tasca);
-                        System.out.println("Tarea con ID " + idTasca + " asociada exitosamente.");
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("ID de tarea inválido. Inténtalo nuevamente.");
-                }
-
-                System.out.print("¿Deseas agregar otra tarea para este operario? (si/no): ");
-                String addMoreTasks = tcl.nextLine().trim().toLowerCase();
-                if (!addMoreTasks.equals("si")) {
-                    addingTasks = false;
-                }
-            }*/
-
             System.out.print("Observaciones: ");
             String observacions = tcl.nextLine();
 
@@ -160,34 +131,6 @@ public class MethodsMainOperari {
                 }
             }
 
-            /*
-            List<Tascaas01> tasques = new ArrayList<>();
-            boolean addingTasks = true;
-
-            while (addingTasks) {
-                System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
-                String inputIdTasca = tcl.nextLine();
-
-                try {
-                    Integer idTasca = Integer.parseInt(inputIdTasca);
-                    Tascaas01 tasca = tascaService.findTascaById(idTasca);
-                    if (tasca == null) {
-                        System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
-                    } else {
-                        tasques.add(tasca);
-                        System.out.println("Tarea con ID " + idTasca + " asociada exitosamente.");
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("ID de tarea inválido. Inténtalo nuevamente.");
-                }
-
-                System.out.print("¿Deseas agregar otra tarea para este operario? (si/no): ");
-                String addMoreTasks = tcl.nextLine().trim().toLowerCase();
-                if (!addMoreTasks.equals("si")) {
-                    addingTasks = false;
-                }
-            }*/
-
             System.out.print("Observaciones: ");
             String observacions = tcl.nextLine();
 
@@ -195,7 +138,6 @@ public class MethodsMainOperari {
             newOperari.setNom(nom);
             newOperari.setCognom(cognom);
             newOperari.setNifOperari(nifOperari);
-            //newOperari.setTasques(tasques);
             newOperari.setObservacions(observacions);
 
             boolean validInput = false;
@@ -230,15 +172,42 @@ public class MethodsMainOperari {
             case 1:
                 log.info("=== MOSTRANDO OPERARIOS RESPONSABLES ===");
                 log.info("*=== [MODO BÁSICO] ===*");
+                for (Operariresponsableas01 operari : operariResponsableService.findAllOperaris()) {
+                    System.out.println("---> [" + operari.getIdOperariTasca() + "] " + operari.getNom() + " " + operari.getCognom()
+                            + " | NIF: " + operari.getNifOperari()
+                            + " | Observaciones: " + operari.getObservacions());
+                }
                 break;
             case 2:
                 log.info("=== MOSTRANDO OPERARIOS RESPONSABLES ===");
                 log.info("*=== [MODO COMPLETO] ===*");
+                listOperariComplete(operariResponsableService);
                 break;
             default:
                 System.out.println("Opción no válida.");
                 break;
         }
+    }
+
+    public static void listOperariComplete(Operariresponsableas01Service operariResponsableService) {
+
+        List<Operariresponsableas01> operarios = operariResponsableService.findAllWithDetails();
+        operarios.forEach(operari -> {
+            System.out.println("- > OPERARIO RESPONSABLE [" + operari.getIdOperariTasca() + "] " + operari.getNom() + " "
+                    + operari.getCognom() + " | NIF: " + operari.getNifOperari()
+                    + " | Observaciones: " + operari.getObservacions());
+
+            System.out.println("\tTareas asignadas al operario " + operari.getNom() + ":");
+            Collection<Tascaas01> tasques = operari.getTasques();
+            if (tasques != null && !tasques.isEmpty()) {
+                tasques.forEach(tasca -> {
+                    System.out.println("\t - [" + tasca.getIdTasca() + "] " + tasca.getDescripcio()
+                            + " | Estado: " + tasca.getEstat());
+                });
+            } else {
+                System.out.println("\tNo hay tareas asociadas a este operario.");
+            }
+        });
     }
 
     //*****************************************************************//

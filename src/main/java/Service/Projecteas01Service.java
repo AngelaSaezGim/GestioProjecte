@@ -38,15 +38,6 @@ public class Projecteas01Service  {
         }
     }
 
-    // Eliminar un proyecto
-    public void deleteProject(Projecteas01 project) {
-        try {
-            projecteDAO.delete(project);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar proyecto", e);
-        }
-    }
-
     // Encontrar un proyecto por su ID
     public Projecteas01 findProjectById(Object id) {
         try {
@@ -57,11 +48,37 @@ public class Projecteas01Service  {
     }
 
     // Obtener todos los proyectos
-    public List<Projecteas01> getAllProjects() {
+    public List<Projecteas01> findAllProjects() {
         try {
             return projecteDAO.findAll();
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener todos los proyectos", e);
         }
+    }
+    
+    public List<Projecteas01> findAllWithDetails() {
+         try {
+            return projecteDAO.findAllWithDetails();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todos los proyectos y las tablas relacionadas", e);
+        }
+         
+     }
+    
+    // Eliminar un proyecto
+    public void deleteProject(Projecteas01 project) {
+        try {
+            projecteDAO.delete(project);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar proyecto", e);
+        }
+    }
+    
+     public void deleteTable() {
+    try {
+        projecteDAO.deleteTable();
+    } catch (Exception e) {
+        throw new RuntimeException("Error al vaciar la tabla de projectes", e);
+    }
     }
 }

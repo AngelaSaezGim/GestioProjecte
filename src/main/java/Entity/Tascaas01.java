@@ -59,8 +59,8 @@ public class Tascaas01 implements Serializable {
     private Collection<Facturaas01> facturaas01Collection;
 
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO
+    // TASCA
     @OneToOne 
-    //@JoinColumn(name = "IdTasca", nullable = false , insertable = false, updatable = false)
     @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false , insertable = false, updatable = false)
     private Operariresponsableas01 idOperari;
 

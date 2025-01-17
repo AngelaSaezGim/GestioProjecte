@@ -96,7 +96,7 @@ public class MethodsMainTasca {
                     verLista = tcl.nextLine().trim().toLowerCase();
 
                     if (verLista.equals("si")) {
-                        projecteService.getAllProjects().forEach(System.out::println);
+                        projecteService.findAllProjects().forEach(System.out::println);
                         validInput = true; 
                     } else if (verLista.equals("no")) {
                         System.out.println("No se mostrará la lista.");

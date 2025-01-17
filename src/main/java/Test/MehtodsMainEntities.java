@@ -42,9 +42,9 @@ public class MehtodsMainEntities {
         System.out.println(border);
         System.out.printf("* %-35s *\n", "Nº Clientes: " + clientService.findAllClients().size());
         System.out.printf("* %-35s *\n", "Nº Facturas: " + facturaService.findAllFacturas().size());
-        System.out.printf("* %-35s *\n", "Nº Operarios responsables: " + operariResponsableService.getAllOperaris().size());
-        System.out.printf("* %-35s *\n", "Nº Proyectos: " + projecteService.getAllProjects().size());
-        System.out.printf("* %-35s *\n", "Nº Tareas: " + tascaService.getAllTasques().size());
+        System.out.printf("* %-35s *\n", "Nº Operarios responsables: " + operariResponsableService.findAllOperaris().size());
+        System.out.printf("* %-35s *\n", "Nº Proyectos: " + projecteService.findAllProjects().size());
+        System.out.printf("* %-35s *\n", "Nº Tareas: " + tascaService.findAllTasques().size());
         System.out.println(border);
     }
 
