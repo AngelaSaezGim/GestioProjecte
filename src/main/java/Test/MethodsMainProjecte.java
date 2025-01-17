@@ -4,6 +4,7 @@
  */
 package Test;
 
+import Entity.Clientas01;
 import Entity.Projecteas01;
 import Entity.Tascaas01;
 import Service.Clientas01Service;
@@ -12,19 +13,17 @@ import Service.Tascaas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import java.util.Collection;
-
+import java.util.List;
 /**
  *
  * @author angsaegim
  */
 public class MethodsMainProjecte {
-    
+
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
-    
     //*************** AGREGAR PROJECTE  *****************************//
-    
     public static void agregarProjecteMenu(Projecteas01Service projecteService, Clientas01Service clientasService, Tascaas01Service tascaService) {
 
         System.out.println("¿Cómo deseas agregar a los proyectos?");
@@ -156,7 +155,7 @@ public class MethodsMainProjecte {
         String continueAdding = "si";
 
         while (continueAdding.equalsIgnoreCase("si")) {
-            
+
             System.out.println("Introduce los datos del proyecto:");
 
             System.out.print("Descripción del proyecto: ");
@@ -247,11 +246,10 @@ public class MethodsMainProjecte {
             }
         }
     }
-    
-     //*****************************************************************//
+
+    //*****************************************************************//
     //********************** FIND ************************************//
     //*****************************************************************//
-    
     //*************** LISTAR PROYECTOS  *****************************//
     protected static void listProyectos(Projecteas01Service projecteService) {
 
@@ -266,10 +264,14 @@ public class MethodsMainProjecte {
             case 1:
                 log.info("=== MOSTRANDO PROYECTOS ===");
                 log.info("*=== [MODO BÁSICO] ===*");
+                for (Projecteas01 proyecto : projecteService.findAllProjects()) {
+                System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+                }
                 break;
             case 2:
                 log.info("=== MOSTRANDO PROYECTOS ===");
                 log.info("*=== [MODO COMPLETO] ===*");
+                listProyectoComplete(projecteService);
                 break;
             default:
                 System.out.println("Opción no válida.");
@@ -277,11 +279,37 @@ public class MethodsMainProjecte {
         }
     }
     
+    public static void listProyectoComplete(Projecteas01Service projecteService) {
+    List<Projecteas01> proyectos = projecteService.findAllWithDetails();
+    proyectos.forEach(proyecto -> {
+
+        System.out.println("- > PROYECTO Nº [" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+
+        System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " pertenece al cliente: ");
+        Clientas01 cliente = proyecto.getIdClient();
+        if (cliente != null) {
+            System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+        } else {
+            System.out.println("\t" + "Cliente asociado no encontrado.");
+        }
+
+        System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " tiene las siguientes tareas: ");
+        Collection<Tascaas01> tareas = proyecto.getTascaas01Collection();
+        if (tareas != null && !tareas.isEmpty()) {
+            tareas.forEach(tarea -> {
+                System.out.println("\t -" + "[" + tarea.getIdTasca() + "]" + tarea.getDescripcio() + " | Estado: " + tarea.getEstat());
+            });
+        } else {
+            System.out.println("\t" + "No tiene tareas asociadas.");
+        }
+    });
+    }
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
+    //*************** DELETE PROJECTE  *****************************//
     
-     //*************** DELETE PROJECTE  *****************************//
     protected static void eliminarProjectes(Projecteas01Service projecteService) {
         System.out.println("¿Cómo deseas eliminar los proyectos?");
         System.out.println("1. Eliminar todos los proyectos");
@@ -292,8 +320,32 @@ public class MethodsMainProjecte {
 
         switch (opcion) {
             case 1:
+                System.out.print("Eliminando todos los proyectos... ");
+                if (projecteService.findAllProjects().isEmpty()) {
+                    System.out.println("No hay proyectos para eliminar.");
+                } else {
+                    System.out.println("Eliminando...");
+                    projecteService.deleteTable();
+                    System.out.println("Todos los proyectos han sido eliminados.");
+                }
                 break;
             case 2:
+                System.out.print("Introduce el ID del proyecto a eliminar: ");
+                System.out.println("Proyectos disponibles:");
+                for (Projecteas01 proyecto : projecteService.findAllProjects()) {
+                    System.out.println("[" + proyecto.getIdProjecte() + "] " + proyecto.getDescripcio() + " - Estado: " + proyecto.getEstat());
+                }
+                System.out.print("ID del proyecto a eliminar: ");
+                int idProyecto = tcl.nextInt();
+                tcl.nextLine();
+
+                Projecteas01 proyecto = projecteService.findProjectById(idProyecto);
+                if (proyecto != null) {
+                    projecteService.deleteProject(proyecto);
+                    System.out.println("Proyecto con ID " + idProyecto + " ha sido eliminado.");
+                } else {
+                    System.out.println("No se encontró un proyecto con ese ID.");
+                }
                 break;
             default:
                 System.out.println("Opción no válida.");

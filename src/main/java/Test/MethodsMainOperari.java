@@ -213,8 +213,10 @@ public class MethodsMainOperari {
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
+    
     //*************** DELETE OPERARI  *****************************//
     protected static void eliminarOperariosResponsables(Operariresponsableas01Service operariResponsableService) {
+
         System.out.println("¿Cómo deseas eliminar los operarios responsables?");
         System.out.println("1. Eliminar todos los operarios responsables");
         System.out.println("2. Eliminar un operario responsable por ID");
@@ -224,8 +226,32 @@ public class MethodsMainOperari {
 
         switch (opcion) {
             case 1:
+                System.out.print("Eliminando todos los operarios responsables... ");
+                if (operariResponsableService.findAllOperaris().isEmpty()) {
+                    System.out.println("No hay operarios responsables para eliminar.");
+                } else {
+                    System.out.println("Eliminando...");
+                    operariResponsableService.deleteTable();
+                    System.out.println("Todos los operarios responsables han sido eliminados.");
+                }
                 break;
             case 2:
+                System.out.print("Introduce el ID del operario responsable a eliminar: ");
+                System.out.println("Operarios responsables disponibles:");
+                for (Operariresponsableas01 operario : operariResponsableService.findAllOperaris()) {
+                    System.out.println("[" + operario.getIdOperariTasca() + "] " + operario.getNom() + " " + operario.getCognom() + " - NIF: " + operario.getNifOperari() + " - Observacions : " + operario.getObservacions());
+                }
+                System.out.print("ID del operario responsable a eliminar: ");
+                int idOperario = tcl.nextInt();
+                tcl.nextLine();
+
+                Operariresponsableas01 operario = operariResponsableService.findOperariById(idOperario);
+                if (operario != null) {
+                    operariResponsableService.deleteOperari(operario);
+                    System.out.println("Operario responsable con ID " + idOperario + " ha sido eliminado.");
+                } else {
+                    System.out.println("No se encontró un operario responsable con ese ID.");
+                }
                 break;
             default:
                 System.out.println("Opción no válida.");

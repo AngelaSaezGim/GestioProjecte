@@ -4,11 +4,16 @@
  */
 package Test;
 
+import Entity.Facturaas01;
+import Entity.Operariresponsableas01;
+import Entity.Projecteas01;
 import Entity.Tascaas01;
 import Service.Projecteas01Service;
 import Service.Tascaas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
+import java.util.List;
+import java.util.Collection;
 
 /**
  *
@@ -97,7 +102,7 @@ public class MethodsMainTasca {
 
                     if (verLista.equals("si")) {
                         projecteService.findAllProjects().forEach(System.out::println);
-                        validInput = true; 
+                        validInput = true;
                     } else if (verLista.equals("no")) {
                         System.out.println("No se mostrará la lista.");
                         validInput = true;
@@ -183,10 +188,14 @@ public class MethodsMainTasca {
             case 1:
                 log.info("=== MOSTRANDO TASQUES ===");
                 log.info("*=== [MODO BÁSICO] ===*");
+                for (Tascaas01 tasca : tascaService.findAllTasques()) {
+                    System.out.println("---> " + "[" + tasca.getIdTasca() + "]" + " " + tasca.getDescripcio() + " | Estado: " + tasca.getEstat());
+                }
                 break;
             case 2:
                 log.info("=== MOSTRANDO TASQUES ===");
                 log.info("*=== [MODO COMPLETO] ===*");
+                listTasquesComplete(tascaService);
                 break;
             default:
                 System.out.println("Opción no válida.");
@@ -194,10 +203,47 @@ public class MethodsMainTasca {
         }
     }
 
+    public static void listTasquesComplete(Tascaas01Service tascaService) {
+
+        List<Tascaas01> tasques = tascaService.findAllWithDetails();
+        tasques.forEach(tasca -> {
+            System.out.println("- > TAREA Nº [" + tasca.getIdTasca() + "]" + " " + tasca.getDescripcio() + " | Estado: " + tasca.getEstat());
+
+            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " pertenece al proyecto: ");
+            Projecteas01 proyecto = tasca.getIdProjecte();
+            if (proyecto != null) {
+                System.out.println("\t -" + "[" + proyecto.getIdProjecte() + "]" + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+            } else {
+                System.out.println("\t" + "Proyecto asociado no encontrado.");
+            }
+
+            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene las siguientes facturas: ");
+            Collection<Facturaas01> facturas = tasca.getFacturaas01Collection();
+            if (facturas != null && !facturas.isEmpty()) {
+                facturas.forEach(factura -> {
+                    System.out.println("\t -" + "[" + factura.getIdFactura() + "]" + " " + " Fecha : " + factura.getData() + " | " + factura.getObservacions() + " | Importe: " + factura.getImportTotal());
+                });
+            } else {
+                System.out.println("\t" + "No tiene facturas asociadas.");
+            }
+
+            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene el siguiente operario responsable: ");
+            Operariresponsableas01 operario = tasca.getOperariResponsable();
+            if (operario != null) {
+                System.out.println("\t -" + "[" + operario.getIdOperariTasca() + "]" + operario.getNom() + " " + operario.getCognom() + " | " + operario.getNifOperari() + "| Actividad : " + operario.getObservacions());
+            } else {
+                System.out.println("\t" + "Operario responsable no encontrado.");
+            }
+        });
+
+    }
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
+    
     //*************** DELETE TASCA  *****************************//
+    
     protected static void eliminarTasques(Tascaas01Service tascaService) {
         System.out.println("¿Cómo deseas eliminar las tasques?");
         System.out.println("1. Eliminar todas las tasques");
@@ -208,8 +254,31 @@ public class MethodsMainTasca {
 
         switch (opcion) {
             case 1:
+                System.out.print("Eliminando todas las tareas... ");
+                if (tascaService.findAllTasques().isEmpty()) {
+                    System.out.println("No hay tareas para eliminar.");
+                } else {
+                    tascaService.deleteTable();
+                    System.out.println("Todas las tareas han sido eliminadas.");
+                }
                 break;
             case 2:
+                System.out.println("Introduce el ID de la tasca a eliminar:");
+                System.out.println("Tareas disponibles:");
+                for (Tascaas01 tasca : tascaService.findAllTasques()) {
+                    System.out.println("[" + tasca.getIdTasca() + "] " + tasca.getDescripcio() + " - Estado: " + tasca.getEstat());
+                }
+                System.out.print("ID de la tasca a eliminar: ");
+                int idTasca = tcl.nextInt();
+                tcl.nextLine();
+
+                Tascaas01 tasca = tascaService.findTascaById(idTasca);
+                if (tasca != null) {
+                    tascaService.deleteTasca(tasca);
+                    System.out.println("Tasca con ID " + idTasca + " ha sido eliminada.");
+                } else {
+                    System.out.println("No se encontró una tasca con ese ID.");
+                }
                 break;
             default:
                 System.out.println("Opción no válida.");

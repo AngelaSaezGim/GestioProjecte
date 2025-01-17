@@ -69,7 +69,6 @@ VALUES
 INSERT INTO OperariResponsableAS01 (nifOperari, nom, cognom, observacions)
 VALUES 
     ('12345678A', 'Pepe', 'Goteras', 'Tasques inicials completades per Pepe Goteras'),
-    ('12345678A', 'Pepe', 'Goteras', 'Tasques de planificació gestionades per Pepe Goteras');
     
 -- TASCA: Inventa 2 tasques per 2 dels projectes anteriors i els altres 2 els deixes sense tasques. Finalitza 1 tasca per cadascun del 2 projectes amb tasques.
 INSERT INTO TascaAS01 (descripcio, estat, idProjecte, idOperari)
