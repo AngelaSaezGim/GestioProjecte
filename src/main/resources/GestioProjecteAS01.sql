@@ -18,24 +18,24 @@ CREATE TABLE IF NOT EXISTS ProjecteAS01 (
 	FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient)
 );
 
--- 3. Tasca: IdTasca (PK, AI), descripció, EstatTasca (No Iniciada, en procés, finalitzada), IdProjecte
-CREATE TABLE IF NOT EXISTS TascaAS01 (
-    idTasca INT PRIMARY KEY AUTO_INCREMENT, 
-    descripcio VARCHAR(45),
-    estat ENUM('No iniciat', 'En procés', 'Finalitzat'),
-    idProjecte INT,
-	FOREIGN KEY (idProjecte) REFERENCES ProjecteAS01(idProjecte)
-);
-
 /*4. OperariResponsable: IdOperariTasca (PK, AI), nom, cognom, NIFOperari (NN), IdTasca (NN), observacions*/
 CREATE TABLE IF NOT EXISTS OperariResponsableAS01 (
     idOperariTasca INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(45),
     cognom VARCHAR(45),
     nifOperari VARCHAR(9) NOT NULL,
-    idTasca INT NOT NULL,
-    observacions VARCHAR(255),
-    FOREIGN KEY (idTasca) REFERENCES TascaAS01(idTasca)
+    observacions VARCHAR(255)
+);
+
+-- 3. Tasca: IdTasca (PK, AI), descripció, EstatTasca (No Iniciada, en procés, finalitzada), IdProjecte
+CREATE TABLE IF NOT EXISTS TascaAS01 (
+    idTasca INT PRIMARY KEY AUTO_INCREMENT, 
+    descripcio VARCHAR(45),
+    estat ENUM('No iniciat', 'En procés', 'Finalitzat'),
+    idProjecte INT,
+    idOperari INT NOT NULL,
+	FOREIGN KEY (idProjecte) REFERENCES ProjecteAS01(idProjecte),
+    FOREIGN KEY (idOperari) REFERENCES OperariResponsableAS01(idOperariTasca)
 );
 
 /*5. Factura: IdFactura (PK AI) , IdTasca (NN), IdClient (NN), data (NN), importTotal, observacions */
@@ -65,20 +65,19 @@ VALUES
     ('Construcció de la casa de Ruben', 'Finalitzat', 1),
     ('Construcció de la casa de David', 'No iniciat', 1);
 
--- TASCA: Inventa 2 tasques per 2 dels projectes anteriors i els altres 2 els deixes sense tasques. Finalitza 1 tasca per cadascun del 2 projectes amb tasques.
-INSERT INTO TascaAS01 (descripcio, estat, idProjecte)
+-- OPERARI RESPONSABLE: Registra a Pepe Goteras com a responsable de les dues tasques. NIF 12345678A.
+INSERT INTO OperariResponsableAS01 (nifOperari, nom, cognom, observacions)
 VALUES 
-    ('Preparar el terreny', 'Finalitzat', 2),
-    ('Construir els fonaments', 'En procés', 2),
+    ('12345678A', 'Pepe', 'Goteras', 'Tasques inicials completades per Pepe Goteras'),
+    ('12345678A', 'Pepe', 'Goteras', 'Tasques de planificació gestionades per Pepe Goteras');
+    
+-- TASCA: Inventa 2 tasques per 2 dels projectes anteriors i els altres 2 els deixes sense tasques. Finalitza 1 tasca per cadascun del 2 projectes amb tasques.
+INSERT INTO TascaAS01 (descripcio, estat, idProjecte, idOperari)
+VALUES 
+    ('Preparar el terreny', 'Finalitzat', 2, 1),
+    ('Construir els fonaments', 'En procés', 2, 1),
     ('Dissenyar plànols', 'Finalitzat', 3),
     ('Organitzar subministraments', 'En procés', 3);
-
--- OPERARI RESPONSABLE: Registra a Pepe Goteras com a responsable de les dues tasques. NIF 12345678A.
-INSERT INTO OperariResponsableAS01 (nifOperari, nom, cognom, idTasca, observacions)
-VALUES 
-    ('12345678A', 'Pepe', 'Goteras', 1, 'Tasques inicials completades per Pepe Goteras'),
-    ('12345678A', 'Pepe', 'Goteras', 3, 'Tasques de planificació gestionades per Pepe Goteras');
-
 
 -- FACTURA:Emet una factura amb data 31/12/2017 i una altra amb data 30/11/2024.
 INSERT INTO FacturaAS01 (idTasca, idClient, data, importTotal, observacions)

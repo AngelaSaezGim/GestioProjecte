@@ -58,9 +58,11 @@ public class Tascaas01 implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
 
+    // UNA TAREA ESTA ASOCIADA A UN OPEARIO
     @OneToOne 
-    @JoinColumn(name = "IdTasca", nullable = false , insertable = false, updatable = false)
-    private Operariresponsableas01 operariResponsable;
+    //@JoinColumn(name = "IdTasca", nullable = false , insertable = false, updatable = false)
+    @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false , insertable = false, updatable = false)
+    private Operariresponsableas01 idOperari;
 
     public Tascaas01() {
     }
@@ -110,11 +112,11 @@ public class Tascaas01 implements Serializable {
     }
 
     public Operariresponsableas01 getOperariResponsable() {
-        return operariResponsable;
+        return idOperari;
     }
 
     public void setOperariResponsable(Operariresponsableas01 operariResponsable) {
-        this.operariResponsable = operariResponsable;
+        this.idOperari = operariResponsable;
     }
 
     @Override
@@ -125,7 +127,7 @@ public class Tascaas01 implements Serializable {
                 + ", estat= " + estat + '\''
                 + ", idProjecte= " + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
                 + ", facturaas01Collection= " + (facturaas01Collection != null ? facturaas01Collection.size() + " facturas" : "null")
-                + ", operariResponsable=" + operariResponsable
+                + ", operariResponsable=" + idOperari
                 + '}';
     }
 }
