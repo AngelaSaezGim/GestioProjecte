@@ -84,13 +84,6 @@ VALUES
     (1, 1, '2017-12-31', 200, 'Pago de antemano' ),
     (3, 1, '2024-11-30', 256, 'Pago por plazos');
     
-SELECT * FROM ClientAS01;
-SELECT * FROM ProjecteAS01;
-SELECT * FROM TascaAS01;
-SELECT * FROM OperariResponsableAS01;
-SELECT * FROM FacturaAS01;
-
-DESCRIBE tascaas01;
 
 DROP TABLE IF EXISTS FacturaAS01;
 DROP TABLE IF EXISTS TascaAS01;

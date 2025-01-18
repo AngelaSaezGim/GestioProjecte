@@ -19,6 +19,7 @@ import Service.Projecteas01Service;
 import Service.Tascaas01Service;
 import static Test.MehtodsMainEntities.*;
 import Utils.EntityManagerProvider;
+import Utils.ResetDatabase;
 
 import java.util.Scanner;
 /**
@@ -33,7 +34,7 @@ public class MainApp {
     //CAMBIAR IDIOMA Y ARREGLAR VARIABLES
 
     private enum MenuOption {
-        QUERY_CLEAN_ALL, QUERY_INSERT, QUERY_LIST, QUERY_DELETE, EXIT
+        QUERY_CLEAN_ALL, QUERY_INSERT, QUERY_LIST, QUERY_DELETE, QUERY_RESET, EXIT
     };
 
     private enum MenuOptionInsert {
@@ -181,6 +182,13 @@ public class MainApp {
                             }
                         } while (opcionElegidaDelete != MenuOptionDelete.EXIT);
                         break;
+                    case QUERY_RESET:
+                        System.out.println("Restaurando bd a la configuración inicial..");
+                        ResetDatabase.dropAllTablesSQL(em);
+                        ResetDatabase.crearTablasSQLde0(em);
+                        ResetDatabase.insertarDadesPredeterminats(em);
+                        esperarIntro();
+                        break;
                     case EXIT:
                         System.out.println("Saliendo del programa");
                         break;
@@ -211,6 +219,7 @@ public class MainApp {
         System.out.println("\t2) Añadir nuevos elementos");
         System.out.println("\t3) Listar elementos");
         System.out.println("\t4) Borrar elementos");
+        System.out.println("\t5) Restaurar BD con datos predeterminados");
         System.out.println("\t0) Salir");
         System.out.println(border);
         System.out.print("Opción: ");
