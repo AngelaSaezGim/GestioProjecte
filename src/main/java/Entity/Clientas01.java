@@ -17,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -39,19 +40,21 @@ public class Clientas01 implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false) 
-    @Column(name = "idClient")
+    @Column(name = "idClient", nullable = false, unique = true)
     private Integer idClient;
     
     @Basic(optional = false) 
-    @Column(name = "nom", nullable = false) //NN
+    @Column(name = "nom", nullable = false) 
+    @NotNull(message = "nombre NN")
     private String nom;
     
-    @Column(name = "cognom") 
+    @Column(name = "cognom") //puede ser null
     private String cognom;
     
     //(Valido nif desde service)
     @Basic(optional = false)
-    @Column(name = "nif", nullable = false, unique = true)
+    @Column(name = "nif", nullable = false, unique = true) //NN 
+    @NotNull(message = "nif NN")
     private String nif;
     
     //Un cliente puede tener muchas facturas
@@ -60,8 +63,9 @@ public class Clientas01 implements Serializable {
     private Collection<Facturaas01> facturaas01Collection;
     
     //Un cliente puede tener muchos proyectos
-    //**** FALTA EL CASCADE
-    @OneToMany(mappedBy = "idClient")
+    //todas las operaciones insertar, actualizar, eliminar, etc.) 
+    //que se realicen sobre clientes también se apliquen automáticamente sobre proyectos asociados).
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
     private Collection<Projecteas01> projecteas01Collection;
 
     public Clientas01() {
@@ -126,16 +130,17 @@ public class Clientas01 implements Serializable {
         this.projecteas01Collection = projecteas01Collection;
     }
 
+    
     @Override
     public String toString() {
-    return "Cliente {" +
-            "idClient=" + idClient +
-            ", nom='" + nom + '\'' +
-            ", cognom='" + cognom + '\'' +
-            ", nif='" + nif + '\'' +
-            ", Facturas de " + nom +" =" + facturaas01Collection +
-            ", Proyectos de " + nom + " =" + projecteas01Collection +
-            '}';
-}
+        return "Cliente {" +
+                "idClient=" + idClient +
+                ", nom='" + nom + '\'' +
+                ", cognom='" + cognom + '\'' +
+                ", nif='" + nif + '\'' +
+                ", Facturas=" + (facturaas01Collection != null && !facturaas01Collection.isEmpty() ? facturaas01Collection.size() : "0") +
+                ", Proyectos=" + (projecteas01Collection != null && !projecteas01Collection.isEmpty() ? projecteas01Collection.size() : "0") +
+                '}';
+    }
     
 }

@@ -19,6 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -40,17 +41,18 @@ public class Facturaas01 implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idFactura")
+    @Column(name = "idFactura", nullable = false, unique = true)
     private Integer idFactura;
 
     @Basic(optional = false)
     @Column(name = "data", nullable = false)
-
     @Temporal(TemporalType.DATE)
+    @NotNull(message = "Fecha NN")
     private Date data;
 
     @Basic(optional = false)
     @Column(name = "importTotal", nullable = false)
+    @NotNull(message = "Import NN")
     private double importTotal;
 
     @Column(name = "observacions")
@@ -129,13 +131,13 @@ public class Facturaas01 implements Serializable {
 
     @Override
     public String toString() {
-        return "Factura {"
-                + "idFactura = " + idFactura
-                + ", data = " + data
-                + ", import = " + importTotal
-                + ", observacions = " + observacions + '\''
-                + ", Cliente asociado = " + (idClient != null ? idClient.getNom() + " " + idClient.getCognom() : "N/A")
-                + ", Tarea asociada = " + (idTasca != null ? idTasca.toString() : "N/A")
+        return "Facturaas01 {"
+                + "idFactura=" + idFactura
+                + ", data=" + data
+                + ", importTotal=" + importTotal
+                + ", observacions='" + (observacions != null ? observacions : "N/A") + '\''
+                + ", Cliente asociado=" + (idClient != null ? idClient.getNom() + " " + idClient.getCognom() : "N/A")
+                + ", Tarea asociada=" + (idTasca != null ? idTasca.toString() : "N/A")
                 + '}';
     }
 

@@ -20,6 +20,12 @@ import java.util.List;
  */
 public class MethodsMainClient {
 
+    //1. ESTABLECER RESTRICCIONES DE ENUNCIADO, TANTO EN MAIN COMO EN JPA
+    //2. INSERT COMPLETO
+    //3. DELETE COMPLETO
+    //4. IDIOMA Y LOG
+    
+    
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//

@@ -4,13 +4,11 @@
  */
 package Test;
 
-import Entity.Clientas01;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import org.apache.logging.log4j.*;
-import java.util.List;
 
 import Service.Clientas01Service;
 import Service.Facturaas01Service;
@@ -28,11 +26,6 @@ import java.util.Scanner;
  */
 public class MainApp {
     
-    // TODOS TIENEN QUE TENER LA MISMA ESTRUCTURA QUE CLIENTE
-    // ARREGLAR DELETES Y RELACIONES
-    //ARREGLAR LISTADOS Y PONERLES UNA ESTRUCTURA
-    //CAMBIAR IDIOMA Y ARREGLAR VARIABLES
-
     private enum MenuOption {
         QUERY_CLEAN_ALL, QUERY_INSERT, QUERY_LIST, QUERY_DELETE, QUERY_RESET, EXIT
     };
@@ -89,6 +82,7 @@ public class MainApp {
                     case QUERY_INSERT:
                         do {
                             showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                            System.out.println("-- INSERTAR DATOS --");
                             printOptionsEntity();
                             opcionElegidaInsert = readChoiceInsert();
                             switch (opcionElegidaInsert) {
@@ -121,6 +115,7 @@ public class MainApp {
                     case QUERY_LIST:
                         do {
                             showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                            System.out.println("-- LISTAR DATOS --");
                             printOptionsEntity();
                             opcionElegidaList = readChoiceList();
                             switch (opcionElegidaList) {
@@ -153,6 +148,7 @@ public class MainApp {
                     case QUERY_DELETE:
                         do {
                             showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                            System.out.println("-- BORRAR DATOS --");
                             printOptionsEntity();
                             opcionElegidaDelete = readChoiceDelete();
                             switch (opcionElegidaDelete) {

@@ -7,8 +7,11 @@ package Entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +26,7 @@ import javax.persistence.Table;
  *
  * @author angsaegim
  */
+
 @Entity
 @Table(name = "projecteas01")
 @NamedQueries({
@@ -39,22 +43,24 @@ public class Projecteas01 implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idProjecte")
+    @Column(name = "idProjecte", nullable = false, unique = true)
     private Integer idProjecte;
 
     @Column(name = "descripcio")
     private String descripcio;
-
+    
     @Column(name = "estat")
     private String estat;
 
     //Un proyecto puede estar asociado a varias tareas
-    @OneToMany(mappedBy = "idProjecte")
+    //Modificaciones de proyecto se aplicarán sobre tareas relacionadas
+    //Si se elimina una tarea de la colección(se desvincula)será eliminada
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "idProjecte")
     private Collection<Tascaas01> tascaas01Collection;
 
     //Varios proyectos pueden estar asociados a un cliente
-    @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     @ManyToOne
+    @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     private Clientas01 idClient;
 
     public Projecteas01() {
@@ -114,5 +120,5 @@ public class Projecteas01 implements Serializable {
                 + ", idClient = " + (idClient != null ? idClient.getIdClient() : "null")
                 + '}';
     }
-
+    
 }

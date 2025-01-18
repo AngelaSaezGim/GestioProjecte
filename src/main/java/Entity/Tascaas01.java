@@ -41,7 +41,7 @@ public class Tascaas01 implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idTasca")
+    @Column(name = "idTasca", nullable = false, unique = true)
     private Integer idTasca;
 
     @Column(name = "descripcio")
@@ -56,11 +56,13 @@ public class Tascaas01 implements Serializable {
     private Projecteas01 idProjecte;
 
     //Una tarea puede estar asociada a varias facturas
+    //Si modificamos una tarea, se modificará su factura asociada
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
 
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO
     // TASCA
+    //Cascade???
     @OneToOne 
     @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false , insertable = true, updatable = true)
     private Operariresponsableas01 idOperari;
