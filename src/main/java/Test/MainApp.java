@@ -100,7 +100,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_OPERARI:
-                                    MethodsMainOperari.agregarOperariResponsableMenu(operariResponsableService, tascaService);
+                                    MethodsMainOperari.agregarOperariBasic(operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_PROJECTE:
@@ -108,7 +108,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_TASCA:
-                                    MethodsMainTasca.agregarTascaMenu(tascaService, projecteService);
+                                    MethodsMainTasca.agregarTascaMenu(tascaService, projecteService, facturaService, operariResponsableService);
                                     esperarIntro();
                                     break;
                                 case EXIT:

@@ -12,8 +12,10 @@ import Service.Projecteas01Service;
 import Service.Tascaas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 /**
  *
  * @author angsaegim
@@ -51,7 +53,7 @@ public class MethodsMainProjecte {
         }
     }
 
-    public static void agregarProjecteBasic(Projecteas01Service projecteService, Clientas01Service clientasService, Tascaas01Service tascaService) {
+    public static void agregarProjecteBasic(Projecteas01Service projecteService, Clientas01Service clientService, Tascaas01Service tascaService) {
 
         String continueAdding = "si";
 
@@ -84,7 +86,7 @@ public class MethodsMainProjecte {
                         break;
                     default:
                         System.out.println("Opción no válida. Intenta nuevamente.");
-                        continue; // Volver al inicio del bucle
+                        continue;
                 }
                 break;
             }
@@ -92,12 +94,13 @@ public class MethodsMainProjecte {
             Integer idClient = null;
             while (idClient == null) {
                 System.out.print("ID del cliente (debe ser válido y existir): ");
-                System.out.println("Quieres ver la lista de clientes ? ");
+                System.out.println("Lista de clientes disponibles; ");
+                MethodsMainClient.listClientsBasic(clientService);
                 System.out.println("Proyecto asociado a cliente...");
                 String inputIdClient = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(inputIdClient);
-                    if (clientasService.findClientById(idClient) == null) {
+                    if (clientService.findClientById(idClient) == null) {
                         System.out.println("El cliente con ID " + idClient + " no existe. Inténtalo nuevamente.");
                         idClient = null;
                     }
@@ -106,28 +109,33 @@ public class MethodsMainProjecte {
                 }
             }
 
-            Integer idTasca = null;
-            while (idTasca == null) {
-                System.out.print("ID de la tasca (debe ser un número válido): ");
-                System.out.println("Quieres ver la lista de tareas ? ");
-                System.out.println("Proyecto asociado a tarea...");
-                String inputIdTasca = tcl.nextLine();
+            System.out.print("IDs de las tareas (separados por comas): ");
+            System.out.println("Lista de tareas disponibles; ");
+            MethodsMainTasca.listTasquesBasic(tascaService);
+            System.out.println("Proyecto asociado a tareas... (separalas por comas)");
+            String inputTascas = tcl.nextLine();
+            String[] tascaIds = inputTascas.split(",");
+            List<Tascaas01> tasques = new ArrayList<>();
+
+            for (String tascaId : tascaIds) {
                 try {
-                    idTasca = Integer.parseInt(inputIdTasca);
-                    if (tascaService.findTascaById(idTasca) == null) {
-                        System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
-                        idTasca = null;
+                    int id = Integer.parseInt(tascaId.trim());
+                    Tascaas01 tasca = tascaService.findTascaById(id);
+                    if (tasca != null) {
+                        tasques.add(tasca);
+                    } else {
+                        System.out.println("La tarea con ID " + id + " no existe.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de tasca inválido. Inténtalo nuevamente.");
+                    System.out.println("El ID " + tascaId + " no es válido.");
                 }
             }
 
             Projecteas01 newProjecte = new Projecteas01();
             newProjecte.setDescripcio(descripcio);
             newProjecte.setEstat(estat);
-            newProjecte.setTascaas01Collection((Collection<Tascaas01>) tascaService.findTascaById(idTasca));
-            newProjecte.setIdClient(clientasService.findClientById(idClient));
+            newProjecte.setTascaas01Collection(tasques);
+            newProjecte.setIdClient(clientService.findClientById(idClient));
 
             try {
                 projecteService.createProject(newProjecte);
@@ -150,7 +158,7 @@ public class MethodsMainProjecte {
         }
     }
 
-    public static void agregarProjecteComplete(Projecteas01Service projecteService, Clientas01Service clientasService, Tascaas01Service tascaService) {
+    public static void agregarProjecteComplete(Projecteas01Service projecteService, Clientas01Service clientService, Tascaas01Service tascaService) {
 
         String continueAdding = "si";
 
@@ -183,7 +191,7 @@ public class MethodsMainProjecte {
                         break;
                     default:
                         System.out.println("Opción no válida. Intenta nuevamente.");
-                        continue; // Volver al inicio del bucle
+                        continue; // Volver al inicio del bucle - no puede ser nulo
                 }
                 break;
             }
@@ -191,10 +199,13 @@ public class MethodsMainProjecte {
             Integer idClient = null;
             while (idClient == null) {
                 System.out.print("ID del cliente (debe ser válido y existir): ");
+                System.out.println("Lista de clientes disponibles; ");
+                MethodsMainClient.listClientsBasic(clientService);
+                System.out.println("Proyecto asociado a cliente...");
                 String inputIdClient = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(inputIdClient);
-                    if (clientasService.findClientById(idClient) == null) {
+                    if (clientService.findClientById(idClient) == null) {
                         System.out.println("El cliente con ID " + idClient + " no existe. Inténtalo nuevamente.");
                         idClient = null;
                     }
@@ -204,27 +215,33 @@ public class MethodsMainProjecte {
                 }
             }
 
-            Integer idTasca = null;
-            while (idTasca == null) {
-                System.out.print("ID de la tasca (debe ser un número válido): ");
-                String inputIdTasca = tcl.nextLine();
+            System.out.print("IDs de las tareas (separados por comas): ");
+            System.out.println("Lista de tareas disponibles; ");
+            MethodsMainTasca.listTasquesBasic(tascaService);
+            System.out.println("Proyecto asociado a tareas... (separalas por comas)");
+            String inputTascas = tcl.nextLine();
+            String[] tascaIds = inputTascas.split(",");
+            List<Tascaas01> tasques = new ArrayList<>();
+
+            for (String tascaId : tascaIds) {
                 try {
-                    idTasca = Integer.parseInt(inputIdTasca);
-                    // Aquí puedes verificar si `idTasca` es válido según tu lógica de negocio.
-                    if (tascaService.findTascaById(idTasca) == null) {
-                        System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
-                        idTasca = null;
+                    int id = Integer.parseInt(tascaId.trim());
+                    Tascaas01 tasca = tascaService.findTascaById(id);
+                    if (tasca != null) {
+                        tasques.add(tasca);
+                    } else {
+                        System.out.println("La tarea con ID " + id + " no existe.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de tasca inválido. Inténtalo nuevamente.");
+                    System.out.println("El ID " + tascaId + " no es válido.");
                 }
             }
 
             Projecteas01 newProjecte = new Projecteas01();
             newProjecte.setDescripcio(descripcio);
             newProjecte.setEstat(estat);
-            newProjecte.setTascaas01Collection((Collection<Tascaas01>) tascaService.findTascaById(idTasca));
-            newProjecte.setIdClient(clientasService.findClientById(idClient));
+            newProjecte.setTascaas01Collection(tasques);
+            newProjecte.setIdClient(clientService.findClientById(idClient));
 
             try {
                 projecteService.createProject(newProjecte);
@@ -264,52 +281,57 @@ public class MethodsMainProjecte {
             case 1:
                 log.info("=== MOSTRANDO PROYECTOS ===");
                 log.info("*=== [MODO BÁSICO] ===*");
-                for (Projecteas01 proyecto : projecteService.findAllProjects()) {
-                System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
-                }
+                listProjecteBasic(projecteService);
                 break;
             case 2:
                 log.info("=== MOSTRANDO PROYECTOS ===");
                 log.info("*=== [MODO COMPLETO] ===*");
-                listProyectoComplete(projecteService);
+                listProjecteComplete(projecteService);
                 break;
             default:
                 System.out.println("Opción no válida.");
                 break;
         }
     }
-    
-    public static void listProyectoComplete(Projecteas01Service projecteService) {
-    List<Projecteas01> proyectos = projecteService.findAllWithDetails();
-    proyectos.forEach(proyecto -> {
 
-        System.out.println("- > PROYECTO Nº [" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+    public static void listProjecteComplete(Projecteas01Service projecteService) {
+        List<Projecteas01> proyectos = projecteService.findAllWithDetails();
+        proyectos.forEach(proyecto -> {
 
-        System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " pertenece al cliente: ");
-        Clientas01 cliente = proyecto.getIdClient();
-        if (cliente != null) {
-            System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
-        } else {
-            System.out.println("\t" + "Cliente asociado no encontrado.");
+            System.out.println("- > PROYECTO Nº [" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+
+            System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " pertenece al cliente: ");
+            Clientas01 cliente = proyecto.getIdClient();
+            if (cliente != null) {
+                System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
+            } else {
+                System.out.println("\t" + "Cliente asociado no encontrado.");
+            }
+
+            System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " tiene las siguientes tareas: ");
+            Collection<Tascaas01> tareas = proyecto.getTascaas01Collection();
+            if (tareas != null && !tareas.isEmpty()) {
+                tareas.forEach(tarea -> {
+                    System.out.println("\t -" + "[" + tarea.getIdTasca() + "]" + tarea.getDescripcio() + " | Estado: " + tarea.getEstat());
+                });
+            } else {
+                System.out.println("\t" + "No tiene tareas asociadas.");
+            }
+        });
+    }
+
+    public static void listProjecteBasic(Projecteas01Service projecteService) {
+        System.out.println("|--------------------------------------|");
+        for (Projecteas01 proyecto : projecteService.findAllProjects()) {
+            System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
         }
-
-        System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " tiene las siguientes tareas: ");
-        Collection<Tascaas01> tareas = proyecto.getTascaas01Collection();
-        if (tareas != null && !tareas.isEmpty()) {
-            tareas.forEach(tarea -> {
-                System.out.println("\t -" + "[" + tarea.getIdTasca() + "]" + tarea.getDescripcio() + " | Estado: " + tarea.getEstat());
-            });
-        } else {
-            System.out.println("\t" + "No tiene tareas asociadas.");
-        }
-    });
+        System.out.println("|--------------------------------------|");
     }
 
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
     //*************** DELETE PROJECTE  *****************************//
-    
     protected static void eliminarProjectes(Projecteas01Service projecteService) {
         System.out.println("¿Cómo deseas eliminar los proyectos?");
         System.out.println("1. Eliminar todos los proyectos");
@@ -332,9 +354,7 @@ public class MethodsMainProjecte {
             case 2:
                 System.out.print("Introduce el ID del proyecto a eliminar: ");
                 System.out.println("Proyectos disponibles:");
-                for (Projecteas01 proyecto : projecteService.findAllProjects()) {
-                    System.out.println("[" + proyecto.getIdProjecte() + "] " + proyecto.getDescripcio() + " - Estado: " + proyecto.getEstat());
-                }
+                listProjecteComplete(projecteService);
                 System.out.print("ID del proyecto a eliminar: ");
                 int idProyecto = tcl.nextInt();
                 tcl.nextLine();

@@ -98,11 +98,7 @@ public class MethodsMainClient {
             case 1:
                 log.info("=== MOSTRANDO CLIENTES ===");
                 log.info("*=== [MODO BÁSICO] ===*");
-                for (Clientas01 cliente : clientService.findAllClients()) {
-                    System.out.println("---> [" + cliente.getIdClient() + "] "
-                            + cliente.getNom() + " " + cliente.getCognom()
-                            + " - NIF: " + cliente.getNif());
-                }
+                listClientsBasic(clientService);
                 break;
             case 2:
                 log.info("=== MOSTRANDO CLIENTES ===");
@@ -140,12 +136,22 @@ public class MethodsMainClient {
             }
         });
     }
+    
+    public static void listClientsBasic(Clientas01Service clientService){
+        System.out.println("|--------------------------------------|");
+        for (Clientas01 cliente : clientService.findAllClients()) {
+                    System.out.println("---> [" + cliente.getIdClient() + "] "
+                            + cliente.getNom() + " " + cliente.getCognom()
+                            + " - NIF: " + cliente.getNif());
+        }
+         System.out.println("|--------------------------------------|");
+    }
 
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
     //*************** DELETE CLIENT  *****************************//
-    protected static void eliminarClientes(Clientas01Service clientasService) {
+    protected static void eliminarClientes(Clientas01Service clientService) {
         System.out.println("¿Cómo deseas eliminar los clientes?");
         System.out.println("1. Eliminar todos los clientes");
         System.out.println("2. Eliminar un cliente por ID");
@@ -156,27 +162,25 @@ public class MethodsMainClient {
         switch (opcion) {
             case 1:
                 System.out.print("Eliminando todos los clientes... ");
-                if (clientasService.findAllClients().isEmpty()) {
+                if (clientService.findAllClients().isEmpty()) {
                     System.out.println("No hay clientes para eliminar.");
                 } else {
                     System.out.println("Eliminando...");
-                    clientasService.deleteTable();
+                    clientService.deleteTable();
                     System.out.println("Todos los clientes han sido eliminados.");
                 }
                 break;
             case 2:
                 System.out.print("Introduce el ID del cliente a eliminar: ");
                 System.out.println("Clientes disponibles; ");
-                for (Clientas01 cliente : clientasService.findAllClients()) {
-                    System.out.println("[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
-                }
+                listClientsComplete(clientService);
                 System.out.println("Id del cliente a eliminar;");
                 int idCliente = tcl.nextInt();
                 tcl.nextLine();
 
-                Clientas01 cliente = clientasService.findClientById(idCliente);
+                Clientas01 cliente = clientService.findClientById(idCliente);
                 if (cliente != null) {
-                    clientasService.deleteClient(cliente);
+                    clientService.deleteClient(cliente);
                     System.out.println("Cliente con ID " + idCliente + " ha sido eliminado.");
                 } else {
                     System.out.println("No se encontró un cliente con ese ID.");

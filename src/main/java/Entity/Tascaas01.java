@@ -49,6 +49,7 @@ public class Tascaas01 implements Serializable {
 
     @Column(name = "estat")
     private String estat;
+    
     //Muchas tareas pueden estar asociadas a un proyecto
     @JoinColumn(name = "idProjecte", referencedColumnName = "idProjecte")
     @ManyToOne
@@ -61,7 +62,7 @@ public class Tascaas01 implements Serializable {
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO
     // TASCA
     @OneToOne 
-    @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false , insertable = false, updatable = false)
+    @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false , insertable = true, updatable = true)
     private Operariresponsableas01 idOperari;
 
     public Tascaas01() {

@@ -25,34 +25,8 @@ public class MethodsMainOperari {
     //********************** CREATE ************************************//
     //*****************************************************************//
     //*************** AGREGAR OPERARI  *****************************//
-    public static void agregarOperariResponsableMenu(Operariresponsableas01Service operariService, Tascaas01Service tascaService) {
-
-        System.out.println("¿Cómo deseas agregar a los operarios responsables?");
-        System.out.println("1. Básico (Solo creamos el operario responsable)");
-        System.out.println("2. Completo (Creamos el operario responsable y si no existe algún dato asociado, lo creamos)");
-
-        int opcion = tcl.nextInt();
-        tcl.nextLine();
-
-        switch (opcion) {
-            case 1:
-                System.out.println("=== CREACIÓN OPERARIOS RESPONSABLES ===");
-                System.out.println("*=== [MODO BÁSICO] ===*");
-                agregarOperariBasic(operariService, tascaService);
-                break;
-            case 2:
-                System.out.println("=== CREACIÓN OPERARIOS RESPONSABLES ===");
-                System.out.println("*=== [MODO COMPLETO] ===*");
-                agregarOperariComplete(operariService, tascaService);
-                break;
-
-            default:
-                System.out.println("Opción no válida.");
-                break;
-        }
-    }
-
-    public static void agregarOperariBasic(Operariresponsableas01Service operariResponsableService, Tascaas01Service tascaService) {
+    // ES SOLO BASIC 
+    public static void agregarOperariBasic(Operariresponsableas01Service operariResponsableService) {
 
         String continueAdding = "si";
 
@@ -107,54 +81,6 @@ public class MethodsMainOperari {
 
     }
 
-    public static void agregarOperariComplete(Operariresponsableas01Service operariResponsableService, Tascaas01Service tascaService) {
-
-        String continueAdding = "si";
-
-        while (continueAdding.equalsIgnoreCase("si")) {
-
-            System.out.println("Introduce los datos del operario responsable:");
-
-            System.out.print("Nombre del operario: ");
-            String nom = tcl.nextLine();
-
-            System.out.print("Apellido del operario: ");
-            String cognom = tcl.nextLine();
-
-            // DEBE SER VALIDO
-            String nifOperari = "";
-            while (nifOperari.isEmpty() || !esNifValido(nifOperari)) {
-                System.out.print("NIF del operario (debe ser único y no puede estar vacío):  ");
-                nifOperari = tcl.nextLine().trim();
-                if (!esNifValido(nifOperari)) {
-                    System.out.println("El NIF ingresado no es válido. Inténtalo de nuevo.");
-                }
-            }
-
-            System.out.print("Observaciones: ");
-            String observacions = tcl.nextLine();
-
-            Operariresponsableas01 newOperari = new Operariresponsableas01();
-            newOperari.setNom(nom);
-            newOperari.setCognom(cognom);
-            newOperari.setNifOperari(nifOperari);
-            newOperari.setObservacions(observacions);
-
-            boolean validInput = false;
-            while (!validInput) {
-                System.out.print("¿Quieres agregar otro operari? (si/no): ");
-                continueAdding = tcl.nextLine().trim().toLowerCase();
-
-                if (continueAdding.equals("si") || continueAdding.equals("no")) {
-                    validInput = true;
-                } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
-                }
-            }
-        }
-
-    }
-
     //*****************************************************************//
     //********************** FIND ************************************//
     //*****************************************************************//
@@ -172,11 +98,7 @@ public class MethodsMainOperari {
             case 1:
                 log.info("=== MOSTRANDO OPERARIOS RESPONSABLES ===");
                 log.info("*=== [MODO BÁSICO] ===*");
-                for (Operariresponsableas01 operari : operariResponsableService.findAllOperaris()) {
-                    System.out.println("---> [" + operari.getIdOperariTasca() + "] " + operari.getNom() + " " + operari.getCognom()
-                            + " | NIF: " + operari.getNifOperari()
-                            + " | Observaciones: " + operari.getObservacions());
-                }
+                listOperariBasic(operariResponsableService);
                 break;
             case 2:
                 log.info("=== MOSTRANDO OPERARIOS RESPONSABLES ===");
@@ -210,10 +132,20 @@ public class MethodsMainOperari {
         });
     }
 
+    public static void listOperariBasic(Operariresponsableas01Service operariResponsableService) {
+        System.out.println("|--------------------------------------|");
+        for (Operariresponsableas01 operari : operariResponsableService.findAllOperaris()) {
+            System.out.println("---> [" + operari.getIdOperariTasca() + "] " + operari.getNom() + " " + operari.getCognom()
+                    + " | NIF: " + operari.getNifOperari()
+                    + " | Observaciones: " + operari.getObservacions());
+        }
+        System.out.println("|--------------------------------------|");
+
+    }
+
     //*****************************************************************//
     //********************** DELETE ************************************//
     //*****************************************************************//
-    
     //*************** DELETE OPERARI  *****************************//
     protected static void eliminarOperariosResponsables(Operariresponsableas01Service operariResponsableService) {
 
@@ -238,9 +170,7 @@ public class MethodsMainOperari {
             case 2:
                 System.out.print("Introduce el ID del operario responsable a eliminar: ");
                 System.out.println("Operarios responsables disponibles:");
-                for (Operariresponsableas01 operario : operariResponsableService.findAllOperaris()) {
-                    System.out.println("[" + operario.getIdOperariTasca() + "] " + operario.getNom() + " " + operario.getCognom() + " - NIF: " + operario.getNifOperari() + " - Observacions : " + operario.getObservacions());
-                }
+                listOperariComplete(operariResponsableService);
                 System.out.print("ID del operario responsable a eliminar: ");
                 int idOperario = tcl.nextInt();
                 tcl.nextLine();
