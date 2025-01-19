@@ -69,6 +69,13 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
                 Projecteas01.class
         ).getResultList();
     }
+    
+    public List<Projecteas01> findAllByState(String state) {
+    return em.createQuery(
+            "SELECT p FROM Projecteas01 p WHERE p.estat = :state", Projecteas01.class)
+            .setParameter("state", state)
+            .getResultList();
+    }
 
     @Override
     public void delete(Projecteas01 entity) {

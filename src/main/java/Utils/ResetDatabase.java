@@ -13,21 +13,29 @@ import javax.persistence.EntityTransaction;
  */
 public class ResetDatabase {
 
+    // Constantes para los nombres de las tablas
+    private static final String TABLE_CLIENT = "ClientAS01";
+    private static final String TABLE_PROJECT = "ProjecteAS01";
+    private static final String TABLE_OPERATOR = "OperariResponsableAS01";
+    private static final String TABLE_TASK = "TascaAS01";
+    private static final String TABLE_INVOICE = "FacturaAS01";
+
     public static void dropAllTablesSQL(EntityManager em) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            em.createNativeQuery("DROP TABLE IF EXISTS FacturaAS01").executeUpdate();
-            em.createNativeQuery("DROP TABLE IF EXISTS TascaAS01").executeUpdate();
-            em.createNativeQuery("DROP TABLE IF EXISTS OperariResponsableAS01").executeUpdate();
-            em.createNativeQuery("DROP TABLE IF EXISTS ProjecteAS01").executeUpdate();
-            em.createNativeQuery("DROP TABLE IF EXISTS ClientAS01").executeUpdate();
+            em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_INVOICE).executeUpdate();
+            em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_TASK).executeUpdate();
+            em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_OPERATOR).executeUpdate();
+            em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_PROJECT).executeUpdate();
+            em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_CLIENT).executeUpdate();
             tx.commit();
-            System.out.println("Todas las tablas han sido eliminadas con DROP");
+            System.out.println("Todas las tablas han sido eliminadas con DROP.");
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
+            System.err.println("Error al eliminar las tablas: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -37,8 +45,9 @@ public class ResetDatabase {
         try {
             tx.begin();
 
+            // Crear tabla ClientAS01
             em.createNativeQuery(
-                    "CREATE TABLE IF NOT EXISTS ClientAS01 ("
+                    "CREATE TABLE IF NOT EXISTS " + TABLE_CLIENT + " ("
                     + "idClient INT PRIMARY KEY AUTO_INCREMENT, "
                     + "nom VARCHAR(45) NOT NULL, "
                     + "cognom VARCHAR(45), "
@@ -46,18 +55,21 @@ public class ResetDatabase {
                     + ")"
             ).executeUpdate();
 
+            // Crear tabla ProjecteAS01
             em.createNativeQuery(
-                    "CREATE TABLE IF NOT EXISTS ProjecteAS01 ("
+                    "CREATE TABLE IF NOT EXISTS " + TABLE_PROJECT + " ("
                     + "idProjecte INT PRIMARY KEY AUTO_INCREMENT, "
                     + "descripcio VARCHAR(45), "
                     + "estat ENUM('No iniciat', 'En procés', 'Finalitzat'), "
+                    + "fechaFinalitzacio DATE DEFAULT NULL, "
                     + "idClient INT, "
-                    + "FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient)"
+                    + "FOREIGN KEY (idClient) REFERENCES " + TABLE_CLIENT + "(idClient)"
                     + ")"
             ).executeUpdate();
 
+            // Crear tabla OperariResponsableAS01
             em.createNativeQuery(
-                    "CREATE TABLE IF NOT EXISTS OperariResponsableAS01 ("
+                    "CREATE TABLE IF NOT EXISTS " + TABLE_OPERATOR + " ("
                     + "idOperariTasca INT PRIMARY KEY AUTO_INCREMENT, "
                     + "nom VARCHAR(45), "
                     + "cognom VARCHAR(45), "
@@ -66,28 +78,30 @@ public class ResetDatabase {
                     + ")"
             ).executeUpdate();
 
+            // Crear tabla TascaAS01
             em.createNativeQuery(
-                    "CREATE TABLE IF NOT EXISTS TascaAS01 ("
+                    "CREATE TABLE IF NOT EXISTS " + TABLE_TASK + " ("
                     + "idTasca INT PRIMARY KEY AUTO_INCREMENT, "
                     + "descripcio VARCHAR(45), "
                     + "estat ENUM('No iniciat', 'En procés', 'Finalitzat'), "
                     + "idProjecte INT, "
                     + "idOperari INT NOT NULL, "
-                    + "FOREIGN KEY (idProjecte) REFERENCES ProjecteAS01(idProjecte), "
-                    + "FOREIGN KEY (idOperari) REFERENCES OperariResponsableAS01(idOperariTasca)"
+                    + "FOREIGN KEY (idProjecte) REFERENCES " + TABLE_PROJECT + "(idProjecte), "
+                    + "FOREIGN KEY (idOperari) REFERENCES " + TABLE_OPERATOR + "(idOperariTasca)"
                     + ")"
             ).executeUpdate();
 
+            // Crear tabla FacturaAS01
             em.createNativeQuery(
-                    "CREATE TABLE IF NOT EXISTS FacturaAS01 ("
+                    "CREATE TABLE IF NOT EXISTS " + TABLE_INVOICE + " ("
                     + "idFactura INT PRIMARY KEY AUTO_INCREMENT, "
                     + "idTasca INT NOT NULL, "
                     + "idClient INT NOT NULL, "
                     + "data DATE NOT NULL, "
                     + "importTotal DOUBLE NOT NULL, "
                     + "observacions VARCHAR(255), "
-                    + "FOREIGN KEY (idTasca) REFERENCES TascaAS01(idTasca), "
-                    + "FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient)"
+                    + "FOREIGN KEY (idTasca) REFERENCES " + TABLE_TASK + "(idTasca), "
+                    + "FOREIGN KEY (idClient) REFERENCES " + TABLE_CLIENT + "(idClient)"
                     + ")"
             ).executeUpdate();
 
@@ -97,6 +111,7 @@ public class ResetDatabase {
             if (tx.isActive()) {
                 tx.rollback();
             }
+            System.err.println("Error al crear las tablas: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -108,41 +123,37 @@ public class ResetDatabase {
 
             // Insertar datos en ClientAS01
             em.createNativeQuery(
-                    "INSERT INTO ClientAS01 (nom, cognom, nif) "
-                    + "VALUES ('Ángela', 'Sáez', '73665652X')"
+                    "INSERT INTO ClientAS01 (nom, cognom, nif) VALUES "
+                    + "('Ángela', 'Sáez', '73665652X')"
             ).executeUpdate();
 
-            // Insertar datos en ProjecteAS01
+            // Insertar datos en ProjecteAS01 con fechaFinalitzacio
             em.createNativeQuery(
-                    "INSERT INTO ProjecteAS01 (descripcio, estat, idClient) "
-                    + "VALUES "
-                    + "('Construcció de la casa de Raquel', 'No iniciat', 1), "
-                    + "('Construcció de la casa de Marcos', 'En procés', 1), "
-                    + "('Construcció de la casa de Ruben', 'Finalitzat', 1), "
-                    + "('Construcció de la casa de David', 'No iniciat', 1)"
+                    "INSERT INTO ProjecteAS01 (descripcio, estat, fechaFinalitzacio, idClient) VALUES "
+                    + "('Construcció de la casa de Raquel', 'No iniciat', NULL, 1), "
+                    + "('Construcció de la casa de Marcos', 'En procés', NULL, 1), "
+                    + "('Construcció de la casa de Ruben', 'Finalitzat', '2020-12-31', 1), "
+                    + "('Construcció de la casa de David', 'No iniciat', NULL, 1)"
             ).executeUpdate();
 
             // Insertar datos en OperariResponsableAS01
             em.createNativeQuery(
-                    "INSERT INTO OperariResponsableAS01 (nifOperari, nom, cognom, observacions) "
-                    + "VALUES "
+                    "INSERT INTO OperariResponsableAS01 (nifOperari, nom, cognom, observacions) VALUES "
                     + "('12345678A', 'Pepe', 'Goteras', 'Tasques inicials completades per Pepe Goteras')"
             ).executeUpdate();
 
             // Insertar datos en TascaAS01
             em.createNativeQuery(
-                    "INSERT INTO TascaAS01 (descripcio, estat, idProjecte, idOperari) "
-                    + "VALUES "
+                    "INSERT INTO TascaAS01 (descripcio, estat, idProjecte, idOperari) VALUES "
                     + "('Preparar el terreny', 'Finalitzat', 2, 1), "
                     + "('Construir els fonaments', 'En procés', 2, 1), "
                     + "('Dissenyar plànols', 'Finalitzat', 3, 1), "
-                    + "('Organitzar subministraments', 'En procés', 3, 1)"
+                    + "('Organitzar subministraments', 'En procés', 4, 1)"
             ).executeUpdate();
 
             // Insertar datos en FacturaAS01
             em.createNativeQuery(
-                    "INSERT INTO FacturaAS01 (idTasca, idClient, data, importTotal, observacions) "
-                    + "VALUES "
+                    "INSERT INTO FacturaAS01 (idTasca, idClient, data, importTotal, observacions) VALUES "
                     + "(1, 1, '2017-12-31', 200, 'Pago de antemano'), "
                     + "(3, 1, '2024-11-30', 256, 'Pago por plazos')"
             ).executeUpdate();
@@ -153,6 +164,7 @@ public class ResetDatabase {
             if (tx.isActive()) {
                 tx.rollback();
             }
+            System.err.println("Error al insertar datos predeterminados: " + e.getMessage());
             e.printStackTrace();
         }
     }

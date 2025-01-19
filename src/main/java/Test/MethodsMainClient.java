@@ -24,8 +24,6 @@ public class MethodsMainClient {
     //2. INSERT COMPLETO
     //3. DELETE COMPLETO
     //4. IDIOMA Y LOG
-    
-    
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
@@ -129,7 +127,17 @@ public class MethodsMainClient {
                 log.info("\t- Proyectos: No hay proyectos.");
             } else {
                 log.info("\t- Proyectos de " + cliente.getNom() + ":");
-                proyectos.forEach(proyecto -> log.info("\t  - " + proyecto.toString()));
+                proyectos.forEach(proyecto -> {
+                    String descripcion = proyecto.getDescripcio();
+                    String estat = proyecto.getEstat();
+                    String fechaFinalizacion = proyecto.getFechaFinalitzacio() != null
+                            ? proyecto.getFechaFinalitzacio().toString()
+                            : "No finalizado";
+
+                    System.out.println("---> Proyecto: " + descripcion
+                            + " | Estado: " + estat
+                            + " | Fecha finalización: " + fechaFinalizacion);
+                });
             }
 
             // Facturas
@@ -138,19 +146,29 @@ public class MethodsMainClient {
                 log.info("\t- Facturas: No hay facturas.");
             } else {
                 log.info("\t- Facturas de " + cliente.getNom() + ":");
-                facturas.forEach(factura -> log.info("\t  - " + factura.toString()));
+                facturas.forEach(factura -> {
+                    Integer idFactura = factura.getIdFactura();
+                    String observaciones = factura.getObservacions();
+                    String fechaFactura = factura.getData() != null ? factura.getData().toString() : "Fecha no disponible";
+                    Double importeTotal = factura.getImportTotal();
+
+                    System.out.println("---> Factura: " + "[" + idFactura + "] "
+                            + "Observaciones: " + observaciones
+                            + " | Fecha: " + fechaFactura
+                            + " | Importe Total: " + importeTotal);
+                });
             }
         });
     }
-    
-    public static void listClientsBasic(Clientas01Service clientService){
+
+    public static void listClientsBasic(Clientas01Service clientService) {
         System.out.println("|--------------------------------------|");
         for (Clientas01 cliente : clientService.findAllClients()) {
-                    System.out.println("---> [" + cliente.getIdClient() + "] "
-                            + cliente.getNom() + " " + cliente.getCognom()
-                            + " - NIF: " + cliente.getNif());
+            System.out.println("---> [" + cliente.getIdClient() + "] "
+                    + cliente.getNom() + " " + cliente.getCognom()
+                    + " - NIF: " + cliente.getNif());
         }
-         System.out.println("|--------------------------------------|");
+        System.out.println("|--------------------------------------|");
     }
 
     //*****************************************************************//

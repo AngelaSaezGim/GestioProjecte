@@ -65,6 +65,15 @@ public class Projecteas01Service  {
          
      }
     
+     public List<Projecteas01> findAllByState(String state) {
+         try {
+            return projecteDAO.findAllByState(state);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todos los proyectos con estado " + state, e);
+        }
+         
+     }
+    
     // Eliminar un proyecto
     public void deleteProject(Projecteas01 project) {
         try {

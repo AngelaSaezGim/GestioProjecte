@@ -56,6 +56,7 @@ public class Tascaas01 implements Serializable {
     private Projecteas01 idProjecte;
 
     //Una tarea puede estar asociada a varias facturas
+    // NOOOO - MAL - CADA TAREA SOLO PUEDE TENER UNA FACTURA
     //Si modificamos una tarea, se modificará su factura asociada
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
     private Collection<Facturaas01> facturaas01Collection;
@@ -102,8 +103,12 @@ public class Tascaas01 implements Serializable {
         return idProjecte;
     }
 
+    // UN PROYECTO FINALIZADO SOLO PUEDE TENER TAREAS FINALIZADAS
     public void setIdProjecte(Projecteas01 idProjecte) {
-        this.idProjecte = idProjecte;
+    if (idProjecte != null && "Finalizat".equals(idProjecte.getEstat()) && !"Finalitzat".equals(this.estat)) {
+        throw new IllegalStateException("Las tareas solo pueden asociarse a proyectos finalizados si también están finalizadas.");
+    }
+    this.idProjecte = idProjecte;
     }
 
     public Collection<Facturaas01> getFacturaas01Collection() {

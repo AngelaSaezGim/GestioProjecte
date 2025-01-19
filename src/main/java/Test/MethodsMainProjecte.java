@@ -12,8 +12,11 @@ import Service.Projecteas01Service;
 import Service.Tascaas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,6 +94,20 @@ public class MethodsMainProjecte {
                 break;
             }
 
+            Date fechaFinalitzacio = null;
+            if ("Finalitzat".equalsIgnoreCase(estat)) {
+                System.out.println("Si esta finalizado, dime la fecha en la que se ha finalizado ;");
+                while (fechaFinalitzacio == null) {
+                    System.out.print("Fecha finalizació (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                    String input = tcl.nextLine();
+                    try {
+                        fechaFinalitzacio = new SimpleDateFormat("yyyy-MM-dd").parse(input);
+                    } catch (ParseException e) {
+                        System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                    }
+                }
+            }
+
             Integer idClient = null;
             while (idClient == null) {
                 System.out.print("ID del cliente (debe ser válido y existir): ");
@@ -111,18 +128,32 @@ public class MethodsMainProjecte {
 
             System.out.print("IDs de las tareas (separados por comas): ");
             System.out.println("Lista de tareas disponibles; ");
-            MethodsMainTasca.listTasquesBasic(tascaService);
-            System.out.println("Proyecto asociado a tareas... (separalas por comas)");
+
+            // Verifica si el proyecto está finalizado antes de permitir agregar tareas
+            if ("Finalitzat".equalsIgnoreCase(estat)) {
+                System.out.println("Dado que el proyecto está finalizado, solo puedes asociar tareas que también estén finalizadas.");
+                System.out.println("Lista de tareas FINALIZADAS disponibles; ");
+                listProjecteByState(projecteService, "Finalitzat");
+            } else {
+                MethodsMainTasca.listTasquesBasic(tascaService);
+            }
+            System.out.println("Proyecto asociado a tareas... (separarlas por comas)");
             String inputTascas = tcl.nextLine();
             String[] tascaIds = inputTascas.split(",");
             List<Tascaas01> tasques = new ArrayList<>();
+            boolean allTasksFinalized = true;
 
             for (String tascaId : tascaIds) {
                 try {
                     int id = Integer.parseInt(tascaId.trim());
                     Tascaas01 tasca = tascaService.findTascaById(id);
                     if (tasca != null) {
-                        tasques.add(tasca);
+                        if ("Finalitzat".equalsIgnoreCase(estat) && !"Finalitzat".equalsIgnoreCase(tasca.getEstat())) {
+                            allTasksFinalized = false; // Marca que no todas las tareas están finalizadas
+                            System.out.println("No se puede asociar la tarea con ID " + id + " porque no está finalizada.");
+                        } else {
+                            tasques.add(tasca);
+                        }
                     } else {
                         System.out.println("La tarea con ID " + id + " no existe.");
                     }
@@ -131,9 +162,16 @@ public class MethodsMainProjecte {
                 }
             }
 
+            if (!allTasksFinalized) {
+                System.out.println("No se pueden asociar tareas que no están finalizadas con un proyecto finalizado.");
+                System.out.println("Porfavor, vuelva a empezar");
+                continue;
+            }
+
             Projecteas01 newProjecte = new Projecteas01();
             newProjecte.setDescripcio(descripcio);
             newProjecte.setEstat(estat);
+            newProjecte.setFechaFinalitzacio(fechaFinalitzacio);
             newProjecte.setTascaas01Collection(tasques);
             newProjecte.setIdClient(clientService.findClientById(idClient));
 
@@ -196,6 +234,20 @@ public class MethodsMainProjecte {
                 break;
             }
 
+            Date fechaFinalitzacio = null;
+            if ("Finalitzat".equalsIgnoreCase(estat)) {
+                System.out.println("Si esta finalizado, dime la fecha en la que se ha finalizado ;");
+                while (fechaFinalitzacio == null) {
+                    System.out.print("Fecha finalizació (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                    String input = tcl.nextLine();
+                    try {
+                        fechaFinalitzacio = new SimpleDateFormat("yyyy-MM-dd").parse(input);
+                    } catch (ParseException e) {
+                        System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                    }
+                }
+            }
+
             Integer idClient = null;
             while (idClient == null) {
                 System.out.print("ID del cliente (debe ser válido y existir): ");
@@ -217,18 +269,32 @@ public class MethodsMainProjecte {
 
             System.out.print("IDs de las tareas (separados por comas): ");
             System.out.println("Lista de tareas disponibles; ");
-            MethodsMainTasca.listTasquesBasic(tascaService);
-            System.out.println("Proyecto asociado a tareas... (separalas por comas)");
+
+            // Verifica si el proyecto está finalizado antes de permitir agregar tareas
+            if ("Finalitzat".equalsIgnoreCase(estat)) {
+                System.out.println("Dado que el proyecto está finalizado, solo puedes asociar tareas que también estén finalizadas.");
+                System.out.println("Lista de tareas FINALIZADAS disponibles; ");
+                listProjecteByState(projecteService, "Finalitzat");
+            } else {
+                MethodsMainTasca.listTasquesBasic(tascaService);
+            }
+            System.out.println("Proyecto asociado a tareas... (separarlas por comas)");
             String inputTascas = tcl.nextLine();
             String[] tascaIds = inputTascas.split(",");
             List<Tascaas01> tasques = new ArrayList<>();
+            boolean allTasksFinalized = true;
 
             for (String tascaId : tascaIds) {
                 try {
                     int id = Integer.parseInt(tascaId.trim());
                     Tascaas01 tasca = tascaService.findTascaById(id);
                     if (tasca != null) {
-                        tasques.add(tasca);
+                        if ("Finalitzat".equalsIgnoreCase(estat) && !"Finalitzat".equalsIgnoreCase(tasca.getEstat())) {
+                            allTasksFinalized = false; // Marca que no todas las tareas están finalizadas
+                            System.out.println("No se puede asociar la tarea con ID " + id + " porque no está finalizada.");
+                        } else {
+                            tasques.add(tasca);
+                        }
                     } else {
                         System.out.println("La tarea con ID " + id + " no existe.");
                     }
@@ -237,9 +303,16 @@ public class MethodsMainProjecte {
                 }
             }
 
+            if (!allTasksFinalized) {
+                System.out.println("No se pueden asociar tareas que no están finalizadas con un proyecto finalizado.");
+                System.out.println("Porfavor, vuelva a empezar");
+                continue;
+            }
+
             Projecteas01 newProjecte = new Projecteas01();
             newProjecte.setDescripcio(descripcio);
             newProjecte.setEstat(estat);
+            newProjecte.setFechaFinalitzacio(fechaFinalitzacio);
             newProjecte.setTascaas01Collection(tasques);
             newProjecte.setIdClient(clientService.findClientById(idClient));
 
@@ -298,7 +371,8 @@ public class MethodsMainProjecte {
         List<Projecteas01> proyectos = projecteService.findAllWithDetails();
         proyectos.forEach(proyecto -> {
 
-            System.out.println("- > PROYECTO Nº [" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+            System.out.println("- > PROYECTO Nº [" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat()
+                    + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
 
             System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " pertenece al cliente: ");
             Clientas01 cliente = proyecto.getIdClient();
@@ -323,7 +397,18 @@ public class MethodsMainProjecte {
     public static void listProjecteBasic(Projecteas01Service projecteService) {
         System.out.println("|--------------------------------------|");
         for (Projecteas01 proyecto : projecteService.findAllProjects()) {
-            System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat());
+            System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat()
+                    + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
+        }
+        System.out.println("|--------------------------------------|");
+    }
+
+    public static void listProjecteByState(Projecteas01Service projecteService, String state) {
+        System.out.println("|--------------------------------------|");
+        // Mostrar proyectos por estado
+        for (Projecteas01 proyectoFinalizado : projecteService.findAllByState(state)) {
+            System.out.println("---> " + "[" + proyectoFinalizado.getIdProjecte() + "]" + " " + proyectoFinalizado.getDescripcio() + " | Estado: " + proyectoFinalizado.getEstat()
+                    + "| fecha finalización = " + (proyectoFinalizado.getFechaFinalitzacio() != null ? proyectoFinalizado.getFechaFinalitzacio() : "No finalizado"));
         }
         System.out.println("|--------------------------------------|");
     }
@@ -332,6 +417,7 @@ public class MethodsMainProjecte {
     //********************** DELETE ************************************//
     //*****************************************************************//
     //*************** DELETE PROJECTE  *****************************//
+    // PROCESAR FECHA DE FINALIZACION - CONDICIONAL
     protected static void eliminarProjectes(Projecteas01Service projecteService) {
         System.out.println("¿Cómo deseas eliminar los proyectos?");
         System.out.println("1. Eliminar todos los proyectos");
