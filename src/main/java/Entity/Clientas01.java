@@ -64,8 +64,9 @@ public class Clientas01 implements Serializable {
     private Collection<Facturaas01> facturaas01Collection;
     
     //Un cliente puede tener muchos proyectos
-    //si elimino un cliente, se eliminan sus proyectos asociados
-    @OneToMany(cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "idClient")
+    //si elimino un cliente NO se eliminan sus proyectos asociados
+    // (PARA NO ELIMINARLO LO DESVINCULO)
+    @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "idClient")
     private Collection<Projecteas01> projecteas01Collection;
 
     public Clientas01() {

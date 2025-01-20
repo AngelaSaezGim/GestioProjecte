@@ -66,7 +66,7 @@ public class Projecteas01 implements Serializable {
 
     //Varios proyectos pueden estar asociados a un cliente
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idClient", referencedColumnName = "idClient", nullable=false)
+    @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     private Clientas01 idClient;
 
     public Projecteas01() {

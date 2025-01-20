@@ -81,6 +81,13 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
                 .setParameter("state", state)
                 .getResultList();
     }
+    
+    public List<Projecteas01> findProjectsByClientId(int clientId) {
+    return em.createQuery(
+            "SELECT p FROM Projecteas01 p WHERE p.idClient = :clientId", Projecteas01.class)
+            .setParameter("clientId", clientId)
+            .getResultList();
+}
 
     @Override
     @Transactional

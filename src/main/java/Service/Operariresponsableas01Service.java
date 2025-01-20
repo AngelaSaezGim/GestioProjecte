@@ -6,6 +6,7 @@ package Service;
 
 import DAO.Operariresponsableas01DAO;
 import Entity.Operariresponsableas01;
+import Entity.Tascaas01;
 import javax.persistence.EntityManager;
 import java.util.List;
 /**
@@ -61,15 +62,29 @@ public class Operariresponsableas01Service {
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener todos los operarios y las tablas relacionadas", e);
         }
-         
      }
+     
+     public String deleteOperariVerification(Operariresponsableas01 operari) {
+        // Verificar si el operario tiene tareas en estado "en procés"
+        for (Tascaas01 tarea : operari.getTasques()) {
+            if ("En procés".equalsIgnoreCase(tarea.getEstat())) {
+                return "El operario responsable no se puede eliminar porque tiene tareas en estado 'en procés'.";
+            }
+        }
+        return null;
+    }
 
     // Eliminar un operario responsable
     public void deleteOperari(Operariresponsableas01 operari) {
-        try {
-            operariDAO.delete(operari);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar operario responsable", e);
+        String info = deleteOperariVerification(operari);
+        if (info == null) {
+            try {
+                operariDAO.delete(operari);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al eliminar operario responsable", e);
+            }
+        } else {
+            System.out.println(info);
         }
     }
     

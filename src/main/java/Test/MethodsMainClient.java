@@ -11,6 +11,7 @@ import Service.Clientas01Service;
 import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import static Test.MehtodsMainEntities.esNifValido;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,10 +21,6 @@ import java.util.List;
  */
 public class MethodsMainClient {
 
-    //1. ESTABLECER RESTRICCIONES DE ENUNCIADO, TANTO EN MAIN COMO EN JPA
-    //2. INSERT COMPLETO
-    //3. DELETE COMPLETO
-    //4. IDIOMA Y LOG
     //*****************************************************************//
     //********************** CREATE ************************************//
     //*****************************************************************//
@@ -121,7 +118,7 @@ public class MethodsMainClient {
 
             log.info("-> [" + cliente.getIdClient() + " ] Cliente: " + cliente.getNom() + " "
                     + cliente.getCognom() + " - NIF: " + cliente.getNif());
-            
+
             // Proyectos
             Collection<Projecteas01> proyectos = cliente.getProjecteas01Collection();
             if (proyectos == null || proyectos.isEmpty()) {
@@ -187,18 +184,46 @@ public class MethodsMainClient {
         switch (opcion) {
             case 1:
                 System.out.print("Eliminando todos los clientes... \n");
+                System.out.print("Eliminando todos los clientes... \n");
                 if (clientService.findAllClients().isEmpty()) {
                     System.out.println("No hay clientes para eliminar.");
                 } else {
-                    //Se itera cada cliente, se revisa, se elimina
+                    // Se itera cada cliente, se revisa si se puede eliminar
+                    List<Clientas01> clientesAEliminar = new ArrayList<>();
                     for (Clientas01 cliente : clientService.findAllClients()) {
                         String info = clientService.deleteClientVerification(cliente);
                         if (info == null) {
-                            clientService.deleteClient(cliente);
-                            System.out.println(cliente.getNom() + " ha sido eliminado/a correctamente");
+                            clientesAEliminar.add(cliente);
                         } else {
                             System.out.println("No se puede eliminar el cliente con ID " + cliente.getIdClient() + ": " + info);
                         }
+                    }
+
+                    if (!clientesAEliminar.isEmpty()) {
+                        // Mostrar el listado de clientes a eliminar
+                        System.out.println("Los siguientes clientes serán eliminados:");
+                        for (Clientas01 cliente : clientesAEliminar) {
+                            System.out.println(cliente.getNom() + " (ID: " + cliente.getIdClient() + ")");
+                        }
+
+                        // Confirmación antes de eliminar
+                        System.out.print("¿Estás seguro de que deseas eliminar estos clientes? (S/N): ");
+                        String confirmacion = tcl.nextLine();
+                        if (confirmacion.equalsIgnoreCase("S")) {
+                            // Eliminar los clientes
+                            for (Clientas01 cliente : clientesAEliminar) {
+                                try {
+                                    clientService.deleteClient(cliente);
+                                    System.out.println(cliente.getNom() + " ha sido eliminado/a correctamente.");
+                                } catch (Exception e) {
+                                    System.out.println("Error al eliminar el cliente con ID " + cliente.getIdClient() + ": " + e.getMessage());
+                                }
+                            }
+                        } else {
+                            System.out.println("La eliminación ha sido cancelada.");
+                        }
+                    } else {
+                        System.out.println("No hay clientes para eliminar.");
                     }
                 }
                 break;
@@ -214,8 +239,8 @@ public class MethodsMainClient {
                 Clientas01 cliente = clientService.findClientById(idCliente);
                 if (cliente != null) {
                     try {
-                        clientService.deleteClient(cliente); 
-                        if(cliente != null){
+                        clientService.deleteClient(cliente);
+                        if (cliente != null) {
                         } else {
                             System.out.println(cliente.getNom() + " ha sido eliminado/a correctamente.");
                         }

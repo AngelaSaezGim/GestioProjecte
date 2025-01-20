@@ -5,15 +5,22 @@
 package Service;
 
 import DAO.Projecteas01DAO;
+import Entity.Facturaas01;
 import Entity.Projecteas01;
+import Entity.Tascaas01;
+import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  *
  * @author angsaegim
  */
-public class Projecteas01Service  {
-    
+public class Projecteas01Service {
+
     private Projecteas01DAO projecteDAO;
 
     public Projecteas01Service(EntityManager em) {
@@ -55,39 +62,112 @@ public class Projecteas01Service  {
             throw new RuntimeException("Error al obtener todos los proyectos", e);
         }
     }
-    
+
     public List<Projecteas01> findAllWithDetails() {
-         try {
+        try {
             return projecteDAO.findAllWithDetails();
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener todos los proyectos y las tablas relacionadas", e);
         }
-         
-     }
-    
-     public List<Projecteas01> findAllByState(String state) {
-         try {
+
+    }
+
+    public List<Projecteas01> findAllByState(String state) {
+        try {
             return projecteDAO.findAllByState(state);
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener todos los proyectos con estado " + state, e);
         }
-         
-     }
-    
-    // Eliminar un proyecto
-    public void deleteProject(Projecteas01 project) {
+
+    }
+
+    public List<Projecteas01> findProjectsByClientId(int clientId) {
         try {
-            projecteDAO.delete(project);
+            return projecteDAO.findProjectsByClientId(clientId);
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar proyecto", e);
+            throw new RuntimeException("Error al obtener los proyectos del cliente con ID " + clientId, e);
         }
     }
-    
-     public void deleteTable() {
-    try {
-        projecteDAO.deleteTable();
-    } catch (Exception e) {
-        throw new RuntimeException("Error al vaciar la tabla de projectes", e);
+
+    // Método de verificación
+    public String deleteProjectVerification(Projecteas01 project) {
+        // 1- Verificar si el proyecto tiene tareas con facturas asociadas
+        if (hasFacturedTasks(project)) {
+            // 2 Si tiene; - Verificar que el proyecto esté en estado 'Finalitzat'
+            if ("Finalitzat".equals(project.getEstat())) {
+                // Si esta finalizat - Verificar si todas las tareas asociadas han sido facturadas hace más de 5 años
+                if (areTasksFacturedMoreThanFiveYearsAgo(project)) {
+                    return null;  // Si se cumple; El proyecto puede ser eliminado
+                } else {
+                    return "El proyecto no puede ser eliminado porque algunas tareas no han sido facturadas hace más de 5 años.";
+                }
+            } else {
+                return "El proyecto no se puede eliminar, tiene facturas asociadas y además no está en estado 'Finalitzat'.";
+            }
+        } else { // En general;
+            return null;  // El proyecto no tiene facturas asociadas, puede eliminarse
+        }
     }
+
+    // Verificar si el proyecto tiene tareas con facturas asociadas
+    private boolean hasFacturedTasks(Projecteas01 project) {
+        // Comprobamos si alguna de las tareas del proyecto tiene una factura asociada
+        for (Tascaas01 tasca : project.getTascaas01Collection()) {
+            if (tasca.getFacturaas01Collection() != null) {  // Si la tarea tiene una factura asociada
+                return true;
+            }
+        }
+        return false;  // No tiene facturas asociadas
+    }
+
+    // Verificar si todas las tareas asociadas han sido facturadas hace más de 5 años y están 'Finalitzat'
+    private boolean areTasksFacturedMoreThanFiveYearsAgo(Projecteas01 project) {
+        // Iterar sobre las tareas del proyecto
+        for (Tascaas01 tasca : project.getTascaas01Collection()) {
+            // Verificar que la tarea esté en estado 'Finalitzat'
+            if (!"Finalitzat".equals(tasca.getEstat())) {
+                return false;  // No se puede eliminar porque la tarea no está 'Finalitzat'
+            }
+
+            // Verificar si la tarea tiene facturas asociadas
+            if (tasca.getFacturaas01Collection() != null) {
+                for (Facturaas01 factura : tasca.getFacturaas01Collection()) {
+                    // Verificar si la factura tiene más de 5 años desde la fecha actual
+                    if (factura.getData().after(getDateFiveYearsAgo())) {
+                        return false;  // No se puede eliminar porque la factura no tiene más de 5 años
+                    }
+                }
+            }
+        }
+        return true;  // Todas las tareas han sido facturadas hace más de 5 años y están 'Finalitzat'
+    }
+
+    // Obtener la fecha actual menos 5 años
+    private Date getDateFiveYearsAgo() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -5);
+        return calendar.getTime();
+    }
+
+    // Eliminar un proyecto
+    public void deleteProject(Projecteas01 project) {
+        String info = deleteProjectVerification(project);
+        if (info == null) {
+            try {
+                projecteDAO.delete(project);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al eliminar proyecto", e);
+            }
+        } else {
+            System.out.println(info);
+        }
+    }
+
+    public void deleteTable() {
+        try {
+            projecteDAO.deleteTable();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al vaciar la tabla de projectes", e);
+        }
     }
 }

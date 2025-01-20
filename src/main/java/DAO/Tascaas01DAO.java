@@ -87,6 +87,7 @@ public class Tascaas01DAO implements GenericDAO<Tascaas01> {
         }
     }
 
+    
     public void deleteTable() {
         EntityTransaction et = em.getTransaction();
         try {

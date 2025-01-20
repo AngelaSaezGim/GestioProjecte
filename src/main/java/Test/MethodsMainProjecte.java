@@ -440,23 +440,66 @@ public class MethodsMainProjecte {
                 if (projecteService.findAllProjects().isEmpty()) {
                     System.out.println("No hay proyectos para eliminar.");
                 } else {
-                    System.out.println("Eliminando...");
-                    projecteService.deleteTable();
-                    System.out.println("Todos los proyectos han sido eliminados.");
+                    // Se itera cada proyecto, se revisa si puede ser eliminado y se elimina
+                    List<Projecteas01> proyectosAEliminar = new ArrayList<>();
+                    for (Projecteas01 proyecto : projecteService.findAllProjects()) {
+                        String info = projecteService.deleteProjectVerification(proyecto);
+                        if (info == null) {
+                            proyectosAEliminar.add(proyecto);
+                        } else {
+                            System.out.println("No se puede eliminar el proyecto con ID " + proyecto.getIdProjecte() + ": " + info);
+                        }
+                    }
+
+                    if (!proyectosAEliminar.isEmpty()) {
+                        // Mostrar el listado de proyectos a eliminar
+                        System.out.println("Los siguientes proyectos serán eliminados:");
+                        for (Projecteas01 proyecto : proyectosAEliminar) {
+                            System.out.println(proyecto.getDescripcio() + " (ID: " + proyecto.getIdProjecte() + ")");
+                        }
+
+                        System.out.print("¿Estás seguro de que deseas eliminar estos proyectos? (S/N): ");
+                        String confirmacion = tcl.nextLine();
+                        if (confirmacion.equalsIgnoreCase("S")) {
+                            // Eliminar los proyectos
+                            for (Projecteas01 proyecto : proyectosAEliminar) {
+                                try {
+                                    projecteService.deleteProject(proyecto);
+                                    System.out.println("Proyecto con ID " + proyecto.getIdProjecte() + " ha sido eliminado.");
+                                } catch (Exception e) {
+                                    System.out.println("Error al eliminar el proyecto con ID " + proyecto.getIdProjecte() + ": " + e.getMessage());
+                                }
+                            }
+                        } else {
+                            System.out.println("La eliminación ha sido cancelada.");
+                        }
+                    } else {
+                        System.out.println("No hay proyectos para eliminar.");
+                    }
                 }
                 break;
             case 2:
                 System.out.print("Introduce el ID del proyecto a eliminar: ");
                 System.out.println("Proyectos disponibles:");
                 listProjecteComplete(projecteService);
+
                 System.out.print("ID del proyecto a eliminar: ");
                 int idProyecto = tcl.nextInt();
                 tcl.nextLine();
 
                 Projecteas01 proyecto = projecteService.findProjectById(idProyecto);
                 if (proyecto != null) {
-                    projecteService.deleteProject(proyecto);
-                    System.out.println("Proyecto con ID " + idProyecto + " ha sido eliminado.");
+                    String info = projecteService.deleteProjectVerification(proyecto);
+                    if (info == null) {
+                        try {
+                            projecteService.deleteProject(proyecto);
+                            System.out.println("Proyecto con ID " + idProyecto + " ha sido eliminado.");
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar el proyecto con ID " + idProyecto + ": " + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("No se puede eliminar el proyecto con ID " + idProyecto + ": " + info);
+                    }
                 } else {
                     System.out.println("No se encontró un proyecto con ese ID.");
                 }

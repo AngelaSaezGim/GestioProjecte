@@ -105,11 +105,11 @@ public class MethodsMainTasca {
                     Projecteas01 project = projecteService.findProjectById(idProjecte);
                     if (project == null) {
                         System.out.println("El proyecto con ID " + idProjecte + " no existe. Inténtalo nuevamente.");
-                        idProjecte = null;  
+                        idProjecte = null;
                         MainApp.esperarIntro();
                     } else if ("Finalitzat".equals(project.getEstat()) && !"Finalitzat".equals(estat)) {
                         System.out.println("No se puede agregar una tarea no finalizada a un proyecto finalizado.");
-                        idProjecte = null;  
+                        idProjecte = null;
                         MainApp.esperarIntro();
                     }
                 } catch (NumberFormatException e) {
@@ -350,7 +350,7 @@ public class MethodsMainTasca {
             Projecteas01 proyecto = tasca.getIdProjecte();
             if (proyecto != null) {
                 System.out.println("\t -" + "[" + proyecto.getIdProjecte() + "]" + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat()
-                + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));              
+                        + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
             } else {
                 System.out.println("\t" + "Proyecto asociado no encontrado.");
             }
@@ -398,34 +398,71 @@ public class MethodsMainTasca {
 
         switch (opcion) {
             case 1:
-                System.out.print("Eliminando todas las tareas... ");
+                System.out.print("Eliminando todas las tareas... \n");
                 if (tascaService.findAllTasques().isEmpty()) {
                     System.out.println("No hay tareas para eliminar.");
                 } else {
-                    tascaService.deleteTable();
-                    System.out.println("Todas las tareas han sido eliminadas.");
+                    // Se itera cada tarea, se revisa si se puede eliminar
+                    List<Tascaas01> tasquesAEliminar = new ArrayList<>();
+                    for (Tascaas01 tasca : tascaService.findAllTasques()) {
+                        String info = tascaService.deleteTascaVerification(tasca);
+                        if (info == null) {
+                            tasquesAEliminar.add(tasca);
+                        } else {
+                            System.out.println("No se puede eliminar la tarea con ID " + tasca.getIdTasca() + ": " + info);
+                        }
+                    }
+
+                    if (!tasquesAEliminar.isEmpty()) {
+                        // Mostrar el listado de tareas a eliminar
+                        System.out.println("Las siguientes tareas serán eliminadas:");
+                        for (Tascaas01 tasca : tasquesAEliminar) {
+                            System.out.println("Tarea: " + tasca.getDescripcio() + " (ID: " + tasca.getIdTasca() + ")");
+                        }
+
+                        // Confirmación antes de eliminar
+                        System.out.print("¿Estás seguro de que deseas eliminar estas tareas? (S/N): ");
+                        String confirmacion = tcl.nextLine();
+                        if (confirmacion.equalsIgnoreCase("S")) {
+                            for (Tascaas01 tasca : tasquesAEliminar) {
+                                try {
+                                    tascaService.deleteTasca(tasca);
+                                    System.out.println("La tarea con ID " + tasca.getIdTasca() + " ha sido eliminada correctamente.");
+                                } catch (Exception e) {
+                                    System.out.println("Error al eliminar la tarea con ID " + tasca.getIdTasca() + ": " + e.getMessage());
+                                }
+                            }
+                        } else {
+                            System.out.println("La eliminación ha sido cancelada.");
+                        }
+                    } else {
+                        System.out.println("No hay tareas para eliminar.");
+                    }
                 }
                 break;
+
             case 2:
-                System.out.println("Introduce el ID de la tasca a eliminar:");
                 System.out.println("Tareas disponibles:");
                 listTasquesComplete(tascaService);
-                System.out.print("ID de la tasca a eliminar: ");
+                System.out.print("Introduce el ID de la tasca a eliminar: ");
                 int idTasca = tcl.nextInt();
                 tcl.nextLine();
-
+                // Buscar la tarea por ID
                 Tascaas01 tasca = tascaService.findTascaById(idTasca);
                 if (tasca != null) {
-                    tascaService.deleteTasca(tasca);
-                    System.out.println("Tasca con ID " + idTasca + " ha sido eliminada.");
+                    try {
+                        tascaService.deleteTasca(tasca);
+                    } catch (Exception e) {
+                        System.out.println("Error al eliminar la tarea: " + e.getMessage()); 
+                    }
                 } else {
-                    System.out.println("No se encontró una tasca con ese ID.");
+                    System.out.println("No se encontró una tarea con ese ID.");
                 }
                 break;
+
             default:
                 System.out.println("Opción no válida.");
                 break;
         }
     }
-
 }
