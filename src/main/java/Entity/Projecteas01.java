@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,8 +65,8 @@ public class Projecteas01 implements Serializable {
     private Collection<Tascaas01> tascaas01Collection;
 
     //Varios proyectos pueden estar asociados a un cliente
-    @ManyToOne
-    @JoinColumn(name = "idClient", referencedColumnName = "idClient")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idClient", referencedColumnName = "idClient", nullable=false)
     private Clientas01 idClient;
 
     public Projecteas01() {

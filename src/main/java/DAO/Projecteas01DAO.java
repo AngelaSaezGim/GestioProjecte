@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -23,11 +24,13 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
     }
 
     @Override
+    @Transactional
     public void create(Projecteas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.persist(entity);
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {
@@ -38,11 +41,13 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
     }
 
     @Override
+    @Transactional
     public void update(Projecteas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.merge(entity);
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {
@@ -65,24 +70,26 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
     public List<Projecteas01> findAllWithDetails() {
         return em.createQuery(
                 "SELECT DISTINCT p FROM Projecteas01 p "
-                + "LEFT JOIN FETCH p.tascaas01Collection t", 
+                + "LEFT JOIN FETCH p.tascaas01Collection t",
                 Projecteas01.class
         ).getResultList();
     }
-    
+
     public List<Projecteas01> findAllByState(String state) {
-    return em.createQuery(
-            "SELECT p FROM Projecteas01 p WHERE p.estat = :state", Projecteas01.class)
-            .setParameter("state", state)
-            .getResultList();
+        return em.createQuery(
+                "SELECT p FROM Projecteas01 p WHERE p.estat = :state", Projecteas01.class)
+                .setParameter("state", state)
+                .getResultList();
     }
 
     @Override
+    @Transactional
     public void delete(Projecteas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.remove(em.contains(entity) ? entity : em.merge(entity));
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {
@@ -92,11 +99,13 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
         }
     }
 
+    @Transactional
     public void deleteTable() {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.createQuery("DELETE FROM Projecteas01").executeUpdate();
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {

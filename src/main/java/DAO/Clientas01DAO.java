@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -23,11 +24,13 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
     }
 
     @Override
+    @Transactional
     public void create(Clientas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.persist(entity);
+            em.flush(); // SINCRONIZACION BD
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {
@@ -38,11 +41,13 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
     }
 
     @Override
+    @Transactional
     public void update(Clientas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.merge(entity);
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {
@@ -72,11 +77,13 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
     }
 
     @Override
+    @Transactional
     public void delete(Clientas01 entity) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.remove(em.contains(entity) ? entity : em.merge(entity));
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {
@@ -86,11 +93,13 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
         }
     }
 
+    @Transactional
     public void deleteTable() {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             em.createQuery("DELETE FROM Clientas01").executeUpdate();
+            em.flush();
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) {

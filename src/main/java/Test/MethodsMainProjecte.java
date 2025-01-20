@@ -173,7 +173,15 @@ public class MethodsMainProjecte {
             newProjecte.setEstat(estat);
             newProjecte.setFechaFinalitzacio(fechaFinalitzacio);
             newProjecte.setTascaas01Collection(tasques);
-            newProjecte.setIdClient(clientService.findClientById(idClient));
+
+            // Obtener el cliente y asociarlo al proyecto
+            Clientas01 client = clientService.findClientById(idClient);
+            if (client != null) {
+                newProjecte.setIdClient(client); // Asociar cliente al proyecto
+            } else {
+                System.out.println("No se pudo asociar el proyecto al cliente.");
+                continue;
+            }
 
             try {
                 projecteService.createProject(newProjecte);

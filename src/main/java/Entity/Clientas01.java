@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,9 +64,8 @@ public class Clientas01 implements Serializable {
     private Collection<Facturaas01> facturaas01Collection;
     
     //Un cliente puede tener muchos proyectos
-    //todas las operaciones insertar, actualizar, eliminar, etc.) 
-    //que se realicen sobre clientes también se apliquen automáticamente sobre proyectos asociados).
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
+    //si elimino un cliente, se eliminan sus proyectos asociados
+    @OneToMany(cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "idClient")
     private Collection<Projecteas01> projecteas01Collection;
 
     public Clientas01() {

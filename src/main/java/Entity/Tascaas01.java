@@ -64,8 +64,8 @@ public class Tascaas01 implements Serializable {
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO
     // TASCA
     //Cascade???
-    @OneToOne 
-    @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false , insertable = true, updatable = true)
+    @OneToOne(cascade= CascadeType.ALL)
+    @JoinColumn(name = "idOperari",  referencedColumnName = "idOperariTasca", nullable = false , insertable = true, updatable = true)
     private Operariresponsableas01 idOperari;
 
     public Tascaas01() {

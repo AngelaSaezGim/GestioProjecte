@@ -68,7 +68,6 @@ public class MainApp {
             Operariresponsableas01Service operariResponsableService = new Operariresponsableas01Service(em);
             Projecteas01Service projecteService = new Projecteas01Service(em);
             Tascaas01Service tascaService = new Tascaas01Service(em);
-
             do {
                 showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
                 printOptions();
