@@ -14,6 +14,7 @@ import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -346,45 +347,88 @@ public class MethodsMainFactura {
     //*****************************************************************//
     //*************** DELETE FACTURAS  *****************************//
     protected static void eliminarFacturas(Facturaas01Service facturaService) {
+    System.out.println("**** Aviso ****");
+    System.out.println("Solo se puede BORRAR una factura SI ha pasado más de 5 años de su Creación");
+    MainApp.esperarIntro();
+    
+    System.out.println("\n¿Cómo deseas eliminar las facturas?");
+    System.out.println("1. Eliminar todas las facturas");
+    System.out.println("2. Eliminar una factura por ID");
 
-        System.out.println("¿Cómo deseas eliminar las facturas?");
-        System.out.println("1. Eliminar todas las facturas");
-        System.out.println("2. Eliminar una factura por ID");
+    int opcion = tcl.nextInt();
+    tcl.nextLine();
 
-        int opcion = tcl.nextInt();
-        tcl.nextLine();
+    switch (opcion) {
+        case 1:
+            System.out.println("Eliminando todas las facturas...");
+            if (facturaService.findAllFacturas().isEmpty()) {
+                System.out.println("No hay facturas para eliminar.");
+            } else {
+                // Se itera cada factura, se revisa si se puede eliminar
+                List<Facturaas01> facturasAEliminar = new ArrayList<>();
+                for (Facturaas01 factura : facturaService.findAllFacturas()) {
+                    String info = facturaService.deleteFacturaVerification(factura);
+                    if (info == null) {
+                        facturasAEliminar.add(factura);
+                    } else {
+                        System.out.println("No se puede eliminar la factura con ID " + factura.getIdFactura() + ": " + info);
+                    }
+                }
 
-        switch (opcion) {
-            case 1:
-                System.out.print("Eliminando todas las facturas... ");
-                if (facturaService.findAllFacturas().isEmpty()) {
+                if (!facturasAEliminar.isEmpty()) {
+                    System.out.println("Las siguientes facturas serán eliminadas:");
+                    for (Facturaas01 factura : facturasAEliminar) {
+                        System.out.println("Factura ID: " + factura.getIdFactura());
+                    }
+
+                    // Confirmación
+                    System.out.print("¿Estás seguro de que deseas eliminar estas facturas? (S/N): ");
+                    String confirmacion = tcl.nextLine();
+                    if (confirmacion.equalsIgnoreCase("S")) {
+                        for (Facturaas01 factura : facturasAEliminar) {
+                            try {
+                                facturaService.deleteFactura(factura);
+                                System.out.println("Factura con ID " + factura.getIdFactura() + " ha sido eliminada correctamente.");
+                            } catch (Exception e) {
+                                System.out.println("Error al eliminar la factura con ID " + factura.getIdFactura() + ": " + e.getMessage());
+                            }
+                        }
+                    } else {
+                        System.out.println("La eliminación ha sido cancelada.");
+                    }
+                } else {
                     System.out.println("No hay facturas para eliminar.");
-                } else {
-                    System.out.println("Eliminando...");
-                    facturaService.deleteTable();
-                    System.out.println("Todos los clientes han sido eliminados.");
                 }
-                break;
-            case 2:
-                System.out.print("Introduce el ID de la factura a eliminar: ");
-                System.out.println("Facturas disponibles: ");
-                listFacturaComplete(facturaService);
-                System.out.print("ID de la factura a eliminar: ");
-                int idFactura = tcl.nextInt();
-                tcl.nextLine();
+            }
+            break;
+        case 2:
+            System.out.println("Facturas disponibles:");
+            listFacturaComplete(facturaService);
 
-                Facturaas01 factura = facturaService.findFacturaById(idFactura);
-                if (factura != null) {
-                    facturaService.deleteFactura(factura);
-                    System.out.println("Factura con ID " + idFactura + " ha sido eliminada.");
+            System.out.print("Introduce el ID de la factura a eliminar: ");
+            int idFactura = tcl.nextInt();
+            tcl.nextLine();
+
+            Facturaas01 factura = facturaService.findFacturaById(idFactura);
+            if (factura != null) {
+                String info = facturaService.deleteFacturaVerification(factura);
+                if (info == null) {
+                    try {
+                        facturaService.deleteFactura(factura);
+                        System.out.println("Factura con ID " + idFactura + " ha sido eliminada.");
+                    } catch (Exception e) {
+                        System.out.println("Error al eliminar la factura con ID " + idFactura + ": " + e.getMessage());
+                    }
                 } else {
-                    System.out.println("No se encontró una factura con ese ID.");
+                    System.out.println(info);
                 }
-                break;
-            default:
-                System.out.println("Opción no válida.");
-                break;
-        }
+            } else {
+                System.out.println("No se encontró una factura con ese ID.");
+            }
+            break;
+        default:
+            System.out.println("Opción no válida.");
+            break;
     }
-
+}
 }

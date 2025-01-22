@@ -154,6 +154,7 @@ public class MethodsMainClient {
                             + "Observaciones: " + observaciones
                             + " | Fecha: " + fechaFactura
                             + " | Importe Total: " + importeTotal);
+                    
                 });
             }
         });
@@ -174,7 +175,11 @@ public class MethodsMainClient {
     //*****************************************************************//
     //*************** DELETE CLIENT  *****************************//
     protected static void eliminarClientes(Clientas01Service clientService) {
-        System.out.println("¿Cómo deseas eliminar los clientes?");
+        System.out.println("**** Aviso ****");
+        System.out.println("Se podrá eliminar el cliente que ya no tiene proyectos activos O todos los proyectos están finalizados hace más de 5 años.");
+        MainApp.esperarIntro();
+        
+        System.out.println("\n¿Cómo deseas eliminar los clientes?");
         System.out.println("1. Eliminar todos los clientes");
         System.out.println("2. Eliminar un cliente por ID");
 

@@ -49,23 +49,20 @@ public class Tascaas01 implements Serializable {
 
     @Column(name = "estat")
     private String estat;
-    
+
     //Muchas tareas pueden estar asociadas a un proyecto
     @JoinColumn(name = "idProjecte", referencedColumnName = "idProjecte")
     @ManyToOne
     private Projecteas01 idProjecte;
 
-    //Una tarea puede estar asociada a varias facturas
-    // NOOOO - MAL - CADA TAREA SOLO PUEDE TENER UNA FACTURA
-    //Si modificamos una tarea, se modificará su factura asociada
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTasca")
-    private Collection<Facturaas01> facturaas01Collection;
+    //Una tarea esta asociada a UNA FACTURA
+    //Si BORRAMOS una tarea, se borrará su factura asociada
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "idTasca", orphanRemoval = true)
+    private Facturaas01 factura;
 
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO
-    // TASCA
-    //Cascade???
-    @OneToOne(cascade= CascadeType.ALL)
-    @JoinColumn(name = "idOperari",  referencedColumnName = "idOperariTasca", nullable = false , insertable = true, updatable = true)
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false, insertable = true, updatable = true)
     private Operariresponsableas01 idOperari;
 
     public Tascaas01() {
@@ -105,18 +102,18 @@ public class Tascaas01 implements Serializable {
 
     // UN PROYECTO FINALIZADO SOLO PUEDE TENER TAREAS FINALIZADAS
     public void setIdProjecte(Projecteas01 idProjecte) {
-    if (idProjecte != null && "Finalizat".equals(idProjecte.getEstat()) && !"Finalitzat".equals(this.estat)) {
-        throw new IllegalStateException("Las tareas solo pueden asociarse a proyectos finalizados si también están finalizadas.");
-    }
-    this.idProjecte = idProjecte;
-    }
-
-    public Collection<Facturaas01> getFacturaas01Collection() {
-        return facturaas01Collection;
+        if (idProjecte != null && "Finalizat".equals(idProjecte.getEstat()) && !"Finalitzat".equals(this.estat)) {
+            throw new IllegalStateException("Las tareas solo pueden asociarse a proyectos finalizados si también están finalizadas.");
+        }
+        this.idProjecte = idProjecte;
     }
 
-    public void setFacturaas01Collection(Collection<Facturaas01> facturaas01Collection) {
-        this.facturaas01Collection = facturaas01Collection;
+    public Facturaas01 getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Facturaas01 factura) {
+        this.factura = factura;
     }
 
     public Operariresponsableas01 getOperariResponsable() {
@@ -130,12 +127,12 @@ public class Tascaas01 implements Serializable {
     @Override
     public String toString() {
         return "Tarea {"
-                + "idTasca= " + idTasca
-                + ", descripcio= " + descripcio + '\''
-                + ", estat= " + estat + '\''
-                + ", idProjecte= " + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
-                + ", facturaas01Collection= " + (facturaas01Collection != null ? facturaas01Collection.size() + " facturas" : "null")
-                + ", operariResponsable=" + idOperari
+                + "idTasca=" + idTasca
+                + ", descripcio='" + descripcio + '\''
+                + ", estat='" + estat + '\''
+                + ", idProjecte=" + (idProjecte != null ? idProjecte.getIdProjecte() : "null")
+                + ", factura=" + (factura != null ? factura.getIdFactura() : "null")
+                + ", operariResponsable=" + (idOperari != null ? idOperari.getIdOperariTasca() : "null")
                 + '}';
     }
 }

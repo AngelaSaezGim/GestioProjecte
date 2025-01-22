@@ -113,7 +113,7 @@ public class Projecteas01Service {
     private boolean hasFacturedTasks(Projecteas01 project) {
         // Comprobamos si alguna de las tareas del proyecto tiene una factura asociada
         for (Tascaas01 tasca : project.getTascaas01Collection()) {
-            if (tasca.getFacturaas01Collection() != null) {  // Si la tarea tiene una factura asociada
+            if (tasca.getFactura() != null) {  // Si la tarea tiene una factura asociada
                 return true;
             }
         }
@@ -122,7 +122,6 @@ public class Projecteas01Service {
 
     // Verificar si todas las tareas asociadas han sido facturadas hace más de 5 años y están 'Finalitzat'
     private boolean areTasksFacturedMoreThanFiveYearsAgo(Projecteas01 project) {
-        // Iterar sobre las tareas del proyecto
         for (Tascaas01 tasca : project.getTascaas01Collection()) {
             // Verificar que la tarea esté en estado 'Finalitzat'
             if (!"Finalitzat".equals(tasca.getEstat())) {
@@ -130,12 +129,11 @@ public class Projecteas01Service {
             }
 
             // Verificar si la tarea tiene facturas asociadas
-            if (tasca.getFacturaas01Collection() != null) {
-                for (Facturaas01 factura : tasca.getFacturaas01Collection()) {
-                    // Verificar si la factura tiene más de 5 años desde la fecha actual
-                    if (factura.getData().after(getDateFiveYearsAgo())) {
-                        return false;  // No se puede eliminar porque la factura no tiene más de 5 años
-                    }
+            Facturaas01 factura = tasca.getFactura();
+            if (factura != null) {
+                // Verificar si la factura tiene más de 5 años desde la fecha actual
+                if (factura.getData().after(getDateFiveYearsAgo())) {
+                    return false;  // No se puede eliminar porque la factura no tiene más de 5 años
                 }
             }
         }

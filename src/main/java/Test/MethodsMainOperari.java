@@ -148,7 +148,11 @@ public class MethodsMainOperari {
     //*****************************************************************//
     //*************** DELETE OPERARI  *****************************//
     protected static void eliminarOperariosResponsables(Operariresponsableas01Service operariService) {
-
+        
+         System.out.println("**** Aviso ****");
+         System.out.println("No se puede eliminar ningún operario responsable que esté trabajando en una tarea en estado 'tarea en proceso'.");
+         MainApp.esperarIntro();
+         
         System.out.println("¿Cómo deseas eliminar los operarios responsables?");
         System.out.println("1. Eliminar todos los operarios responsables");
         System.out.println("2. Eliminar un operario responsable por ID");

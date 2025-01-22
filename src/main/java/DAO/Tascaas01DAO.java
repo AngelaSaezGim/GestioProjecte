@@ -66,7 +66,7 @@ public class Tascaas01DAO implements GenericDAO<Tascaas01> {
         return em.createQuery(
                 "SELECT DISTINCT t FROM Tascaas01 t "
                 + "LEFT JOIN FETCH t.idProjecte p "
-                + "LEFT JOIN FETCH t.facturaas01Collection f "
+                + "LEFT JOIN FETCH t.factura f "
                 + "LEFT JOIN FETCH t.idOperari o",
                 Tascaas01.class
         ).getResultList();

@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -58,9 +59,9 @@ public class Facturaas01 implements Serializable {
     @Column(name = "observacions")
     private String observacions;
 
-    //Varias facturas pueden estar asociadas a una tarea
-    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca", nullable = false)
-    @ManyToOne(optional = false)
+    //una FACTURA ESTA ASOCIADA A UNA TAREA
+    @OneToOne(optional = false)
+    @JoinColumn(name = "idTasca", referencedColumnName = "idTasca", unique = true)
     private Tascaas01 idTasca;
 
     //Varias facturas pueden estas asociadas a un cliente

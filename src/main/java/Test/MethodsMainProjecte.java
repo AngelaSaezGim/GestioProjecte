@@ -427,7 +427,14 @@ public class MethodsMainProjecte {
     //*************** DELETE PROJECTE  *****************************//
     // PROCESAR FECHA DE FINALIZACION - CONDICIONAL
     protected static void eliminarProjectes(Projecteas01Service projecteService) {
-        System.out.println("¿Cómo deseas eliminar los proyectos?");
+        System.out.println("**** Aviso ****");
+        System.out.println("No podremos eliminar ningún PROYECTO que tenga alguna TAREA que ya haya generado la FACTURA asociada.");
+        System.out.println("**Se podrá eliminar un proyecto; \n"
+                + "-> SOLO cuando esté en estado FINALIZADO y ADEMÁS todas sus tareas (FINALIZADAS) hayan sido facturadas HACE MÁS DE 5 AÑOS");
+        
+        MainApp.esperarIntro();
+        
+        System.out.println("\n¿Cómo deseas eliminar los proyectos?");
         System.out.println("1. Eliminar todos los proyectos");
         System.out.println("2. Eliminar un proyecto por ID");
 

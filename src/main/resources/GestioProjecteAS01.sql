@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS ProjecteAS01 (
     fechaFinalitzacio DATE DEFAULT NULL,
     idClient INT,
 	FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient)
+    ON DELETE SET NULL
 );
 
 /*4. OperariResponsable: IdOperariTasca (PK, AI), nom, cognom, NIFOperari (NN), IdTasca (NN), observacions*/

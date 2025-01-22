@@ -107,6 +107,7 @@ public class MethodsMainTasca {
                         System.out.println("El proyecto con ID " + idProjecte + " no existe. Inténtalo nuevamente.");
                         idProjecte = null;
                         MainApp.esperarIntro();
+                        // REVISAR SI ASIGNAMOS UNA TAREA NO FINALIZADA A PROYECTO FINALIZADO
                     } else if ("Finalitzat".equals(project.getEstat()) && !"Finalitzat".equals(estat)) {
                         System.out.println("No se puede agregar una tarea no finalizada a un proyecto finalizado.");
                         idProjecte = null;
@@ -117,25 +118,21 @@ public class MethodsMainTasca {
                 }
             }
 
-            System.out.print("IDs de las facturas (separados por comas): ");
-            System.out.println("Lista de facturas disponibles; ");
-            MethodsMainFactura.listFacturaBasic(facturaService);
-            System.out.println("Proyecto asociado a facturas... (separalas por comas)");
-            String inputFacturas = tcl.nextLine();
-            String[] facturaIds = inputFacturas.split(",");
-            List<Facturaas01> facturas = new ArrayList<>();
-
-            for (String facturaId : facturaIds) {
+            Facturaas01 factura = null;
+            while (factura == null) {
+                System.out.print("ID de la factura asociada: ");
+                System.out.println("Lista de facturas disponibles:");
+                MethodsMainFactura.listFacturaBasic(facturaService);
+                System.out.println("Proyecto asociado a la factura...");
+                String inputFacturaId = tcl.nextLine();
                 try {
-                    int id = Integer.parseInt(facturaId.trim());
-                    Facturaas01 factura = facturaService.findFacturaById(id);
-                    if (factura != null) {
-                        facturas.add(factura);
-                    } else {
-                        System.out.println("La factura con ID " + id + " no existe.");
+                    int facturaId = Integer.parseInt(inputFacturaId.trim());
+                    factura = facturaService.findFacturaById(facturaId);
+                    if (factura == null) {
+                        System.out.println("La factura con ID " + facturaId + " no existe. Inténtalo nuevamente.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("El ID " + facturaId + " no es válido.");
+                    System.out.println("El ID de factura ingresado no es válido. Inténtalo nuevamente.");
                 }
             }
 
@@ -161,7 +158,7 @@ public class MethodsMainTasca {
             newTasca.setDescripcio(descripcio);
             newTasca.setEstat(estat);
             newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
-            newTasca.setFacturaas01Collection(facturas);
+            newTasca.setFactura(factura);
             newTasca.setOperariResponsable(operariService.findOperariById(idOperari));
 
             try {
@@ -233,34 +230,37 @@ public class MethodsMainTasca {
                 String inputIdProjecte = tcl.nextLine();
                 try {
                     idProjecte = Integer.parseInt(inputIdProjecte);
-                    if (projecteService.findProjectById(idProjecte) == null) {
+                    Projecteas01 project = projecteService.findProjectById(idProjecte);
+                    if (project == null) {
                         System.out.println("El proyecto con ID " + idProjecte + " no existe. Inténtalo nuevamente.");
                         idProjecte = null;
+                        MainApp.esperarIntro();
+                        // REVISAR SI ASIGNAMOS UNA TAREA NO FINALIZADA A PROYECTO FINALIZADO
+                    } else if ("Finalitzat".equals(project.getEstat()) && !"Finalitzat".equals(estat)) {
+                        System.out.println("No se puede agregar una tarea no finalizada a un proyecto finalizado.");
+                        idProjecte = null;
+                        MainApp.esperarIntro();
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("ID de proyecto inválido. Inténtalo nuevamente.");
                 }
             }
 
-            System.out.print("IDs de las facturas (separados por comas): ");
-            System.out.println("Lista de facturas disponibles; ");
-            MethodsMainFactura.listFacturaBasic(facturaService);
-            System.out.println("Proyecto asociado a facturas... (separalas por comas)");
-            String inputFacturas = tcl.nextLine();
-            String[] facturaIds = inputFacturas.split(",");
-            List<Facturaas01> facturas = new ArrayList<>();
-
-            for (String facturaId : facturaIds) {
+            Facturaas01 factura = null;
+            while (factura == null) {
+                System.out.print("ID de la factura asociada: ");
+                System.out.println("Lista de facturas disponibles:");
+                MethodsMainFactura.listFacturaBasic(facturaService);
+                System.out.println("Proyecto asociado a la factura...");
+                String inputFacturaId = tcl.nextLine();
                 try {
-                    int id = Integer.parseInt(facturaId.trim());
-                    Facturaas01 factura = facturaService.findFacturaById(id);
-                    if (factura != null) {
-                        facturas.add(factura);
-                    } else {
-                        System.out.println("La factura con ID " + id + " no existe.");
+                    int facturaId = Integer.parseInt(inputFacturaId.trim());
+                    factura = facturaService.findFacturaById(facturaId);
+                    if (factura == null) {
+                        System.out.println("La factura con ID " + facturaId + " no existe. Inténtalo nuevamente.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("El ID " + facturaId + " no es válido.");
+                    System.out.println("El ID de factura ingresado no es válido. Inténtalo nuevamente.");
                 }
             }
 
@@ -286,7 +286,7 @@ public class MethodsMainTasca {
             newTasca.setDescripcio(descripcio);
             newTasca.setEstat(estat);
             newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
-            newTasca.setFacturaas01Collection(facturas);
+            newTasca.setFactura(factura);
             newTasca.setOperariResponsable(operariService.findOperariById(idOperari));
 
             try {
@@ -308,7 +308,6 @@ public class MethodsMainTasca {
                 }
             }
         }
-
     }
 
     //*****************************************************************//
@@ -355,14 +354,12 @@ public class MethodsMainTasca {
                 System.out.println("\t" + "Proyecto asociado no encontrado.");
             }
 
-            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene las siguientes facturas: ");
-            Collection<Facturaas01> facturas = tasca.getFacturaas01Collection();
-            if (facturas != null && !facturas.isEmpty()) {
-                facturas.forEach(factura -> {
-                    System.out.println("\t -" + "[" + factura.getIdFactura() + "]" + " " + " Fecha : " + factura.getData() + " | " + factura.getObservacions() + " | Importe: " + factura.getImportTotal());
-                });
+            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene la siguiente factura: ");
+            Facturaas01 factura = tasca.getFactura();
+            if (factura != null) {
+                System.out.println("\t -" + "[" + factura.getIdFactura() + "]" + " " + " Fecha : " + factura.getData() + " | " + factura.getObservacions() + " | Importe: " + factura.getImportTotal());
             } else {
-                System.out.println("\t" + "No tiene facturas asociadas.");
+                System.out.println("\t" + "No tiene factura asociada.");
             }
 
             System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene el siguiente operario responsable: ");
@@ -373,7 +370,6 @@ public class MethodsMainTasca {
                 System.out.println("\t" + "Operario responsable no encontrado.");
             }
         });
-
     }
 
     public static void listTasquesBasic(Tascaas01Service tascaService) {
@@ -389,6 +385,11 @@ public class MethodsMainTasca {
     //*****************************************************************//
     //*************** DELETE TASCA  *****************************//
     protected static void eliminarTasques(Tascaas01Service tascaService) {
+        
+        System.out.println("**** Aviso ****");
+        System.out.println("Una tasca SE PODRÁ BORRAR SIEMPRE Y CUANDO NO ESTÉ EN PROCESO");
+        MainApp.esperarIntro();
+         
         System.out.println("¿Cómo deseas eliminar las tasques?");
         System.out.println("1. Eliminar todas las tasques");
         System.out.println("2. Eliminar una tasca por ID");
@@ -447,21 +448,21 @@ public class MethodsMainTasca {
                 System.out.print("Introduce el ID de la tasca a eliminar: ");
                 int idTasca = tcl.nextInt();
                 tcl.nextLine();
-                // Buscar la tarea por ID
                 Tascaas01 tasca = tascaService.findTascaById(idTasca);
                 if (tasca != null) {
-                    try {
-                        tascaService.deleteTasca(tasca);
-                    } catch (Exception e) {
-                        System.out.println("Error al eliminar la tarea: " + e.getMessage()); 
+                    String info = tascaService.deleteTascaVerification(tasca);
+                    if (info == null) {
+                        try {
+                            tascaService.deleteTasca(tasca);
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar la tarea: " + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("No se puede eliminar la tarea: " + info);
                     }
                 } else {
                     System.out.println("No se encontró una tarea con ese ID.");
                 }
-                break;
-
-            default:
-                System.out.println("Opción no válida.");
                 break;
         }
     }

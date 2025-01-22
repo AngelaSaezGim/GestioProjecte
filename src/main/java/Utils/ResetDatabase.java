@@ -63,7 +63,8 @@ public class ResetDatabase {
                     + "estat ENUM('No iniciat', 'En procés', 'Finalitzat'), "
                     + "fechaFinalitzacio DATE DEFAULT NULL, "
                     + "idClient INT, "
-                    + "FOREIGN KEY (idClient) REFERENCES " + TABLE_CLIENT + "(idClient)"
+                    + "FOREIGN KEY (idClient) REFERENCES " + TABLE_CLIENT + "(idClient) "
+                    + "ON DELETE SET NULL"
                     + ")"
             ).executeUpdate();
 
