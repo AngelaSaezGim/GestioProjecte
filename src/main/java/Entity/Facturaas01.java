@@ -65,7 +65,7 @@ public class Facturaas01 implements Serializable {
     private Tascaas01 idTasca;
 
     //Varias facturas pueden estas asociadas a un cliente
-    @JoinColumn(name = "idClient", referencedColumnName = "idClient", nullable = false)
+    @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     @ManyToOne(optional = false)
     private Clientas01 idClient;
 

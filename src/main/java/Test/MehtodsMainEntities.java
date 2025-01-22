@@ -56,11 +56,11 @@ public class MehtodsMainEntities {
             Tascaas01Service tascaService) {
         System.out.println("Vaciando todas las tablas...");
         try {
-            //clientService.deleteTable();
-            //facturaService.deleteTable();
-            //operariResponsableService.deleteTable();
-            //projecteService.deleteTable();
-            //tascaService.deleteTable();
+            facturaService.deleteTable();
+            tascaService.deleteTable();
+            operariResponsableService.deleteTable();
+            projecteService.deleteTable();
+            clientService.deleteTable();
             System.out.println("Todas las tablas han sido vaciadas.");
         } catch (Exception e) {
             log.error("Error al vaciar las tablas: ", e);

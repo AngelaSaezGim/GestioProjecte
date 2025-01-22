@@ -65,22 +65,22 @@ public class MainApp {
             // Inicio servicios (dividos en entidades)
             Clientas01Service clientService = new Clientas01Service(em);
             Facturaas01Service facturaService = new Facturaas01Service(em);
-            Operariresponsableas01Service operariResponsableService = new Operariresponsableas01Service(em);
+            Operariresponsableas01Service operariService = new Operariresponsableas01Service(em);
             Projecteas01Service projecteService = new Projecteas01Service(em);
             Tascaas01Service tascaService = new Tascaas01Service(em);
             do {
-                showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                showContador(clientService, facturaService, operariService, projecteService, tascaService);
                 printOptions();
                 opcionElegidaPrincipal = readChoiceMain();
 
                 switch (opcionElegidaPrincipal) {
                     case QUERY_CLEAN_ALL:
-                        truncateAllTables(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                        truncateAllTables(clientService, facturaService, operariService, projecteService, tascaService);
                         esperarIntro();
                         break;
                     case QUERY_INSERT:
                         do {
-                            showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                            showContador(clientService, facturaService, operariService, projecteService, tascaService);
                             System.out.println("-- INSERTAR DATOS --");
                             printOptionsEntity();
                             opcionElegidaInsert = readChoiceInsert();
@@ -90,11 +90,11 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_FACTURAS:
-                                    MethodsMainFactura.agregarFacturaMenu(facturaService, tascaService, clientService);
+                                    MethodsMainFactura.agregarFacturaMenu(facturaService, tascaService, clientService, projecteService, operariService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_OPERARI:
-                                    MethodsMainOperari.agregarOperariBasic(operariResponsableService);
+                                    MethodsMainOperari.agregarOperariBasic(operariService);
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_PROJECTE:
@@ -102,7 +102,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_INSERT_TASCA:
-                                    MethodsMainTasca.agregarTascaMenu(tascaService, projecteService, facturaService, operariResponsableService);
+                                    MethodsMainTasca.agregarTascaMenu(tascaService, projecteService, facturaService, operariService);
                                     esperarIntro();
                                     break;
                                 case EXIT:
@@ -113,7 +113,7 @@ public class MainApp {
                         break;
                     case QUERY_LIST:
                         do {
-                            showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                            showContador(clientService, facturaService, operariService, projecteService, tascaService);
                             System.out.println("-- LISTAR DATOS --");
                             printOptionsEntity();
                             opcionElegidaList = readChoiceList();
@@ -127,7 +127,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_OPERARI:
-                                    MethodsMainOperari.listOperariosResponsables(operariResponsableService);
+                                    MethodsMainOperari.listOperariosResponsables(operariService);
                                     esperarIntro();
                                     break;
                                 case QUERY_LIST_PROJECTE:
@@ -146,7 +146,7 @@ public class MainApp {
                         break;
                     case QUERY_DELETE:
                         do {
-                            showContador(clientService, facturaService, operariResponsableService, projecteService, tascaService);
+                            showContador(clientService, facturaService, operariService, projecteService, tascaService);
                             System.out.println("-- BORRAR DATOS --");
                             printOptionsEntity();
                             opcionElegidaDelete = readChoiceDelete();
@@ -160,7 +160,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_OPERARI:
-                                    MethodsMainOperari.eliminarOperariosResponsables(operariResponsableService);
+                                    MethodsMainOperari.eliminarOperariosResponsables(operariService);
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_PROJECTE:

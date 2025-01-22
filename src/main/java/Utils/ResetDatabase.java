@@ -96,8 +96,8 @@ public class ResetDatabase {
             em.createNativeQuery(
                     "CREATE TABLE IF NOT EXISTS " + TABLE_INVOICE + " ("
                     + "idFactura INT PRIMARY KEY AUTO_INCREMENT, "
-                    + "idTasca INT NOT NULL, "
-                    + "idClient INT NOT NULL, "
+                    + "idTasca INT, "
+                    + "idClient INT, "
                     + "data DATE NOT NULL, "
                     + "importTotal DOUBLE NOT NULL, "
                     + "observacions VARCHAR(255), "

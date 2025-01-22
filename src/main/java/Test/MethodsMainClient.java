@@ -81,6 +81,51 @@ public class MethodsMainClient {
             }
         }
     }
+    
+    // METODO SOBRECARGADO CON IDFACTURA
+    // CREA Y DEVUELVE EL ID DEL CLIENTE
+    public static Integer agregarClienteBasic(Clientas01Service clientasService, Integer idFactura) {
+
+            System.out.println("Introduce los datos del cliente:");
+
+            //NO PUEDE SER NULO - no puede estar vacío
+            String nom = "";
+            while (nom.isEmpty()) {
+                System.out.print("Nombre (No puede estar vacío): ");
+                nom = tcl.nextLine();
+            }
+
+            // (puede ser vacío)
+            System.out.print("Apellido: ");
+            String cognom = tcl.nextLine();
+
+            // NIF (No puede estar vacío) - DEBE SER VALIDO
+            String nif = "";
+            while (nif.isEmpty() || !esNifValido(nif)) {
+                System.out.print("NIF (No puede estar vacío y debe ser válido): ");
+                nif = tcl.nextLine().trim();
+                if (!esNifValido(nif)) {
+                    System.out.println("El NIF ingresado no es válido. Inténtalo de nuevo.");
+                }
+            }
+
+            // Crear la entidad de newClient
+            Clientas01 newClient = new Clientas01();
+            newClient.setNom(nom);
+            newClient.setCognom(cognom);
+            newClient.setNif(nif);
+
+            // Agregar bd
+            try {
+                clientasService.createClient(newClient);
+                System.out.println("Cliente agregado exitosamente.");
+                return newClient.getIdClient();
+            } catch (Exception e) {
+                System.out.println("Error al agregar el cliente: " + e.getMessage());
+            }
+            //ONE CLIENTE FACTURA (no creamos más)
+            return null;  //Si falla pasamos null
+    }
 
     //*****************************************************************//
     //********************** FIND ************************************//
