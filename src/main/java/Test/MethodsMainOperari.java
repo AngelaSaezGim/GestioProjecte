@@ -80,6 +80,46 @@ public class MethodsMainOperari {
         }
 
     }
+    
+    // METODO SOBRECARGADO - CREA OPERARI (con tarea) Y LO DEVUELVE
+     public static Integer agregarOperariBasic(Operariresponsableas01Service operariResponsableService, Integer idTasca) {
+
+            System.out.println("Introduce los datos del operario responsable:");
+
+            System.out.print("Nombre del operario: ");
+            String nom = tcl.nextLine();
+
+            System.out.print("Apellido del operario: ");
+            String cognom = tcl.nextLine();
+
+            // DEBE SER VALIDO
+            String nifOperari = "";
+            while (nifOperari.isEmpty() || !esNifValido(nifOperari)) {
+                System.out.print("NIF del operario (debe ser único y no puede estar vacío):  ");
+                nifOperari = tcl.nextLine().trim();
+                if (!esNifValido(nifOperari)) {
+                    System.out.println("El NIF ingresado no es válido. Inténtalo de nuevo.");
+                }
+            }
+
+            System.out.print("Observaciones: ");
+            String observacions = tcl.nextLine();
+
+            Operariresponsableas01 newOperari = new Operariresponsableas01();
+            newOperari.setNom(nom);
+            newOperari.setCognom(cognom);
+            newOperari.setNifOperari(nifOperari);
+            newOperari.setObservacions(observacions);
+
+            try {
+                operariResponsableService.createOperari(newOperari);
+                System.out.println("Operario responsable agregado exitosamente.");
+                return newOperari.getIdOperariTasca();
+            } catch (Exception e) {
+                System.out.println("Error al agregar el operario responsable: " + e.getMessage());
+            }
+            return null;  //Si falla pasamos null
+        }
 
     //*****************************************************************//
     //********************** FIND ************************************//

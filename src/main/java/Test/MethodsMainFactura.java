@@ -171,7 +171,6 @@ public class MethodsMainFactura {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("--- MODO COMPLETO ---");
             System.out.println("Introduce los datos de la factura:");
 
             // Validar fecha (no puede estar vacía)
@@ -216,10 +215,10 @@ public class MethodsMainFactura {
             Integer idFactura = newFactura.getIdFactura();
 
             // Asociar tarea a la factura
-            Integer idTasca = asociarTarea(tascaService, projecteService, facturaService, operariService, idFactura);
+            Integer idTasca = asociarTareaFactura(tascaService, projecteService, facturaService, operariService, idFactura);
 
             // Asociar cliente a la factura
-            Integer idClient = asociarCliente(clientService, idFactura);
+            Integer idClient = asociarClienteFactura(clientService, idFactura);
 
             newFactura.setIdTasca(tascaService.findTascaById(idTasca));
             newFactura.setIdClient(clientService.findClientById(idClient));
@@ -245,7 +244,7 @@ public class MethodsMainFactura {
     }
 
     // Método para asociar tarea
-    private static Integer asociarTarea(
+    private static Integer asociarTareaFactura(
             Tascaas01Service tascaService,
             Projecteas01Service projecteService,
             Facturaas01Service facturaService,
@@ -290,7 +289,7 @@ public class MethodsMainFactura {
     }
 
     // Método para asociar cliente
-    private static Integer asociarCliente(Clientas01Service clientService, Integer idFactura) {
+    private static Integer asociarClienteFactura(Clientas01Service clientService, Integer idFactura) {
         
         Integer idClient = null;
         while (idClient == null) {
@@ -328,6 +327,74 @@ public class MethodsMainFactura {
         }
         return idClient;
     }
+    
+    // METODO SOBRECARGADO
+    //CREAR FACTURA CON ID TASCA
+    public static Integer agregarFacturaComplete(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientService,
+            Projecteas01Service projecteService, Operariresponsableas01Service operariService, Integer idTasca) {
+
+            System.out.println("Introduce los datos de la factura:");
+
+            // Validar fecha (no puede estar vacía)
+            Date data = null;
+            while (data == null) {
+                System.out.print("Fecha (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                String input = tcl.nextLine();
+                try {
+                    data = new SimpleDateFormat("yyyy-MM-dd").parse(input);
+                } catch (ParseException e) {
+                    System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                }
+            }
+
+            Double importTotal = null;
+            while (importTotal == null) {
+                System.out.print("Importe Total (número positivo): ");
+                String input = tcl.nextLine();
+                try {
+                    importTotal = Double.parseDouble(input);
+                    if (importTotal <= 0) {
+                        System.out.println("El importe total debe ser positivo.");
+                        importTotal = null;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Importe total inválido. Inténtalo nuevamente.");
+                }
+            }
+
+            // (puede estar vacío)
+            System.out.print("Observaciones: ");
+            String observacions = tcl.nextLine();
+
+            // Crear la entidad de nueva factura
+            Facturaas01 newFactura = new Facturaas01();
+            newFactura.setData(data);
+            newFactura.setImportTotal(importTotal);
+            newFactura.setObservacions(observacions);
+
+            facturaService.createFactura(newFactura);
+            // CON ESTO PODREMOS ACCEDER A SU ID AUTOGENERADO
+            Integer idFactura = newFactura.getIdFactura();
+
+            // Asociar tarea a la factura
+            // YA LO TENEMOS DE ANTES - PARÁMETRO
+
+            // Asociar cliente a la factura
+            Integer idClient = asociarClienteFactura(clientService, idFactura);
+
+            newFactura.setIdTasca(tascaService.findTascaById(idTasca));
+            newFactura.setIdClient(clientService.findClientById(idClient));
+
+            try {
+                facturaService.createFactura(newFactura); // Se inserta la factura a la BASE DE DATOS
+                System.out.println("Factura agregada correctamente");
+                return newFactura.getIdFactura();
+            } catch (Exception e) {
+                System.out.println("Error al agregar la factura: " + e.getMessage());
+            }
+            
+            return null; 
+        }
 
     //*****************************************************************//
     //********************** FIND ************************************//

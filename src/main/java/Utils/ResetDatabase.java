@@ -86,7 +86,7 @@ public class ResetDatabase {
                     + "descripcio VARCHAR(45), "
                     + "estat ENUM('No iniciat', 'En procés', 'Finalitzat'), "
                     + "idProjecte INT, "
-                    + "idOperari INT NOT NULL, "
+                    + "idOperari INT, "
                     + "FOREIGN KEY (idProjecte) REFERENCES " + TABLE_PROJECT + "(idProjecte), "
                     + "FOREIGN KEY (idOperari) REFERENCES " + TABLE_OPERATOR + "(idOperariTasca)"
                     + ")"
