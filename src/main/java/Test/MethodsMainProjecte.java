@@ -34,27 +34,26 @@ public class MethodsMainProjecte {
     //*************** AGREGAR PROJECTE  *****************************//
     public static void agregarProjecteMenu(Projecteas01Service projecteService, Clientas01Service clientasService, Facturaas01Service facturaService, Operariresponsableas01Service operariService, Tascaas01Service tascaService) {
 
-        System.out.println("¿Cómo deseas agregar a los proyectos?");
-        System.out.println("1. Básico (Solo creamos el proyecto)");
-        System.out.println("2. Completo (Creamos el proyecto y si no existe algún dato asociado, lo creamos)");
+        System.out.println("Com vols afegir els projectes?");
+        System.out.println("1. Bàsic (Només creem el projecte)");
+        System.out.println("2. Complet (Creem el projecte i, si no existeix alguna dada associada, la creem)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                System.out.println("=== CREACIÓN PROYECTOS ===");
-                System.out.println("*=== [MODO BÁSICO] ===*");
+                System.out.println("=== CREACIÓ DE PROJECTES ===");
+                System.out.println("*=== [MODO BÀSIC] ===*");
                 agregarProjecteBasic(projecteService, clientasService, tascaService);
                 break;
             case 2:
-                System.out.println("=== CREACIÓN PROYECTOS ===");
-                System.out.println("*=== [MODO COMPLETO] ===*");
+                System.out.println("=== CREACIÓ DE PROJECTES ===");
+                System.out.println("*=== [MODO COMPLET] ===*");
                 agregarProjecteComplete(projecteService, clientasService, facturaService, operariService, tascaService);
                 break;
-
             default:
-                System.out.println("Opción no válida.");
+                 System.out.println("Opció no vàlida.");
                 break;
         }
     }
@@ -65,18 +64,18 @@ public class MethodsMainProjecte {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("Introduce los datos del proyecto:");
+            System.out.println("Introdueix les dades del projecte:");
 
-            System.out.print("Descripción del proyecto: ");
+            System.out.print("Descripció del projecte: ");
             String descripcio = tcl.nextLine();
 
             String estat = "";
             while (true) {
-                System.out.println("Selecciona el estado del proyecto:");
-                System.out.println("1. No iniciat");
-                System.out.println("2. En procés");
-                System.out.println("3. Finalitzat");
-                System.out.print("Introduce el número correspondiente al estado: ");
+                System.out.println("Selecciona l'estat del projecte:");
+            System.out.println("1. No iniciat");
+            System.out.println("2. En procés");
+            System.out.println("3. Finalitzat");
+            System.out.print("Introdueix el número corresponent a l'estat: ");
                 int opcion = tcl.nextInt();
                 tcl.nextLine();
 
@@ -91,7 +90,7 @@ public class MethodsMainProjecte {
                         estat = "Finalitzat";
                         break;
                     default:
-                        System.out.println("Opción no válida. Intenta nuevamente.");
+                         System.out.println("Opció no vàlida. Torna a intentar-ho.");
                         continue;
                 }
                 break;
@@ -99,48 +98,48 @@ public class MethodsMainProjecte {
 
             Date fechaFinalitzacio = null;
             if ("Finalitzat".equalsIgnoreCase(estat)) {
-                System.out.println("Si esta finalizado, dime la fecha en la que se ha finalizado ;");
+                System.out.println("Si està finalitzat, indica la data en què s'ha finalitzat:");
                 while (fechaFinalitzacio == null) {
-                    System.out.print("Fecha finalizació (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                   System.out.print("Data de finalització (Format: yyyy-MM-dd, No pot estar buida): ");
                     String input = tcl.nextLine();
                     try {
                         fechaFinalitzacio = new SimpleDateFormat("yyyy-MM-dd").parse(input);
                     } catch (ParseException e) {
-                        System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                        System.out.println("Data no vàlida. Assegura't d'utilitzar el format yyyy-MM-dd.");
                     }
                 }
             }
 
             Integer idClient = null;
             while (idClient == null) {
-                System.out.print("ID del cliente (debe ser válido y existir): ");
-                System.out.println("Lista de clientes disponibles; ");
+                System.out.print("ID del client (ha de ser vàlid i existir): ");
+                System.out.println("Llista de clients disponibles:");
                 MethodsMainClient.listClientsBasic(clientService);
-                System.out.println("Proyecto asociado a cliente...");
+                System.out.println("Projecte associat a client...");
                 String inputIdClient = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(inputIdClient);
                     if (clientService.findClientById(idClient) == null) {
-                        System.out.println("El cliente con ID " + idClient + " no existe. Inténtalo nuevamente.");
+                        System.out.println("El client amb ID " + idClient + " no existeix. Torna a intentar-ho.");
                         idClient = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de cliente inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de client no vàlid. Torna a intentar-ho.");
                 }
             }
 
-            System.out.print("IDs de las tareas (separados por comas): ");
-            System.out.println("Lista de tareas disponibles; ");
+            System.out.print("IDs de les tasques (separats per comes): ");
+            System.out.println("Llista de tasques disponibles:");
 
             // Verifica si el proyecto está finalizado antes de permitir agregar tareas
             if ("Finalitzat".equalsIgnoreCase(estat)) {
-                System.out.println("Dado que el proyecto está finalizado, solo puedes asociar tareas que también estén finalizadas.");
-                System.out.println("Lista de tareas FINALIZADAS disponibles; ");
+                System.out.println("Com que el projecte està finalitzat, només pots associar tasques que també estiguin finalitzades.");
+                System.out.println("Llista de tasques FINALITZADES disponibles:");
                 listProjecteByState(projecteService, "Finalitzat");
             } else {
                 MethodsMainTasca.listTasquesBasic(tascaService);
             }
-            System.out.println("Proyecto asociado a tareas... (separarlas por comas)");
+            System.out.println("Projecte associat a tasques... (separa-les per comes)");
             String inputTascas = tcl.nextLine();
             String[] tascaIds = inputTascas.split(",");
             List<Tascaas01> tasques = new ArrayList<>();
@@ -153,21 +152,21 @@ public class MethodsMainProjecte {
                     if (tasca != null) {
                         if ("Finalitzat".equalsIgnoreCase(estat) && !"Finalitzat".equalsIgnoreCase(tasca.getEstat())) {
                             allTasksFinalized = false; // Marca que no todas las tareas están finalizadas
-                            System.out.println("No se puede asociar la tarea con ID " + id + " porque no está finalizada.");
+                             System.out.println("No es pot associar la tasca amb ID " + id + " perquè no està finalitzada.");
                         } else {
                             tasques.add(tasca);
                         }
                     } else {
-                        System.out.println("La tarea con ID " + id + " no existe.");
+                        System.out.println("La tasca amb ID " + id + " no existeix.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("El ID " + tascaId + " no es válido.");
+                     System.out.println("L'ID " + tascaId + " no és vàlid.");
                 }
             }
 
             if (!allTasksFinalized) {
-                System.out.println("No se pueden asociar tareas que no están finalizadas con un proyecto finalizado.");
-                System.out.println("Porfavor, vuelva a empezar");
+                System.out.println("No es poden associar tasques que no estan finalitzades amb un projecte finalitzat.");
+                System.out.println("Per favor, torna a començar.");
                 continue;
             }
 
@@ -182,26 +181,26 @@ public class MethodsMainProjecte {
             if (client != null) {
                 newProjecte.setIdClient(client); // Asociar cliente al proyecto
             } else {
-                System.out.println("No se pudo asociar el proyecto al cliente.");
+                System.out.println("No s'ha pogut associar el projecte al client.");
                 continue;
             }
 
             try {
                 projecteService.createProject(newProjecte);
-                System.out.println("Proyecto agregado exitosamente.");
+                System.out.println("Projecte afegit amb èxit.");
             } catch (Exception e) {
-                System.out.println("Error al agregar el proyecto: " + e.getMessage());
+                System.out.println("Error en afegir el projecte: " + e.getMessage());
             }
 
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otro projecto ? (si/no): ");
+                System.out.print("Vols afegir un altre projecte? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                     System.out.println("Introdueix 'si' per continuar o 'no' per sortir.");
                 }
             }
         }
@@ -213,20 +212,20 @@ public class MethodsMainProjecte {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("Introduce los datos del proyecto:");
+            System.out.println("Introdueix les dades del projecte:");
 
             // Descripción del proyecto
-            System.out.print("Descripción del proyecto: ");
+            System.out.print("Descripció del projecte: ");
             String descripcio = tcl.nextLine();
 
             // Selección del estado del proyecto
             String estat = "";
             while (true) {
-                System.out.println("Selecciona el estado del proyecto:");
-                System.out.println("1. No iniciat");
-                System.out.println("2. En procés");
-                System.out.println("3. Finalitzat");
-                System.out.print("Introduce el número correspondiente al estado: ");
+               System.out.println("Selecciona l'estat del projecte:");
+            System.out.println("1. No iniciat");
+            System.out.println("2. En procés");
+            System.out.println("3. Finalitzat");
+            System.out.print("Introdueix el número corresponent a l'estat: ");
                 int opcion = tcl.nextInt();
                 tcl.nextLine();
 
@@ -241,7 +240,7 @@ public class MethodsMainProjecte {
                         estat = "Finalitzat";
                         break;
                     default:
-                        System.out.println("Opción no válida. Intenta nuevamente.");
+                         System.out.println("Opció no vàlida. Torna a intentar-ho.");
                         continue;
                 }
                 break;
@@ -250,14 +249,14 @@ public class MethodsMainProjecte {
             // Fecha de finalización si está finalizado
             Date fechaFinalitzacio = null;
             if ("Finalitzat".equalsIgnoreCase(estat)) {
-                System.out.println("Si este proyecto está finalizado, ingresa la fecha de finalización:");
+                System.out.println("Si està finalitzat, indica la data en què s'ha finalitzat:");
                 while (fechaFinalitzacio == null) {
-                    System.out.print("Fecha finalización (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                    System.out.print("Data de finalització (Format: yyyy-MM-dd, No pot estar buida): ");
                     String input = tcl.nextLine();
                     try {
                         fechaFinalitzacio = new SimpleDateFormat("yyyy-MM-dd").parse(input);
                     } catch (ParseException e) {
-                        System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                       System.out.println("Data no vàlida. Assegura't d'utilitzar el format yyyy-MM-dd.");
                     }
                 }
             }
@@ -279,21 +278,21 @@ public class MethodsMainProjecte {
 
             try {
                 projecteService.createProject(newProjecte);
-                System.out.println("Proyecto agregado exitosamente.");
+                System.out.println("Projecte afegit amb èxit.");
             } catch (Exception e) {
-                System.out.println("Error al agregar el proyecto: " + e.getMessage());
+                System.out.println("Error en afegir el projecte: " + e.getMessage());
             }
 
             // Preguntar si se desea agregar otro proyecto
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otro proyecto en modo completo? (si/no): ");
+                System.out.print("¿Vols afegir un altre projecte en modo completo? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                    System.out.println("Introdueix 'si' per continuar o 'no' per sortir.");
                 }
             }
         }
@@ -302,24 +301,24 @@ public class MethodsMainProjecte {
     public static List<Tascaas01> asociarTascasProjecte(Tascaas01Service tascaService, Projecteas01Service projecteService,
             Facturaas01Service facturaService, Operariresponsableas01Service operariService, Clientas01Service clientService, Integer idProjecte, String estat) {
 
-        System.out.println("[TAREA ASOCIADA A PROJECTE]");
+        System.out.println("[TASCA ASSOCIA A PROJECTE]");
 
         // Opciones para agregar tareas
-        System.out.println("Opciones:");
-        System.out.println("1. Buscar tareas existentes");
-        System.out.println("2. Crear nuevas tareas asociadas a este proyecto");
-        System.out.print("Elige una opción para las tareas (1/2): ");
+        System.out.println("Opcions:");
+        System.out.println("1. Cercar tasques existents");
+        System.out.println("2. Crear noves tasques associades a aquest projecte");
+        System.out.print("Escull una opció per a les tasques (1/2): ");
         String optionTasca = tcl.nextLine();
         List<Tascaas01> tasques = new ArrayList<>();
         boolean allTasksFinalized = true;
         switch (optionTasca) {
             case "1":
                 // Buscar tareas existentes
-                System.out.println("Lista de tareas existentes: ");
+                System.out.println("Llista de tasques existents: ");
                 MethodsMainTasca.listTasquesBasic(tascaService);
 
                 // Solicitar los IDs de las tareas (esto tiene más sentido dentro de "1" si estamos buscando tareas)
-                System.out.print("IDs de las tareas (separados por comas): ");
+                System.out.print("IDs de les tasques (separats per comes): ");
                 String inputTascas = tcl.nextLine();
                 String[] tascaIds = inputTascas.split(",");
 
@@ -330,32 +329,31 @@ public class MethodsMainProjecte {
                         if (tasca != null) {
                             if ("Finalitzat".equalsIgnoreCase(estat) && !"Finalitzat".equalsIgnoreCase(tasca.getEstat())) {
                                 allTasksFinalized = false;
-                                System.out.println("No se puede asociar la tarea con ID " + id + " porque no está finalizada.");
+                                System.out.println("No es pot associar la tasca amb ID " + id + " perquè no està finalitzada.");
                             } else {
                                 tasques.add(tasca);
                             }
                         } else {
-                            System.out.println("La tarea con ID " + id + " no existe.");
+                            System.out.println("La tasca amb ID " + id + " no existeix.");
                         }
                     } catch (NumberFormatException e) {
-                        System.out.println("El ID " + tascaId + " no es válido.");
+                      System.out.println("L'ID " + tascaId + " no és vàlid.");
                     }
                 }
                 // Verificación de si las tareas pueden ser asociadas con el proyecto
                 if ("Finalitzat".equalsIgnoreCase(estat) && !allTasksFinalized) {
-                    System.out.println("No se pueden asociar tareas que no están finalizadas con un proyecto finalizado.");
-                    System.out.println("Por favor, vuelva a empezar.");
+                    System.out.println("No es poden associar tasques que no estan finalitzades amb un projecte finalitzat.");
+                    System.out.println("Si us plau, torna a començar.");
                     break;
                 }
                 break;
             case "2":
                 // Crear nuevas tareas
-                // SI EL PROYECTO ESTA FINALIZADO SOLO SE PUEDEN CREAR TAREAS FINALIZADAS
-                System.out.println("Creando nuevas tareas para el proyecto...");
+                System.out.println("Creant noves tasques per al projecte...");
                 tasques = MethodsMainTasca.agregarTascaComplete(tascaService, projecteService, facturaService, operariService, clientService, idProjecte, estat);
                 break;
             default:
-                System.out.println("Opción no válida. Intenta nuevamente.");
+                System.out.println("Opció no vàlida. Torna-ho a intentar.");
                 break;
         }
         return tasques;
@@ -368,33 +366,33 @@ public class MethodsMainProjecte {
         Integer idClient = null;
 
         while (idClient == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar un cliente existente");
-            System.out.println("2. Crear un nuevo cliente asociado a este proyecto");
-            System.out.print("Elige una opción para el cliente (1/2): ");
+            System.out.println("Opcions:");
+            System.out.println("1. Cercar un client existent");
+            System.out.println("2. Crear un nou client associat a aquest projecte");
+            System.out.print("Escull una opció per al client (1/2): ");
             String optionClient = tcl.nextLine();
 
             if (optionClient.equals("1")) {
-                System.out.println("Lista de clientes disponibles:");
+                System.out.println("Llista de clients disponibles:");
                 MethodsMainClient.listClientsBasic(clientService);
-                System.out.print("ID del Cliente a asociar: ");
+                 System.out.print("ID del Client a associar: ");
                 String input = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(input);
                     if (clientService.findClientById(idClient) == null) {
-                        System.out.println("El cliente con ID " + idClient + " no existe.");
+                        System.out.println("El client amb ID " + idClient + " no existeix.");
                         idClient = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de cliente inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de client invàlid. Torna-ho a intentar.");
                 }
             } else if (optionClient.equals("2")) {
                 // Crear un nuevo cliente (reemplazar con lógica de creación)
-                System.out.println("Creando un nuevo cliente...");
+                 System.out.println("Creant un nou client...");
                 Integer idFactura = 1; //esto nada
                 idClient = MethodsMainClient.agregarClienteBasic(clientService, idFactura);
             } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
+                System.out.println("Opció no vàlida. Torna-ho a intentar.");
             }
         }
         return idClient;
@@ -406,22 +404,22 @@ public class MethodsMainProjecte {
     public static Integer agregarProjecteComplete(Projecteas01Service projecteService, Clientas01Service clientService, Facturaas01Service facturaService, Operariresponsableas01Service operariService, Tascaas01Service tascaService,
             Integer idTasca, String estatTasca) {
 
-        System.out.println("[PROJECTE ASOCIADO A TAREA]");
+       System.out.println("[PROJECTE ASSOCIAT A TASCA]");
 
-        System.out.println("Introduce los datos del proyecto:");
+        System.out.println("Introdueix les dades del projecte:");
 
         // Descripción del proyecto
-        System.out.print("Descripción del proyecto: ");
+         System.out.print("Descripció del projecte: ");
         String descripcio = tcl.nextLine();
 
         // Selección del estado del proyecto
         String estat = "";
         while (true) {
-            System.out.println("Selecciona el estado del proyecto:");
+            System.out.println("Selecciona l'estat del projecte:");
             System.out.println("1. No iniciat");
             System.out.println("2. En procés");
             System.out.println("3. Finalitzat");
-            System.out.print("Introduce el número correspondiente al estado: ");
+            System.out.print("Introdueix el número corresponent a l'estat: ");
             int opcion = tcl.nextInt();
             tcl.nextLine();
 
@@ -440,7 +438,7 @@ public class MethodsMainProjecte {
                     continue;
             }
             if ("Finalitzat".equalsIgnoreCase(estat) && !"Finalitzat".equalsIgnoreCase(estatTasca)) {
-                System.out.println("Error: No puedes agregar una tarea que no esté finalizada a un proyecto finalizado.");
+                System.out.println("Error: No pots afegir una tasca que no estiga finalitzada a un projecte finalitzat.");
                 continue;
             }
 
@@ -450,14 +448,14 @@ public class MethodsMainProjecte {
         // Fecha de finalización si está finalizado
         Date fechaFinalitzacio = null;
         if ("Finalitzat".equalsIgnoreCase(estat)) {
-            System.out.println("Si este proyecto está finalizado, ingresa la fecha de finalización:");
+             System.out.println("Si aquest projecte està finalitzat, introdueix la data de finalització:");
             while (fechaFinalitzacio == null) {
-                System.out.print("Fecha finalización (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                System.out.print("Data finalització (Format: yyyy-MM-dd, No pot estar buida): ");
                 String input = tcl.nextLine();
                 try {
                     fechaFinalitzacio = new SimpleDateFormat("yyyy-MM-dd").parse(input);
                 } catch (ParseException e) {
-                    System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                    System.out.println("Data invàlida. Assegura't d'utilitzar el format yyyy-MM-dd.");
                 }
             }
         }
@@ -477,16 +475,16 @@ public class MethodsMainProjecte {
         if (tasca != null) {
             newProjecte.setTascaas01Collection(Collections.singletonList(tasca));
         } else {
-            System.out.println("No se encontró la tarea con el ID especificado.");
+            System.out.println("No es va trobar la tasca amb l'ID especificat.");
         }
         newProjecte.setIdClient(clientService.findClientById(idClient));
 
         try {
             projecteService.createProject(newProjecte);
-            System.out.println("Proyecto agregado exitosamente.");
+            System.out.println("Projecte afegit correctament.");
             return newProjecte.getIdProjecte();
         } catch (Exception e) {
-            System.out.println("Error al agregar el proyecto: " + e.getMessage());
+             System.out.println("Error en afegir el projecte: " + e.getMessage());
         }
         return null; // null si falla
     }
@@ -497,26 +495,26 @@ public class MethodsMainProjecte {
     //*************** LISTAR PROYECTOS  *****************************//
     protected static void listProyectos(Projecteas01Service projecteService) {
 
-        System.out.println("¿Cómo deseas ver los proyectos?");
-        System.out.println("1. Básico (Solo datos del proyecto)");
-        System.out.println("2. Completo (Datos del proyecto + tablas relacionadas)");
+          System.out.println("¿Com vols veure els projectes?");
+          System.out.println("1. Bàsic (Només dades del projecte)");
+          System.out.println("2. Completo (Dades del projecte + taules relacionades)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                log.info("=== MOSTRANDO PROYECTOS ===");
-                log.info("*=== [MODO BÁSICO] ===*");
+             System.out.println("=== MOSTRANT PROJECTES ===");
+           System.out.println("*=== [MODE BÀSIC] ===*");
                 listProjecteBasic(projecteService);
                 break;
             case 2:
-                log.info("=== MOSTRANDO PROYECTOS ===");
-                log.info("*=== [MODO COMPLETO] ===*");
+            System.out.println("=== MOSTRANT PROJECTES ===");
+           System.out.println("*=== [MODE COMPLET] ===*");
                 listProjecteComplete(projecteService);
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }
@@ -526,46 +524,46 @@ public class MethodsMainProjecte {
         proyectos.forEach(proyecto -> {
 
             System.out.println("- > PROYECTO Nº [" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat()
-                    + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
+                    + "| data finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
 
             System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " pertenece al cliente: ");
             Clientas01 cliente = proyecto.getIdClient();
             if (cliente != null) {
                 System.out.println("\t -" + "[" + cliente.getIdClient() + "]" + cliente.getNom() + " " + cliente.getCognom() + " - NIF: " + cliente.getNif());
             } else {
-                System.out.println("\t" + "Cliente asociado no encontrado.");
+                 System.out.println("\t" + "Client associat no trobat.");
             }
 
-            System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " tiene las siguientes tareas: ");
+            System.out.println("\t" + "Proyecto nº " + proyecto.getIdProjecte() + " té les següents tasques: ");
             Collection<Tascaas01> tareas = proyecto.getTascaas01Collection();
             if (tareas != null && !tareas.isEmpty()) {
                 tareas.forEach(tarea -> {
                     System.out.println("\t -" + "[" + tarea.getIdTasca() + "]" + tarea.getDescripcio() + " | Estado: " + tarea.getEstat());
                 });
             } else {
-                System.out.println("\t" + "No tiene tareas asociadas.");
+                System.out.println("\t" + "No té tasques associades.");
             }
         });
     }
 
-    public static void listProjecteBasic(Projecteas01Service projecteService) {
-        System.out.println("|--------------------------------------|");
-        for (Projecteas01 proyecto : projecteService.findAllProjects()) {
-            System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat()
-                    + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
-        }
-        System.out.println("|--------------------------------------|");
+   public static void listProjecteBasic(Projecteas01Service projecteService) {
+    System.out.println("|--------------------------------------|");
+    for (Projecteas01 proyecto : projecteService.findAllProjects()) {
+        System.out.println("---> " + "[" + proyecto.getIdProjecte() + "]" + " " + proyecto.getDescripcio() + " | Estat: " + proyecto.getEstat()
+                + "| data finalització = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalitzat"));
     }
+    System.out.println("|--------------------------------------|");
+}
 
-    public static void listProjecteByState(Projecteas01Service projecteService, String state) {
-        System.out.println("|--------------------------------------|");
-        // Mostrar proyectos por estado
-        for (Projecteas01 proyectoFinalizado : projecteService.findAllByState(state)) {
-            System.out.println("---> " + "[" + proyectoFinalizado.getIdProjecte() + "]" + " " + proyectoFinalizado.getDescripcio() + " | Estado: " + proyectoFinalizado.getEstat()
-                    + "| fecha finalización = " + (proyectoFinalizado.getFechaFinalitzacio() != null ? proyectoFinalizado.getFechaFinalitzacio() : "No finalizado"));
-        }
-        System.out.println("|--------------------------------------|");
+   public static void listProjecteByState(Projecteas01Service projecteService, String state) {
+    System.out.println("|--------------------------------------|");
+    // Mostrar projectes per estat
+    for (Projecteas01 proyectoFinalizado : projecteService.findAllByState(state)) {
+        System.out.println("---> " + "[" + proyectoFinalizado.getIdProjecte() + "]" + " " + proyectoFinalizado.getDescripcio() + " | Estat: " + proyectoFinalizado.getEstat()
+                + "| data finalització = " + (proyectoFinalizado.getFechaFinalitzacio() != null ? proyectoFinalizado.getFechaFinalitzacio() : "No finalitzat"));
     }
+    System.out.println("|--------------------------------------|");
+}
 
     //*****************************************************************//
     //********************** DELETE ************************************//
@@ -573,25 +571,25 @@ public class MethodsMainProjecte {
     //*************** DELETE PROJECTE  *****************************//
     // PROCESAR FECHA DE FINALIZACION - CONDICIONAL
     protected static void eliminarProjectes(Projecteas01Service projecteService) {
-        System.out.println("**** Aviso ****");
-        System.out.println("No podremos eliminar ningún PROYECTO que tenga alguna TAREA que ya haya generado la FACTURA asociada.");
-        System.out.println("**Se podrá eliminar un proyecto; \n"
-                + "-> SOLO cuando esté en estado FINALIZADO y ADEMÁS todas sus tareas (FINALIZADAS) hayan sido facturadas HACE MÁS DE 5 AÑOS");
+        System.out.println("**** Avís ****");
+    System.out.println("No podrem eliminar cap PROJECTE que tingui alguna TASCA que ja hagi generat la FACTURA associada.");
+    System.out.println("**Es podrà eliminar un projecte; \n"
+            + "-> NOMÉS quan estigui en estat FINALITZAT i ADEMÉS totes les seves tasques (FINALITZADES) hagin sigut facturades FA MÉS DE 5 ANYS");
 
         MainApp.esperarIntro();
 
-        System.out.println("\n¿Cómo deseas eliminar los proyectos?");
-        System.out.println("1. Eliminar todos los proyectos");
-        System.out.println("2. Eliminar un proyecto por ID");
+        System.out.println("\nCom vols eliminar els projectes?");
+        System.out.println("1. Eliminar tots els projectes");
+        System.out.println("2. Eliminar un projecte per ID");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                System.out.print("Eliminando todos los proyectos... ");
+                System.out.print("Eliminant tots els projectes... ");
                 if (projecteService.findAllProjects().isEmpty()) {
-                    System.out.println("No hay proyectos para eliminar.");
+                  System.out.println("No hi ha projectes per eliminar.");
                 } else {
                     // Se itera cada proyecto, se revisa si puede ser eliminado y se elimina
                     List<Projecteas01> proyectosAEliminar = new ArrayList<>();
@@ -600,43 +598,43 @@ public class MethodsMainProjecte {
                         if (info == null) {
                             proyectosAEliminar.add(proyecto);
                         } else {
-                            System.out.println("No se puede eliminar el proyecto con ID " + proyecto.getIdProjecte() + ": " + info);
+                            System.out.println("No es pot eliminar el projecte amb ID " + proyecto.getIdProjecte() + ": " + info);
                         }
                     }
 
                     if (!proyectosAEliminar.isEmpty()) {
                         // Mostrar el listado de proyectos a eliminar
-                        System.out.println("Los siguientes proyectos serán eliminados:");
+                        System.out.println("Els següents projectes seran eliminats:");
                         for (Projecteas01 proyecto : proyectosAEliminar) {
                             System.out.println(proyecto.getDescripcio() + " (ID: " + proyecto.getIdProjecte() + ")");
                         }
 
-                        System.out.print("¿Estás seguro de que deseas eliminar estos proyectos? (S/N): ");
+                        System.out.print("Estàs segur que vols eliminar aquests projectes? (S/N): ");
                         String confirmacion = tcl.nextLine();
                         if (confirmacion.equalsIgnoreCase("S")) {
                             // Eliminar los proyectos
                             for (Projecteas01 proyecto : proyectosAEliminar) {
                                 try {
                                     projecteService.deleteProject(proyecto);
-                                    System.out.println("Proyecto con ID " + proyecto.getIdProjecte() + " ha sido eliminado.");
+                                     System.out.println("Projecte amb ID " + proyecto.getIdProjecte() + " ha estat eliminat.");
                                 } catch (Exception e) {
-                                    System.out.println("Error al eliminar el proyecto con ID " + proyecto.getIdProjecte() + ": " + e.getMessage());
+                                     System.out.println("Error en eliminar el projecte amb ID " + proyecto.getIdProjecte() + ": " + e.getMessage());
                                 }
                             }
                         } else {
-                            System.out.println("La eliminación ha sido cancelada.");
+                            System.out.println("L'eliminació ha estat cancel·lada.");
                         }
                     } else {
-                        System.out.println("No hay proyectos para eliminar.");
+                        System.out.println("No hi ha projectes per eliminar.");
                     }
                 }
                 break;
             case 2:
-                System.out.print("Introduce el ID del proyecto a eliminar: ");
-                System.out.println("Proyectos disponibles:");
+                System.out.print("Introdueix l'ID del projecte a eliminar: ");
+                System.out.println("Projectes disponibles:");
                 listProjecteComplete(projecteService);
 
-                System.out.print("ID del proyecto a eliminar: ");
+                System.out.print("ID del projecte a eliminar: ");
                 int idProyecto = tcl.nextInt();
                 tcl.nextLine();
 
@@ -646,19 +644,19 @@ public class MethodsMainProjecte {
                     if (info == null) {
                         try {
                             projecteService.deleteProject(proyecto);
-                            System.out.println("Proyecto con ID " + idProyecto + " ha sido eliminado.");
+                             System.out.println("Projecte amb ID " + idProyecto + " ha estat eliminat.");
                         } catch (Exception e) {
-                            System.out.println("Error al eliminar el proyecto con ID " + idProyecto + ": " + e.getMessage());
+                            System.out.println("Error en eliminar el projecte amb ID " + idProyecto + ": " + e.getMessage());
                         }
                     } else {
-                        System.out.println("No se puede eliminar el proyecto con ID " + idProyecto + ": " + info);
+                          System.out.println("No es pot eliminar el projecte amb ID " + idProyecto + ": " + info);
                     }
                 } else {
-                    System.out.println("No se encontró un proyecto con ese ID.");
+                     System.out.println("No s'ha trobat cap projecte amb aquest ID.");
                 }
                 break;
             default:
-                System.out.println("Opción no válida.");
+                 System.out.println("Opció no vàlida.");
                 break;
         }
     }

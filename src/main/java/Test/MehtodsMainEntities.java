@@ -4,12 +4,6 @@
  */
 package Test;
 
-import Entity.Clientas01;
-import Entity.Facturaas01;
-import Entity.Operariresponsableas01;
-import Entity.Projecteas01;
-import Entity.Tascaas01;
-
 import Service.Clientas01Service;
 import Service.Facturaas01Service;
 import Service.Operariresponsableas01Service;
@@ -17,14 +11,6 @@ import Service.Projecteas01Service;
 import Service.Tascaas01Service;
 
 import static Test.MainApp.log;
-import static Test.MainApp.tcl;
-import java.util.List;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-
 /**
  *
  * @author angel

@@ -17,7 +17,6 @@ import static Test.MainApp.tcl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -34,27 +33,27 @@ public class MethodsMainFactura {
     public static void agregarFacturaMenu(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientasService,
             Projecteas01Service projecteService, Operariresponsableas01Service operariService) {
 
-        System.out.println("¿Cómo deseas agregar las facturas?");
-        System.out.println("1. Básico (Solo creamos la factura)");
-        System.out.println("2. Completo (Creamos factura y si no existe algun dato asociado lo creamos)");
+        System.out.println("Com vols agregar les factures?");
+        System.out.println("1. Bàsic (Només creem la factura)");
+        System.out.println("2. Complet (Creem factura i, si no existeix alguna dada associada, la creem)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                log.info("=== CREACIÓN FACTURAS ===");
-                log.info("*=== [MODO BÁSICO] ===*");
+                System.out.println("=== CREACIÓ FACTURES ===");
+                System.out.println("*=== [MODE BÀSIC] ===*");
                 agregarFacturaBasic(facturaService, tascaService, clientasService);
                 break;
             case 2:
-                log.info("=== CREACIÓN FACTURAS ===");
-                log.info("*=== [MODO COMPLETO] ===*");
+                System.out.println("=== CREACIÓ FACTURES ===");
+                System.out.println("*=== [MODE COMPLET] ===*");
                 agregarFacturaComplete(facturaService, tascaService, clientasService, projecteService, operariService);
                 break;
 
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
 
@@ -65,73 +64,73 @@ public class MethodsMainFactura {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("Introduce los datos de la factura:");
+            System.out.println("Introdueix les dades de la factura:");
 
             Integer idTasca = null;
             while (idTasca == null) {
-                System.out.print("ID de la Tarea (No puede estar vacío y debe existir): ");
-                System.out.println("Lista de tareas disponibles; ");
+                System.out.print("ID de la Tasca (No pot estar buit i ha d'existir): ");
+                System.out.println("Llista de tasques disponibles:");
                 MethodsMainTasca.listTasquesBasic(tascaService);
-                System.out.println("Factura asociada a tarea...");
+                System.out.println("Factura associada a tasca...");
                 String inputIdTasca = tcl.nextLine();
                 try {
                     idTasca = Integer.parseInt(inputIdTasca);
                     if (tascaService.findTascaById(idTasca) == null) {
-                        System.out.println("La tarea con ID " + idTasca + " no existe. Inténtalo nuevamente.");
+                        System.out.println("La tasca amb ID " + idTasca + " no existeix. Torna-ho a intentar.");
                         idTasca = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de tarea inválido. Inténtalo nuevamente.");
+                    log.info("ID de tasca invàlid. Torna-ho a intentar.");
                 }
             }
 
             Integer idClient = null;
             while (idClient == null) {
-                System.out.print("ID del Cliente (No puede estar vacío y debe existir): ");
-                System.out.println("Lista de clientes disponibles; ");
+                System.out.print("ID del Client (No pot estar buit i ha d'existir): ");
+                System.out.println("Llista de clients disponibles:");
                 MethodsMainClient.listClientsBasic(clientService);
-                System.out.println("Factura asociada a cliente...");
+                System.out.println("Factura associada a client...");
                 String inputIdCliente = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(inputIdCliente);
                     if (clientService.findClientById(idClient) == null) {
-                        System.out.println("El cliente con ID " + idClient + " no existe. Inténtalo nuevamente.");
+                        System.out.println("El client amb ID " + idClient + " no existeix. Torna-ho a intentar.");
                         idClient = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de cliente inválido. Inténtalo nuevamente.");
+                    log.info("ID de client invàlid. Torna-ho a intentar.");
                 }
             }
 
             // Validar data (no puede estar vacía)
             Date data = null;
             while (data == null) {
-                System.out.print("Fecha (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                System.out.print("Data (Format: yyyy-MM-dd, No pot estar buida): ");
                 String input = tcl.nextLine();
                 try {
                     data = new SimpleDateFormat("yyyy-MM-dd").parse(input);
                 } catch (ParseException e) {
-                    System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                    System.out.println("Data invàlida. Assegura't d'usar el format yyyy-MM-dd.");
                 }
             }
 
             Double importTotal = null;
             while (importTotal == null) {
-                System.out.print("Importe Total (número positivo): ");
+                System.out.print("Import Total (numero positiu): ");
                 String input = tcl.nextLine();
                 try {
                     importTotal = Double.parseDouble(input);
                     if (importTotal <= 0) {
-                        System.out.println("El importe total debe ser positivo.");
+                        System.out.println("L'import total ha de ser positiu.");
                         importTotal = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Importe total inválido. Inténtalo nuevamente.");
+                    System.out.println("Import total invàlid. Torna-ho a intentar.");
                 }
             }
 
             // (puede estar vacío)
-            System.out.print("Observaciones: ");
+            System.out.print("Observacions: ");
             String observacions = tcl.nextLine();
 
             // Crear la entidad de nueva factura
@@ -145,20 +144,20 @@ public class MethodsMainFactura {
             // bd
             try {
                 facturaService.createFactura(newFactura);
-                System.out.println("Factura agregada exitosamente.");
+                System.out.println("Factura agregada amb èxit.");
             } catch (Exception e) {
-                System.out.println("Error al agregar la factura: " + e.getMessage());
+                System.out.println("Error en agregar la factura: " + e.getMessage());
             }
 
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otra factura? (si/no): ");
+                System.out.print("Vols agregar una altra factura? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                    System.out.println("Per favor, introdueix 'si' per continuar o 'no' per eixir.");
                 }
             }
         }
@@ -171,37 +170,37 @@ public class MethodsMainFactura {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("Introduce los datos de la factura:");
+            System.out.println("Introdueix les dades de la factura:");
 
             // Validar fecha (no puede estar vacía)
             Date data = null;
             while (data == null) {
-                System.out.print("Fecha (Formato: yyyy-MM-dd, No puede estar vacía): ");
+                System.out.print("Data (Format: yyyy-MM-dd, No pot estar buida): ");
                 String input = tcl.nextLine();
                 try {
                     data = new SimpleDateFormat("yyyy-MM-dd").parse(input);
                 } catch (ParseException e) {
-                    System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
+                    System.out.println("Data invàlida. Assegura't d'usar el format yyyy-MM-dd.");
                 }
             }
 
             Double importTotal = null;
             while (importTotal == null) {
-                System.out.print("Importe Total (número positivo): ");
+                System.out.print("Import Total (numero positiu): ");
                 String input = tcl.nextLine();
                 try {
                     importTotal = Double.parseDouble(input);
                     if (importTotal <= 0) {
-                        System.out.println("El importe total debe ser positivo.");
+                        System.out.println("L'import total ha de ser positiu.");
                         importTotal = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Importe total inválido. Inténtalo nuevamente.");
+                    System.out.println("Import total invàlid. Torna-ho a intentar.");
                 }
             }
 
             // (puede estar vacío)
-            System.out.print("Observaciones: ");
+            System.out.print("Observacions: ");
             String observacions = tcl.nextLine();
 
             // Crear la entidad de nueva factura
@@ -226,18 +225,18 @@ public class MethodsMainFactura {
             try {
                 facturaService.createFactura(newFactura); // Se inserta la factura a la BASE DE DATOS
             } catch (Exception e) {
-                System.out.println("Error al agregar la factura: " + e.getMessage());
+                System.out.println("Error en agregar la factura: " + e.getMessage());
             }
 
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otra factura en modo completo? (si/no): ");
+                System.out.print("¿Vols agregar una altra factura en modo completo? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                    System.out.println("Per favor, introdueix 'si' per continuar o 'no' per eixir.");
                 }
             }
         }
@@ -252,40 +251,40 @@ public class MethodsMainFactura {
             Clientas01Service clientService,
             Integer idFactura) {
 
-        System.out.println("[TAREA ASOCIADA A FACTURA]");
-        
+        System.out.println("[TASCA ASSOCIADA A FACTURA]");
+
         Integer idTasca = null;
         while (idTasca == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar tarea existente");
-            System.out.println("2. Crear una nueva tarea");
-            System.out.print("Elige una opción para la tarea (1/2): ");
+            System.out.println("Opcions:");
+            System.out.println("1. Buscar tasca existent");
+            System.out.println("2. Crear una nova tasca");
+            System.out.print("Tria una opció per a la tasca (1/2): ");
             String option = tcl.nextLine();
 
             if (option.equals("1")) {
-                System.out.println("Lista de tareas disponibles:");
+                System.out.println("Llista de tasques disponibles:");
                 MethodsMainTasca.listTasquesBasic(tascaService);
-                System.out.print("ID de la Tarea a asociar: ");
+                System.out.print("ID de la Tasca a associar: ");
                 String inputIdTasca = tcl.nextLine();
                 try {
                     idTasca = Integer.parseInt(inputIdTasca);
                     if (tascaService.findTascaById(idTasca) == null) {
-                        System.out.println("La tarea con ID " + idTasca + " no existe.");
+                        System.out.println("La tasca amb ID " + idTasca + " no existeix.");
                         idTasca = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de tarea inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de tasca invàlid. Torna-ho a intentar.");
                 }
             } else if (option.equals("2")) {
-                System.out.println("Creando una nueva tarea...");
+                System.out.println("Creant una nova tasca...");
                 idTasca = MethodsMainTasca.agregarTascaComplete(tascaService, projecteService, clientService, facturaService, operariService, idFactura);
                 if (idTasca != null) {
-                    System.out.println("Tasca creada con ID: " + idTasca);
+                    System.out.println("Tasca creada amb ID: " + idTasca);
                 } else {
-                    System.out.println("No se pudo crear la tasca.");
+                    System.out.println("No s'ha pogut crear la tasca.");
                 }
             } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
+                System.out.println("Opció no vàlida. Torna-ho a intentar.");
             }
         }
         return idTasca;
@@ -294,114 +293,113 @@ public class MethodsMainFactura {
     // Método para asociar cliente
     private static Integer asociarClienteFactura(Clientas01Service clientService, Integer idFactura) {
 
-        System.out.println("[CLIENTE ASOCIADO A FACTURA]");
-        
+        System.out.println("[CLIENT ASSOCIAT A FACTURA]");
+
         Integer idClient = null;
         while (idClient == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar cliente existente");
-            System.out.println("2. Crear un nuevo cliente");
-            System.out.print("Elige una opción para el cliente (1/2): ");
+            System.out.println("Opcions:");
+            System.out.println("1. Buscar client existent");
+            System.out.println("2. Crear un nou client");
+            System.out.print("Tria una opció per al client (1/2): ");
             String optionClient = tcl.nextLine();
 
             if (optionClient.equals("1")) {
-                System.out.println("Lista de clientes disponibles:");
+                System.out.println("Llista de clients disponibles:");
                 MethodsMainClient.listClientsBasic(clientService);
-                System.out.print("ID del Cliente a asociar: ");
+                System.out.print("ID del Client a associar: ");
                 String input = tcl.nextLine();
                 try {
                     idClient = Integer.parseInt(input);
                     if (clientService.findClientById(idClient) == null) {
-                        System.out.println("El cliente con ID " + idClient + " no existe.");
+                        System.out.println("El client amb ID " + idClient + " no existeix.");
                         idClient = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de cliente inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de client invàlid. Torna-ho a intentar.");
                 }
             } else if (optionClient.equals("2")) {
-                System.out.println("Creando un nuevo cliente...");
+                System.out.println("Creant un nou client...");
                 idClient = MethodsMainClient.agregarClienteBasic(clientService, idFactura);
                 if (idClient != null) {
-                    System.out.println("Cliente creado con ID: " + idClient);
+                    System.out.println("Client creat amb ID: " + idClient);
                 } else {
-                    System.out.println("No se pudo crear la tasca.");
+                    System.out.println("No s'ha pogut crear el client.");
                 }
             } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
+                System.out.println("Opció no vàlida. Torna-ho a intentar.");
             }
         }
         return idClient;
     }
-    
+
     // METODO SOBRECARGADO
     //CREAR FACTURA CON ID TASCA
     public static Integer agregarFacturaComplete(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientService,
             Projecteas01Service projecteService, Operariresponsableas01Service operariService, Integer idTasca) {
-        
-        System.out.println("[FACTURA ASOCIADA A TAREA]");
 
-            System.out.println("Introduce los datos de la factura:");
+        System.out.println("[FACTURA ASSOCIADA A TASCA]");
 
-            // Validar fecha (no puede estar vacía)
-            Date data = null;
-            while (data == null) {
-                System.out.print("Fecha (Formato: yyyy-MM-dd, No puede estar vacía): ");
-                String input = tcl.nextLine();
-                try {
-                    data = new SimpleDateFormat("yyyy-MM-dd").parse(input);
-                } catch (ParseException e) {
-                    System.out.println("Fecha inválida. Asegúrate de usar el formato yyyy-MM-dd.");
-                }
-            }
+        System.out.println("Introdueix les dades de la factura:");
 
-            Double importTotal = null;
-            while (importTotal == null) {
-                System.out.print("Importe Total (número positivo): ");
-                String input = tcl.nextLine();
-                try {
-                    importTotal = Double.parseDouble(input);
-                    if (importTotal <= 0) {
-                        System.out.println("El importe total debe ser positivo.");
-                        importTotal = null;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Importe total inválido. Inténtalo nuevamente.");
-                }
-            }
-
-            // (puede estar vacío)
-            System.out.print("Observaciones: ");
-            String observacions = tcl.nextLine();
-
-            // Crear la entidad de nueva factura
-            Facturaas01 newFactura = new Facturaas01();
-            newFactura.setData(data);
-            newFactura.setImportTotal(importTotal);
-            newFactura.setObservacions(observacions);
-
-            facturaService.createFactura(newFactura);
-            // CON ESTO PODREMOS ACCEDER A SU ID AUTOGENERADO
-            Integer idFactura = newFactura.getIdFactura();
-
-            // Asociar tarea a la factura
-            // YA LO TENEMOS DE ANTES - PARÁMETRO
-
-            // Asociar cliente a la factura
-            Integer idClient = asociarClienteFactura(clientService, idFactura);
-
-            newFactura.setIdTasca(tascaService.findTascaById(idTasca));
-            newFactura.setIdClient(clientService.findClientById(idClient));
-
+        // Validar fecha (no puede estar vacía)
+        Date data = null;
+        while (data == null) {
+            System.out.print("Data (Format: yyyy-MM-dd, No pot estar buida): ");
+            String input = tcl.nextLine();
             try {
-                facturaService.createFactura(newFactura); // Se inserta la factura a la BASE DE DATOS
-                System.out.println("Factura agregada correctamente");
-                return newFactura.getIdFactura();
-            } catch (Exception e) {
-                System.out.println("Error al agregar la factura: " + e.getMessage());
+                data = new SimpleDateFormat("yyyy-MM-dd").parse(input);
+            } catch (ParseException e) {
+                System.out.println("Data invàlida. Assegura't d'usar el format yyyy-MM-dd.");
             }
-            
-            return null; 
         }
+
+        Double importTotal = null;
+        while (importTotal == null) {
+            System.out.print("Import total (número positiu): ");
+            String input = tcl.nextLine();
+            try {
+                importTotal = Double.parseDouble(input);
+                if (importTotal <= 0) {
+                    System.out.println("L'import total ha de ser positiu.");
+                    importTotal = null;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Import total invàlid. Torna-ho a intentar.");
+            }
+        }
+
+        // (puede estar vacío)
+        System.out.print("Observacions: ");
+        String observacions = tcl.nextLine();
+
+        // Crear la entidad de nueva factura
+        Facturaas01 newFactura = new Facturaas01();
+        newFactura.setData(data);
+        newFactura.setImportTotal(importTotal);
+        newFactura.setObservacions(observacions);
+
+        facturaService.createFactura(newFactura);
+        // CON ESTO PODREMOS ACCEDER A SU ID AUTOGENERADO
+        Integer idFactura = newFactura.getIdFactura();
+
+        // Asociar tarea a la factura
+        // YA LO TENEMOS DE ANTES - PARÁMETRO
+        // Asociar cliente a la factura
+        Integer idClient = asociarClienteFactura(clientService, idFactura);
+
+        newFactura.setIdTasca(tascaService.findTascaById(idTasca));
+        newFactura.setIdClient(clientService.findClientById(idClient));
+
+        try {
+            facturaService.createFactura(newFactura); // Se inserta la factura a la BASE DE DATOS
+            System.out.println("Factura agregada correctament");
+            return newFactura.getIdFactura();
+        } catch (Exception e) {
+            System.out.println("Error en agregar la factura: " + e.getMessage());
+        }
+
+        return null;
+    }
 
     //*****************************************************************//
     //********************** FIND ************************************//
@@ -409,28 +407,28 @@ public class MethodsMainFactura {
     //*************** LISTAR FACTURAS  *****************************//
     protected static void listFacturas(Facturaas01Service facturaService) {
 
-        System.out.println("¿Cómo deseas ver las facturas?");
-        System.out.println("1. Básico (Solo datos de la factura)");
-        System.out.println("2. Completo (Datos de la factura + tablas relacionadas)");
+        System.out.println("Com vols veure les factures?");
+        System.out.println("1. Bàsic (Només dades de la factura)");
+        System.out.println("2. Complet (Dades de la factura + taules relacionades)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                log.info("=== MOSTRANDO FACTURAS ===");
-                log.info("*=== [MODO BÁSICO] ===*");
+                System.out.println("=== MOSTRANT FACTURES ===");
+                System.out.println("*=== [MODE BÀSIC] ===*");
                 listFacturaBasic(facturaService);
                 break;
 
             case 2:
-                log.info("=== MOSTRANDO FACTURAS ===");
-                log.info("*=== [MODO COMPLETO] ===*");
+                System.out.println("=== MOSTRANT FACTURES ===");
+                System.out.println("*=== [MODE COMPLET] ===*");
                 listFacturaComplete(facturaService);
                 break;
 
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }
@@ -444,24 +442,24 @@ public class MethodsMainFactura {
                     + factura.getData() + " | "
                     + factura.getImportTotal());
 
-            System.out.println("\tFactura nº " + factura.getIdFactura() + " es del cliente:");
+            System.out.println("\tFactura nº " + factura.getIdFactura() + " es del client:");
             Clientas01 cliente = factura.getIdClient();
             if (cliente != null) {
                 System.out.println("\t  - [" + cliente.getIdClient() + "] "
                         + cliente.getNom() + " " + cliente.getCognom()
                         + " - NIF: " + cliente.getNif());
             } else {
-                System.out.println("\t  Cliente asociado no encontrado.");
+                System.out.println("\t  Client associat no trobat.");
             }
 
-            System.out.println("\tFactura nº " + factura.getIdFactura() + " es de la tarea:");
+            System.out.println("\tFactura nº " + factura.getIdFactura() + " es de la tasca :");
             Tascaas01 tarea = factura.getIdTasca();
             if (tarea != null) {
                 System.out.println("\t  - [" + tarea.getIdTasca() + "] "
                         + tarea.getDescripcio() + " | "
                         + tarea.getEstat());
             } else {
-                System.out.println("\t  Tarea asociada no encontrada.");
+                System.out.println("\t Tasca associada no trobada.");
             }
         });
     }
@@ -482,22 +480,22 @@ public class MethodsMainFactura {
     //*****************************************************************//
     //*************** DELETE FACTURAS  *****************************//
     protected static void eliminarFacturas(Facturaas01Service facturaService) {
-        System.out.println("**** Aviso ****");
-        System.out.println("Solo se puede BORRAR una factura SI ha pasado más de 5 años de su Creación");
+        System.out.println("**** Avís ****");
+        System.out.println("Només es pot ESBORRAR una factura SI han passat més de 5 anys des de la seua creació");
         MainApp.esperarIntro();
 
-        System.out.println("\n¿Cómo deseas eliminar las facturas?");
-        System.out.println("1. Eliminar todas las facturas");
-        System.out.println("2. Eliminar una factura por ID");
+        System.out.println("\nCom vols eliminar les factures?");
+        System.out.println("1. Eliminar totes les factures");
+        System.out.println("2. Eliminar una factura per ID");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                System.out.println("Eliminando todas las facturas...");
+                System.out.println("Eliminant totes les factures...");
                 if (facturaService.findAllFacturas().isEmpty()) {
-                    System.out.println("No hay facturas para eliminar.");
+                    System.out.println("No hi ha factures per eliminar.");
                 } else {
                     // Se itera cada factura, se revisa si se puede eliminar
                     List<Facturaas01> facturasAEliminar = new ArrayList<>();
@@ -506,41 +504,41 @@ public class MethodsMainFactura {
                         if (info == null) {
                             facturasAEliminar.add(factura);
                         } else {
-                            System.out.println("No se puede eliminar la factura con ID " + factura.getIdFactura() + ": " + info);
+                            System.out.println("No es pot eliminar la factura amb ID " + factura.getIdFactura() + ": " + info);
                         }
                     }
 
                     if (!facturasAEliminar.isEmpty()) {
-                        System.out.println("Las siguientes facturas serán eliminadas:");
+                        System.out.println("Les següents factures seran eliminades:");
                         for (Facturaas01 factura : facturasAEliminar) {
                             System.out.println("Factura ID: " + factura.getIdFactura());
                         }
 
                         // Confirmación
-                        System.out.print("¿Estás seguro de que deseas eliminar estas facturas? (S/N): ");
+                        System.out.print("Estàs segur que vols eliminar aquestes factures? (S/N): ");
                         String confirmacion = tcl.nextLine();
                         if (confirmacion.equalsIgnoreCase("S")) {
                             for (Facturaas01 factura : facturasAEliminar) {
                                 try {
                                     facturaService.deleteFactura(factura);
-                                    System.out.println("Factura con ID " + factura.getIdFactura() + " ha sido eliminada correctamente.");
+                                    System.out.println("Factura amb ID " + factura.getIdFactura() + " ha sigut eliminada correctament.");
                                 } catch (Exception e) {
-                                    System.out.println("Error al eliminar la factura con ID " + factura.getIdFactura() + ": " + e.getMessage());
+                                    System.out.println("Error en eliminar la factura amb ID " + factura.getIdFactura() + ": " + e.getMessage());
                                 }
                             }
                         } else {
-                            System.out.println("La eliminación ha sido cancelada.");
+                            System.out.println("L'eliminació ha sigut cancel·lada.");
                         }
                     } else {
-                        System.out.println("No hay facturas para eliminar.");
+                        System.out.println("No hi ha factures per eliminar.");
                     }
                 }
                 break;
             case 2:
-                System.out.println("Facturas disponibles:");
+                System.out.println("Factures disponibles:");
                 listFacturaComplete(facturaService);
 
-                System.out.print("Introduce el ID de la factura a eliminar: ");
+                System.out.print("Introdueix l'ID de la factura a eliminar: ");
                 int idFactura = tcl.nextInt();
                 tcl.nextLine();
 
@@ -550,19 +548,19 @@ public class MethodsMainFactura {
                     if (info == null) {
                         try {
                             facturaService.deleteFactura(factura);
-                            System.out.println("Factura con ID " + idFactura + " ha sido eliminada.");
+                            System.out.println("Factura amb ID " + idFactura + " ha sigut eliminada.");
                         } catch (Exception e) {
-                            System.out.println("Error al eliminar la factura con ID " + idFactura + ": " + e.getMessage());
+                            System.out.println("Error en eliminar la factura amb ID " + idFactura + ": " + e.getMessage());
                         }
                     } else {
                         System.out.println(info);
                     }
                 } else {
-                    System.out.println("No se encontró una factura con ese ID.");
+                    System.out.println("No s'ha trobat cap factura amb aquest ID.");
                 }
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }

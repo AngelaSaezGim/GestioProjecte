@@ -30,26 +30,26 @@ public class MethodsMainClient {
         String continueAdding = "si";
 
         while (continueAdding.equalsIgnoreCase("si")) {
-            System.out.println("Introduce los datos del cliente:");
+            System.out.println("Introdueix les dades del client:");
 
             //NO PUEDE SER NULO - no puede estar vacío
             String nom = "";
             while (nom.isEmpty()) {
-                System.out.print("Nombre (No puede estar vacío): ");
+                System.out.print("Nom (No pot estar buit): ");
                 nom = tcl.nextLine();
             }
 
             // (puede ser vacío)
-            System.out.print("Apellido: ");
+            System.out.print("Cognom: ");
             String cognom = tcl.nextLine();
 
             // NIF (No puede estar vacío) - DEBE SER VALIDO
             String nif = "";
             while (nif.isEmpty() || !esNifValido(nif)) {
-                System.out.print("NIF (No puede estar vacío y debe ser válido): ");
+                System.out.print("NIF (No pot estar buit i ha de ser vàlid): ");
                 nif = tcl.nextLine().trim();
                 if (!esNifValido(nif)) {
-                    System.out.println("El NIF ingresado no es válido. Inténtalo de nuevo.");
+                    System.out.println("El NIF introduït no és vàlid. Torna-ho a intentar.");
                 }
             }
 
@@ -62,71 +62,71 @@ public class MethodsMainClient {
             // Agregar bd
             try {
                 clientasService.createClient(newClient);
-                System.out.println("Cliente agregado exitosamente.");
+                System.out.println("Client afegit amb èxit.");
             } catch (Exception e) {
-                System.out.println("Error al agregar el cliente: " + e.getMessage());
+                System.out.println("Error en afegir el client: " + e.getMessage());
             }
 
-            // Preguntar al usuario si quiere agregar otro cliente
+            // Preguntar al usuario si quiere agregar otro client
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otro cliente? (si/no): ");
+                System.out.print("Vols afegir un altre client? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                    System.out.println("Introdueix 'si' per continuar o 'no' per eixir.\"");
                 }
             }
         }
     }
-    
+
     // METODO SOBRECARGADO CON IDFACTURA
     // CREA Y DEVUELVE EL ID DEL CLIENTE
     public static Integer agregarClienteBasic(Clientas01Service clientasService, Integer idFactura) {
-        
-         System.out.println("[ CLIENTE ASOCIADO A FACTURA ]");
 
-            System.out.println("Introduce los datos del cliente:");
+        System.out.println("[ CLIENT ASSOCIAT A FACTURA ]");
 
-            //NO PUEDE SER NULO - no puede estar vacío
-            String nom = "";
-            while (nom.isEmpty()) {
-                System.out.print("Nombre (No puede estar vacío): ");
-                nom = tcl.nextLine();
+        System.out.println("Introdueix les dades del client:");
+
+        //NO PUEDE SER NULO - no puede estar vacío
+        String nom = "";
+        while (nom.isEmpty()) {
+            System.out.print("Nom (No pot estar buit): ");
+            nom = tcl.nextLine();
+        }
+
+        // (puede ser vacío)
+        System.out.print("Cognom: ");
+        String cognom = tcl.nextLine();
+
+        // NIF (No puede estar vacío) - DEBE SER VALIDO
+        String nif = "";
+        while (nif.isEmpty() || !esNifValido(nif)) {
+            System.out.print("NIF (No pot estar buit i ha de ser vàlid): ");
+            nif = tcl.nextLine().trim();
+            if (!esNifValido(nif)) {
+                System.out.println("El NIF introduït no és vàlid. Torna-ho a intentar.");
             }
+        }
 
-            // (puede ser vacío)
-            System.out.print("Apellido: ");
-            String cognom = tcl.nextLine();
+        // Crear la entidad de newClient
+        Clientas01 newClient = new Clientas01();
+        newClient.setNom(nom);
+        newClient.setCognom(cognom);
+        newClient.setNif(nif);
 
-            // NIF (No puede estar vacío) - DEBE SER VALIDO
-            String nif = "";
-            while (nif.isEmpty() || !esNifValido(nif)) {
-                System.out.print("NIF (No puede estar vacío y debe ser válido): ");
-                nif = tcl.nextLine().trim();
-                if (!esNifValido(nif)) {
-                    System.out.println("El NIF ingresado no es válido. Inténtalo de nuevo.");
-                }
-            }
-
-            // Crear la entidad de newClient
-            Clientas01 newClient = new Clientas01();
-            newClient.setNom(nom);
-            newClient.setCognom(cognom);
-            newClient.setNif(nif);
-
-            // Agregar bd
-            try {
-                clientasService.createClient(newClient);
-                System.out.println("Cliente agregado exitosamente.");
-                return newClient.getIdClient();
-            } catch (Exception e) {
-                System.out.println("Error al agregar el cliente: " + e.getMessage());
-            }
-            //ONE CLIENTE FACTURA (no creamos más)
-            return null;  //Si falla pasamos null
+        // Agregar bd
+        try {
+            clientasService.createClient(newClient);
+            System.out.println("Client afegit amb èxit.");
+            return newClient.getIdClient();
+        } catch (Exception e) {
+            System.out.println("Error en afegir el client: " + e.getMessage());
+        }
+        //ONE CLIENTE FACTURA (no creamos más)
+        return null;  //Si falla pasamos null
     }
 
     //*****************************************************************//
@@ -135,73 +135,72 @@ public class MethodsMainClient {
     //*************** LISTAR CLIENTE  *****************************//
     protected static void listClients(Clientas01Service clientService) {
 
-        System.out.println("¿Cómo deseas ver los clientes?");
-        System.out.println("1. Básico (Solo datos del cliente)");
-        System.out.println("2. Completo (Datos del cliente + tablas relacionadas)");
+        System.out.println("Com vols veure els clients?");
+        System.out.println("1. Bàsic (Només dades del client)");
+        System.out.println("2. Complet (Dades del client + taules relacionades)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                log.info("=== MOSTRANDO CLIENTES ===");
-                log.info("*=== [MODO BÁSICO] ===*");
+                System.out.println("=== MOSTRANT CLIENTS ===");
+                System.out.println("*=== [MODE BÀSIC] ===*");
                 listClientsBasic(clientService);
                 break;
             case 2:
-                log.info("=== MOSTRANDO CLIENTES ===");
-                log.info("*=== [MODO COMPLETO] ===*");
+                System.out.println("=== MOSTRANT CLIENTS ===");
+                System.out.println("*=== [MODE COMPLET] ===*");
                 listClientsComplete(clientService);
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }
 
     public static void listClientsComplete(Clientas01Service clientService) {
-        List<Clientas01> clientes = clientService.findAllWithDetails();
-        clientes.forEach(cliente -> {
+        List<Clientas01> clients = clientService.findAllWithDetails();
+        clients.forEach(client -> {
 
-            log.info("-> [" + cliente.getIdClient() + " ] Cliente: " + cliente.getNom() + " "
-                    + cliente.getCognom() + " - NIF: " + cliente.getNif());
+            System.out.println("-> [" + client.getIdClient() + " ] Client: " + client.getNom() + " "
+                    + client.getCognom() + " - NIF: " + client.getNif());
 
             // Proyectos
-            Collection<Projecteas01> proyectos = cliente.getProjecteas01Collection();
-            if (proyectos == null || proyectos.isEmpty()) {
-                log.info("\t- Proyectos: No hay proyectos.");
+            Collection<Projecteas01> projectes = client.getProjecteas01Collection();
+            if (projectes == null || projectes.isEmpty()) {
+                System.out.println("\t- Projectes: No hi ha projectes.");
             } else {
-                log.info("\t- Proyectos de " + cliente.getNom() + ":");
-                proyectos.forEach(proyecto -> {
-                    String descripcion = proyecto.getDescripcio();
-                    String estat = proyecto.getEstat();
-                    String fechaFinalizacion = proyecto.getFechaFinalitzacio() != null
-                            ? proyecto.getFechaFinalitzacio().toString()
-                            : "No finalizado";
+                System.out.println("\t- Projectes de " + client.getNom() + ":");
+                projectes.forEach(projecte -> {
+                    String descripcio = projecte.getDescripcio();
+                    String estat = projecte.getEstat();
+                    String dataFinalitzacio = projecte.getFechaFinalitzacio() != null
+                            ? projecte.getFechaFinalitzacio().toString()
+                            : "No finalitzat";
 
-                    System.out.println("---> [" + proyecto.getIdProjecte() + "] Proyecto: " + descripcion
-                            + " | Estado: " + estat
-                            + " | Fecha finalización: " + fechaFinalizacion);
+                    System.out.println("---> [" + projecte.getIdProjecte() + "] Projecte: " + descripcio
+                            + " | Estat: " + estat
+                            + " | Data de finalització: " + dataFinalitzacio);
                 });
             }
 
             // Facturas
-            Collection<Facturaas01> facturas = cliente.getFacturaas01Collection();
+            Collection<Facturaas01> facturas = client.getFacturaas01Collection();
             if (facturas == null || facturas.isEmpty()) {
-                log.info("\t- Facturas: No hay facturas.");
+                System.out.println("\t- Factures: No hi ha factures.");
             } else {
-                log.info("\t- Facturas de " + cliente.getNom() + ":");
+                System.out.println("\t- Factures de " + client.getNom() + ":");
                 facturas.forEach(factura -> {
                     Integer idFactura = factura.getIdFactura();
-                    String observaciones = factura.getObservacions();
-                    String fechaFactura = factura.getData() != null ? factura.getData().toString() : "Fecha no disponible";
-                    Double importeTotal = factura.getImportTotal();
+                    String observacions = factura.getObservacions();
+                    String dataFactura = factura.getData() != null ? factura.getData().toString() : "Fecha no disponible";
+                    Double importTotal = factura.getImportTotal();
 
                     System.out.println("---> Factura: " + "[" + idFactura + "] "
-                            + "Observaciones: " + observaciones
-                            + " | Fecha: " + fechaFactura
-                            + " | Importe Total: " + importeTotal);
-                    
+                            + "Observacions: " + observacions
+                            + " | Data: " + dataFactura
+                            + " | Import Total: " + importTotal);
                 });
             }
         });
@@ -209,10 +208,10 @@ public class MethodsMainClient {
 
     public static void listClientsBasic(Clientas01Service clientService) {
         System.out.println("|--------------------------------------|");
-        for (Clientas01 cliente : clientService.findAllClients()) {
-            System.out.println("---> [" + cliente.getIdClient() + "] "
-                    + cliente.getNom() + " " + cliente.getCognom()
-                    + " - NIF: " + cliente.getNif());
+        for (Clientas01 client : clientService.findAllClients()) {
+            System.out.println("---> [" + client.getIdClient() + "] "
+                    + client.getNom() + " " + client.getCognom()
+                    + " - NIF: " + client.getNif());
         }
         System.out.println("|--------------------------------------|");
     }
@@ -222,89 +221,88 @@ public class MethodsMainClient {
     //*****************************************************************//
     //*************** DELETE CLIENT  *****************************//
     protected static void eliminarClientes(Clientas01Service clientService) {
-        System.out.println("**** Aviso ****");
-        System.out.println("Se podrá eliminar el cliente que ya no tiene proyectos activos O todos los proyectos están finalizados hace más de 5 años.");
+        System.out.println("**** Avís ****");
+        System.out.println("Es podrà eliminar el client que ja no tinga projectes actius O tots els projectes estiguen finalitzats fa més de 5 anys.");
         MainApp.esperarIntro();
-        
-        System.out.println("\n¿Cómo deseas eliminar los clientes?");
-        System.out.println("1. Eliminar todos los clientes");
-        System.out.println("2. Eliminar un cliente por ID");
+
+        System.out.println("\nCom vols eliminar els clients?");
+        System.out.println("1. Eliminar tots els clients");
+        System.out.println("2. Eliminar un client per ID");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                System.out.print("Eliminando todos los clientes... \n");
-                System.out.print("Eliminando todos los clientes... \n");
+                System.out.print("Eliminant tots els clients... \n");
                 if (clientService.findAllClients().isEmpty()) {
-                    System.out.println("No hay clientes para eliminar.");
+                     System.out.println("No hi ha clients per a eliminar.");
                 } else {
-                    // Se itera cada cliente, se revisa si se puede eliminar
+                    // Se itera cada client, se revisa si se puede eliminar
                     List<Clientas01> clientesAEliminar = new ArrayList<>();
-                    for (Clientas01 cliente : clientService.findAllClients()) {
-                        String info = clientService.deleteClientVerification(cliente);
+                    for (Clientas01 client : clientService.findAllClients()) {
+                        String info = clientService.deleteClientVerification(client);
                         if (info == null) {
-                            clientesAEliminar.add(cliente);
+                            clientesAEliminar.add(client);
                         } else {
-                            System.out.println("No se puede eliminar el cliente con ID " + cliente.getIdClient() + ": " + info);
+                             System.out.println("No es pot eliminar el client amb ID " + client.getIdClient() + ": " + info);
                         }
                     }
 
                     if (!clientesAEliminar.isEmpty()) {
-                        // Mostrar el listado de clientes a eliminar
-                        System.out.println("Los siguientes clientes serán eliminados:");
-                        for (Clientas01 cliente : clientesAEliminar) {
-                            System.out.println(cliente.getNom() + " (ID: " + cliente.getIdClient() + ")");
+                        // Mostrar el listado de clients a eliminar
+                        System.out.println("Els següents clients seran eliminats:");
+                        for (Clientas01 client : clientesAEliminar) {
+                        System.out.println(client.getNom() + " (ID: " + client.getIdClient() + ")");
                         }
 
                         // Confirmación antes de eliminar
-                        System.out.print("¿Estás seguro de que deseas eliminar estos clientes? (S/N): ");
+                        System.out.print("Estàs segur que vols eliminar aquests clients? (S/N): ");
                         String confirmacion = tcl.nextLine();
                         if (confirmacion.equalsIgnoreCase("S")) {
-                            // Eliminar los clientes
+                            // Eliminar los clients
                             for (Clientas01 cliente : clientesAEliminar) {
                                 try {
                                     clientService.deleteClient(cliente);
-                                    System.out.println(cliente.getNom() + " ha sido eliminado/a correctamente.");
+                                    System.out.println(cliente.getNom() + " ha sigut eliminat/da correctament.");
                                 } catch (Exception e) {
-                                    System.out.println("Error al eliminar el cliente con ID " + cliente.getIdClient() + ": " + e.getMessage());
+                                    System.out.println("Error en eliminar el client amb ID " + cliente.getIdClient() + ": " + e.getMessage());
                                 }
                             }
                         } else {
-                            System.out.println("La eliminación ha sido cancelada.");
+                            System.out.println("L'eliminació ha sigut cancel·lada.");
                         }
                     } else {
-                        System.out.println("No hay clientes para eliminar.");
+                        System.out.println("No hi ha clients per a eliminar.");
                     }
                 }
                 break;
             case 2:
-                System.out.println("Clientes disponibles:");
-                listClientsComplete(clientService); // Lista todos los clientes disponibles
+                 System.out.println("Clients disponibles:");
+                listClientsComplete(clientService); // Lista todos los clients disponibles
 
-                System.out.print("Introduce el ID del cliente a eliminar: ");
+                System.out.print("Introdueix l'ID del client a eliminar: ");
                 int idCliente = tcl.nextInt();
                 tcl.nextLine(); // Consumir la nueva línea
 
-                // Buscar al cliente por ID
+                // Buscar al client por ID
                 Clientas01 cliente = clientService.findClientById(idCliente);
                 if (cliente != null) {
                     try {
                         clientService.deleteClient(cliente);
                         if (cliente != null) {
                         } else {
-                            System.out.println(cliente.getNom() + " ha sido eliminado/a correctamente.");
+                            System.out.println(cliente.getNom() + " ha sigut eliminat/da correctament.");
                         }
                     } catch (RuntimeException e) {
-                        System.out.println("Error al eliminar el cliente: " + e.getMessage()); // Manejo de errores
+                        System.out.println("Error en eliminar el client: " + e.getMessage()); // Manejo de errores
                     }
                 } else {
-                    System.out.println("No se encontró un cliente con ese ID.");
+                    System.out.println("No s'ha trobat un client amb aquest ID.");
                 }
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }

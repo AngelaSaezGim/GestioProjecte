@@ -17,7 +17,6 @@ import static Test.MainApp.log;
 import static Test.MainApp.tcl;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collection;
 
 /**
  *
@@ -32,28 +31,28 @@ public class MethodsMainTasca {
     public static void agregarTascaMenu(Tascaas01Service tascaService, Projecteas01Service projecteService, Facturaas01Service facturaService, Operariresponsableas01Service operariService,
             Clientas01Service clientService) {
 
-        System.out.println("¿Cómo deseas agregar las tascas?");
-        System.out.println("1. Básico (Solo creamos la tasca)");
-        System.out.println("2. Completo (Creamos la tasca y si no existe algún dato asociado, lo creamos)");
+        System.out.println("Com vols afegir les tasques?");
+        System.out.println("1. Bàsic (Només creem la tasca)");
+        System.out.println("2. Complet (Creem la tasca i, si no existeix algun dada associada, la creem)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                System.out.println("=== CREACIÓN TASCAS ===");
-                System.out.println("*=== [MODO BÁSICO] ===*");
+                System.out.println("=== CREACIÓ TASQUES ===");
+                System.out.println("*=== [MODE BÀSIC] ===*");
                 agregarTascaBasic(tascaService, projecteService, facturaService, operariService);
                 break;
             case 2:
-                System.out.println("=== CREACIÓN TASCAS ===");
-                System.out.println("*=== [MODO COMPLETO] ===*");
+                System.out.println("=== CREACIÓ TASQUES ===");
+                System.out.println("*=== [MODE COMPLET] ===*");
                 agregarTascaComplete(tascaService, projecteService, facturaService, operariService,
                         clientService);
                 break;
 
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }
@@ -64,18 +63,18 @@ public class MethodsMainTasca {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("Introduce los datos de la tasca:");
+            System.out.println("Introdueix les dades de la tasca:");
 
-            System.out.print("Descripción de la tasca: ");
+            System.out.print("Descripció de la tasca: ");
             String descripcio = tcl.nextLine();
 
             String estat = "";
             while (true) {
-                System.out.println("Selecciona el estado de la tasca:");
+                System.out.println("Selecciona l'estat de la tasca:");
                 System.out.println("1. No iniciat");
                 System.out.println("2. En procés");
                 System.out.println("3. Finalitzat");
-                System.out.print("Introduce el número correspondiente al estado: ");
+                System.out.print("Introdueix el número corresponent a l'estat: ");
                 int opcion = tcl.nextInt();
                 tcl.nextLine();
 
@@ -90,7 +89,7 @@ public class MethodsMainTasca {
                         estat = "Finalitzat";
                         break;
                     default:
-                        System.out.println("Opción no válida. Intenta nuevamente.");
+                        System.out.println("Opció no vàlida. Torna-ho a intentar.");
                         continue;
                 }
                 break;
@@ -98,62 +97,62 @@ public class MethodsMainTasca {
 
             Integer idProjecte = null;
             while (idProjecte == null) {
-                System.out.print("ID del proyecto asociado (debe ser válido y existir): ");
-                System.out.println("Lista de proyectos disponibles; ");
+                System.out.print("ID del projecte associat (ha de ser vàlid i existir): ");
+                System.out.println("Llista de projectes disponibles; ");
                 MethodsMainProjecte.listProjecteBasic(projecteService);
-                System.out.println("Tarea asociada a proyecto...");
+                System.out.println("Tasques associades al projecte...");
                 String inputIdProjecte = tcl.nextLine();
                 try {
                     idProjecte = Integer.parseInt(inputIdProjecte);
                     Projecteas01 project = projecteService.findProjectById(idProjecte);
                     if (project == null) {
-                        System.out.println("El proyecto con ID " + idProjecte + " no existe. Inténtalo nuevamente.");
+                        System.out.println("El projecte amb ID " + idProjecte + " no existeix. Torna-ho a intentar.");
                         idProjecte = null;
                         MainApp.esperarIntro();
                         // REVISAR SI ASIGNAMOS UNA TAREA NO FINALIZADA A PROYECTO FINALIZADO
                     } else if ("Finalitzat".equals(project.getEstat()) && !"Finalitzat".equals(estat)) {
-                        System.out.println("No se puede agregar una tarea no finalizada a un proyecto finalizado.");
+                        System.out.println("No es pot afegir una tasca no finalitzada a un projecte finalitzat.");
                         idProjecte = null;
                         MainApp.esperarIntro();
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de proyecto inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de projecte invàlid. Torna-ho a intentar.");
                 }
             }
 
             Facturaas01 factura = null;
             while (factura == null) {
-                System.out.print("ID de la factura asociada: ");
-                System.out.println("Lista de facturas disponibles:");
+                System.out.print("ID de la factura associada: ");
+                System.out.println("Llista de factures disponibles:");
                 MethodsMainFactura.listFacturaBasic(facturaService);
-                System.out.println("Proyecto asociado a la factura...");
+                System.out.println("Projecte associat a la factura...");
                 String inputFacturaId = tcl.nextLine();
                 try {
                     int facturaId = Integer.parseInt(inputFacturaId.trim());
                     factura = facturaService.findFacturaById(facturaId);
                     if (factura == null) {
-                        System.out.println("La factura con ID " + facturaId + " no existe. Inténtalo nuevamente.");
+                        System.out.println("La factura amb ID " + facturaId + " no existeix. Torna-ho a intentar.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("El ID de factura ingresado no es válido. Inténtalo nuevamente.");
+                    System.out.println("L'ID de factura introduït no és vàlid. Torna-ho a intentar.");
                 }
             }
 
             Integer idOperari = null;
             while (idOperari == null) {
-                System.out.print("ID del operario asociado (debe ser válido y existir): ");
-                System.out.println("Lista de operarios disponibles; ");
+                System.out.print("ID de l'operari associat (ha de ser vàlid i existir): ");
+                System.out.println("Llista d'operaris disponibles; ");
                 MethodsMainOperari.listOperariBasic(operariService);
-                System.out.println("Tarea asociada a operari...");
+                System.out.println("Tasques associades a l'operari...");
                 String inputIdOperari = tcl.nextLine();
                 try {
                     idOperari = Integer.parseInt(inputIdOperari);
                     if (operariService.findOperariById(idOperari) == null) {
-                        System.out.println("El operari con ID " + idOperari + " no existe. Inténtalo nuevamente.");
+                        System.out.println("L'operari amb ID " + idOperari + " no existeix. Torna-ho a intentar.");
                         idOperari = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de operari inválido. Inténtalo nuevamente.");
+                    System.out.println("ID d'operari invàlid. Torna-ho a intentar.");
                 }
             }
 
@@ -166,20 +165,20 @@ public class MethodsMainTasca {
 
             try {
                 tascaService.createTasca(newTasca);
-                System.out.println("Tasca agregada exitosamente.");
+                System.out.println("Tasca afegida amb èxit.");
             } catch (Exception e) {
-                System.out.println("Error al agregar la tasca: " + e.getMessage());
+                System.out.println("Error en afegir la tasca: " + e.getMessage());
             }
 
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otra tasca? (si/no): ");
+                System.out.print("Vols afegir una altra tasca? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                    System.out.println("Si us plau, introdueix 'si' per continuar o 'no' per sortir.");
                 }
             }
         }
@@ -192,18 +191,18 @@ public class MethodsMainTasca {
 
         while (continueAdding.equalsIgnoreCase("si")) {
 
-            System.out.println("Introduce los datos de la tasca:");
+            System.out.println("Introdueix les dades de la tasca:");
 
-            System.out.print("Descripción de la tasca: ");
+            System.out.print("Descripció de la tasca: ");
             String descripcio = tcl.nextLine();
 
             String estat = "";
             while (true) {
-                System.out.println("Selecciona el estado de la tasca:");
+                System.out.println("Selecciona l'estat de la tasca:");
                 System.out.println("1. No iniciat");
                 System.out.println("2. En procés");
                 System.out.println("3. Finalitzat");
-                System.out.print("Introduce el número correspondiente al estado: ");
+                System.out.print("Introdueix el número corresponent a l'estat: ");
                 int opcion = tcl.nextInt();
                 tcl.nextLine();
 
@@ -218,7 +217,7 @@ public class MethodsMainTasca {
                         estat = "Finalitzat";
                         break;
                     default:
-                        System.out.println("Opción no válida. Intenta nuevamente.");
+                        System.out.println("Opció no vàlida. Torna-ho a intentar.");
                         continue;
                 }
                 break;
@@ -249,21 +248,21 @@ public class MethodsMainTasca {
 
             try {
                 tascaService.createTasca(newTasca);
-                System.out.println("Tasca agregada exitosamente.");
+                System.out.println("Tasca afegida amb èxit.");
             } catch (Exception e) {
-                System.out.println("Error al agregar la tasca: " + e.getMessage());
+                System.out.println("Error en afegir la tasca: " + e.getMessage());
             }
 
             // Preguntar si desea agregar otra tasca
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otra tasca en modo completo ? (si/no): ");
+                System.out.print("¿Vols afegir una altra tasca en modo completo ? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
                     validInput = true;
                 } else {
-                    System.out.println("Por favor, ingresa 'si' para continuar o 'no' para salir.");
+                    System.out.println("Si us plau, introdueix 'si' per continuar o 'no' per sortir.");
                 }
             }
         }
@@ -272,43 +271,42 @@ public class MethodsMainTasca {
     private static Integer asociarProjecteTasca(Projecteas01Service projecteService, Clientas01Service clientService, Integer idTasca, Facturaas01Service facturaService,
             Operariresponsableas01Service operariService, Tascaas01Service tascaService, String estat) {
 
-        System.out.println("[PROJECTE ASOCIADO A TAREA]");
+        System.out.println("[PROJECTE ASSOCIAT A TASCA]");
 
         Integer idProjecte = null;
         while (idProjecte == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar proyecto existente");
-            System.out.println("2. Crear un nuevo proyecto asociado a esa tarea");
-            System.out.print("Elige una opción para el proyecto (1/2): ");
+            System.out.println("Opcions:");
+            System.out.println("1. Buscar projecte existent");
+            System.out.println("2. Crear un nou projecte associat a eixa tasca");
+            System.out.print("Tria una opció per al projecte (1/2): ");
             String option = tcl.nextLine();
 
             if (option.equals("1")) {
                 // Buscar proyecto
-                System.out.print("ID del proyecto asociado (debe ser válido y existir): ");
-                System.out.println("Lista de proyectos disponibles: ");
+                System.out.print("ID del projecte associat (ha de ser vàlid i existir): ");
+                System.out.println("Llista de projectes disponibles: ");
                 MethodsMainProjecte.listProjecteBasic(projecteService);
-                System.out.println("Tarea asociada a proyecto...");
+                System.out.println("Tasca associada al projecte...");
                 String inputIdProjecte = tcl.nextLine();
                 try {
                     idProjecte = Integer.parseInt(inputIdProjecte);
                     Projecteas01 project = projecteService.findProjectById(idProjecte);
-
                     if (project == null) {
-                        System.out.println("El proyecto con ID " + idProjecte + " no existe.");
+                        System.out.println("El projecte amb ID " + idProjecte + " no existeix.");
                         idProjecte = null;
                     } else if ("Finalitzat".equals(project.getEstat()) && !"Finalitzat".equals(estat)) {
-                        System.out.println("No se puede agregar una tarea no finalizada a un proyecto finalizado.");
+                        System.out.println("No es pot agregar una tasca no finalitzada a un projecte finalitzat.");
                         idProjecte = null; // Reinicia el bucle si el proyecto y la tarea no son compatibles
                         MainApp.esperarIntro();
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de proyecto inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de projecte invàlid. Intenta-ho de nou.");
                 }
             } else if (option.equals("2")) {
-                System.out.println("Creando un nuevo proyecto...");
+                System.out.println("Creant un nou projecte...");
                 idProjecte = MethodsMainProjecte.agregarProjecteComplete(projecteService, clientService, facturaService, operariService, tascaService, idTasca, estat);
             } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
+                System.out.println("Opció no vàlida. Intenta-ho de nou.");
             }
         }
         return idProjecte;
@@ -322,35 +320,35 @@ public class MethodsMainTasca {
         Integer idFactura = null;
 
         while (idFactura == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar una factura existente");
-            System.out.println("2. Crear una nueva factura asociada a esa tarea");
-            System.out.print("Elige una opción para la factura (1/2): ");
+            System.out.println("Opcions:");
+            System.out.println("1. Buscar una factura existent");
+            System.out.println("2. Crear una nova factura associada a eixa tasca");
+            System.out.print("Tria una opció per a la factura (1/2): ");
             String option = tcl.nextLine();
 
             if (option.equals("1")) {
-                System.out.println("Lista de facturas disponibles: ");
+                System.out.println("Llista de factures disponibles: ");
                 MethodsMainFactura.listFacturaBasic(facturaService);
-                System.out.print("ID de la factura asociada: ");
+                System.out.print("ID de la factura associada: ");
                 String inputFacturaId = tcl.nextLine();
                 try {
                     idFactura = Integer.parseInt(inputFacturaId);
                     if (facturaService.findFacturaById(idFactura) == null) {
-                        System.out.println("La factura con ID " + idFactura + " no existe.");
+                        System.out.println("La factura amb ID " + idFactura + " no existeix.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de factura inválido. Inténtalo nuevamente.");
+                    System.out.println("ID de factura invàlid. Intenta-ho de nou.");
                 }
             } else if (option.equals("2")) {
-                System.out.println("Creando una nueva factura...");
+                System.out.println("Creant una nova factura...");
                 idFactura = MethodsMainFactura.agregarFacturaComplete(facturaService, tascaService, clientService, projecteService, operariService, idTasca);
                 if (idFactura != null) {
-                    System.out.println("Factura creada con id : " + idFactura);
+                    System.out.println("Factura creada amb ID: " + idFactura);
                 } else {
-                    System.out.println("No se pudo crear la factura.");
+                    System.out.println("No s'ha pogut crear la factura.");
                 }
             } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
+                System.out.println("Opció no vàlida. Intenta-ho de nou.");
             }
         }
         return idFactura;
@@ -358,42 +356,42 @@ public class MethodsMainTasca {
 
     private static Integer asociarOperariTasca(Operariresponsableas01Service operariService, Integer idTasca) {
 
-        System.out.println("[OPERARI ASOCIADO A TAREA]");
+        System.out.println("[OPERARI ASSOCIAT A TASCA]");
 
         Integer idOperari = null;
 
         while (idOperari == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar un operario existente");
-            System.out.println("2. Crear un nuevo operario asociado a esa tarea");
-            System.out.print("Elige una opción para el operario (1/2): ");
+            System.out.println("Opcions:");
+            System.out.println("1. Buscar un operari existent");
+            System.out.println("2. Crear un nou operari associat a eixa tasca");
+            System.out.print("Tria una opció per a l'operari (1/2): ");
             String option = tcl.nextLine();
 
             if (option.equals("1")) {
-                System.out.print("ID del operario asociado (debe ser válido y existir): ");
-                System.out.println("Lista de operarios disponibles: ");
+                System.out.print("ID de l'operari associat (ha de ser vàlid i existir): ");
+                System.out.println("Llista d'operaris disponibles: ");
                 MethodsMainOperari.listOperariBasic(operariService);
                 String inputIdOperari = tcl.nextLine();
                 try {
                     idOperari = Integer.parseInt(inputIdOperari);
                     if (operariService.findOperariById(idOperari) == null) {
-                        System.out.println("El operario con ID " + idOperari + " no existe.");
+                        System.out.println("L'operari amb ID " + idOperari + " no existeix.");
                         idOperari = null;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("ID de operario inválido. Inténtalo nuevamente.");
+                    System.out.println("ID d'operari invàlid. Intenta-ho de nou.");
                 }
             } else if (option.equals("2")) {
                 // Crear nuevo operario
-                System.out.println("Creando un nuevo operario...");
+                System.out.println("Creant un nou operari...");
                 idOperari = MethodsMainOperari.agregarOperariBasic(operariService, idTasca);
                 if (idOperari != null) {
-                    System.out.println("Operari creado con ID: " + idOperari);
+                    System.out.println("Operari creat amb ID: " + idOperari);
                 } else {
-                    System.out.println("No se pudo crear el operari.");
+                    System.out.println("No s'ha pogut crear l'operari.");
                 }
             } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
+                System.out.println("Opció no vàlida. Intenta-ho de nou.");
             }
         }
         return idOperari;
@@ -404,20 +402,20 @@ public class MethodsMainTasca {
     public static Integer agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Clientas01Service clientService,
             Facturaas01Service facturaService, Operariresponsableas01Service operariService, Integer idFactura) {
 
-        System.out.println("TAREA ASOCIADA A FACTURA");
+        System.out.println("TASCA ASSOCIADA A FACTURA");
 
-        System.out.println("Introduce los datos de la tasca:");
+        System.out.println("Introduïx les dades de la tasca:");
 
-        System.out.print("Descripción de la tasca: ");
+        System.out.print("Descripció de la tasca: ");
         String descripcio = tcl.nextLine();
 
         String estat = "";
         while (true) {
-            System.out.println("Selecciona el estado de la tasca:");
+            System.out.println("Selecciona l'estat de la tasca:");
             System.out.println("1. No iniciat");
             System.out.println("2. En procés");
             System.out.println("3. Finalitzat");
-            System.out.print("Introduce el número correspondiente al estado: ");
+            System.out.print("Introduïx el número corresponent a l'estat: ");
             int opcion = tcl.nextInt();
             tcl.nextLine();
 
@@ -432,7 +430,7 @@ public class MethodsMainTasca {
                     estat = "Finalitzat";
                     break;
                 default:
-                    System.out.println("Opción no válida. Intenta nuevamente.");
+                    System.out.println("Opció no vàlida. Intenta novament.");
                     continue;
             }
             break;
@@ -456,10 +454,10 @@ public class MethodsMainTasca {
 
         try {
             tascaService.createTasca(newTasca);
-            System.out.println("Tasca agregada exitosamente.");
+            System.out.println("Tasca agregada amb èxit.");
             return newTasca.getIdTasca();
         } catch (Exception e) {
-            System.out.println("Error al agregar la tasca: " + e.getMessage());
+            System.out.println("Error en agregar la tasca: " + e.getMessage());
         }
 
         return null; // Devuelve null si hubo un error
@@ -472,22 +470,22 @@ public class MethodsMainTasca {
     public static List<Tascaas01> agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Facturaas01Service facturaService, Operariresponsableas01Service operariService,
             Clientas01Service clientService, Integer idProjecte, String EstatProjecte) {
 
-        System.out.println("TAREA ASOCIADA A PROYECTO ");
+        System.out.println("TASCA ASSOCIADA A PROJECTE");
 
         List<Tascaas01> tasques = new ArrayList<>();
 
-        System.out.println("Introduce los datos de la tasca:");
+        System.out.println("Introduïx les dades de la tasca:");
 
-        System.out.print("Descripción de la tasca: ");
+        System.out.print("Descripció de la tasca: ");
         String descripcio = tcl.nextLine();
 
         String estat = "";
         while (true) {
-            System.out.println("Selecciona el estado de la tasca:");
+            System.out.println("Selecciona l'estat de la tasca:");
             System.out.println("1. No iniciat");
             System.out.println("2. En procés");
             System.out.println("3. Finalitzat");
-            System.out.print("Introduce el número correspondiente al estado: ");
+            System.out.print("Introduïx el número corresponent a l'estat: ");
             int opcion = tcl.nextInt();
             tcl.nextLine();
 
@@ -502,12 +500,12 @@ public class MethodsMainTasca {
                     estat = "Finalitzat";
                     break;
                 default:
-                    System.out.println("Opción no válida. Intenta nuevamente.");
+                    System.out.println("Opció no vàlida. Intenta novament.");
                     continue;
             }
             // Validar que el estado de la tarea no sea incompatible con el estado del proyecto
             if ("Finalitzat".equalsIgnoreCase(EstatProjecte) && !estat.equals("Finalitzat")) {
-                System.out.println("No puedes asignar una tarea con estado 'No iniciat' o 'En procés' a un proyecto finalizado.");
+                System.out.println("No pots assignar una tasca amb estat 'No iniciat' o 'En procés' a un projecte finalitzat.");
                 continue; // Volver a pedir
             }
             break;
@@ -530,10 +528,10 @@ public class MethodsMainTasca {
 
         try {
             tascaService.createTasca(newTasca);
-            System.out.println("Tasca agregada exitosamente.");
+            System.out.println("Tasca agregada amb èxit.");
             tasques.add(newTasca);
         } catch (Exception e) {
-            System.out.println("Error al agregar la tasca: " + e.getMessage());
+            System.out.println("Error en agregar la tasca: " + e.getMessage());
         }
         return tasques;
     }
@@ -543,26 +541,26 @@ public class MethodsMainTasca {
     //*****************************************************************//
     protected static void listTasques(Tascaas01Service tascaService) {
 
-        System.out.println("¿Cómo deseas ver las tasques?");
-        System.out.println("1. Básico (Solo datos de la tasca)");
-        System.out.println("2. Completo (Datos de la tasca + tablas relacionadas)");
+        System.out.println("Com desitges vore les tasques?");
+        System.out.println("1. Bàsic (Només dades de la tasca)");
+        System.out.println("2. Complet (Dades de la tasca + taules relacionades)");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                log.info("=== MOSTRANDO TASQUES ===");
-                log.info("*=== [MODO BÁSICO] ===*");
+                System.out.println("=== MOSTRANT TASQUES ===");
+                System.out.println("*=== [MODE BÀSIC] ===*");
                 listTasquesBasic(tascaService);
                 break;
             case 2:
-                log.info("=== MOSTRANDO TASQUES ===");
-                log.info("*=== [MODO COMPLETO] ===*");
+                System.out.println("=== MOSTRANT TASQUES ===");
+                System.out.println("*=== [MODE COMPLET] ===*");
                 listTasquesComplete(tascaService);
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }
@@ -571,31 +569,31 @@ public class MethodsMainTasca {
 
         List<Tascaas01> tasques = tascaService.findAllWithDetails();
         tasques.forEach(tasca -> {
-            System.out.println("- > TAREA Nº [" + tasca.getIdTasca() + "]" + " " + tasca.getDescripcio() + " | Estado: " + tasca.getEstat());
+            System.out.println("- > TASCA Nº [" + tasca.getIdTasca() + "]" + " " + tasca.getDescripcio() + " | Estado: " + tasca.getEstat());
 
-            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " pertenece al proyecto: ");
+            System.out.println("\t" + "Tasca nº \" + tasca.getIdTasca() + \" pertany al projecte: ");
             Projecteas01 proyecto = tasca.getIdProjecte();
             if (proyecto != null) {
                 System.out.println("\t -" + "[" + proyecto.getIdProjecte() + "]" + proyecto.getDescripcio() + " | Estado: " + proyecto.getEstat()
-                        + "| fecha finalización = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
+                        + "| fecha finalizació = " + (proyecto.getFechaFinalitzacio() != null ? proyecto.getFechaFinalitzacio() : "No finalizado"));
             } else {
-                System.out.println("\t" + "Proyecto asociado no encontrado.");
+                System.out.println("\t" + "Projecte associat no trobat.");
             }
 
-            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene la siguiente factura: ");
+            System.out.println("\t" + "Tasca nº " + tasca.getIdTasca() + " té la següent factura: ");
             Facturaas01 factura = tasca.getFactura();
             if (factura != null) {
                 System.out.println("\t -" + "[" + factura.getIdFactura() + "]" + " " + " Fecha : " + factura.getData() + " | " + factura.getObservacions() + " | Importe: " + factura.getImportTotal());
             } else {
-                System.out.println("\t" + "No tiene factura asociada.");
+                System.out.println("\t" + "No té factura associada.");
             }
 
-            System.out.println("\t" + "Tarea nº " + tasca.getIdTasca() + " tiene el siguiente operario responsable: ");
+            System.out.println("\t" + "Tasca nº " + tasca.getIdTasca() + " té el següent operari responsable: ");
             Operariresponsableas01 operario = tasca.getOperariResponsable();
             if (operario != null) {
                 System.out.println("\t -" + "[" + operario.getIdOperariTasca() + "]" + operario.getNom() + " " + operario.getCognom() + " | " + operario.getNifOperari() + "| Actividad : " + operario.getObservacions());
             } else {
-                System.out.println("\t" + "Operario responsable no encontrado.");
+                System.out.println("\t" + "Operari responsable no trobat.");
             }
         });
     }
@@ -614,22 +612,22 @@ public class MethodsMainTasca {
     //*************** DELETE TASCA  *****************************//
     protected static void eliminarTasques(Tascaas01Service tascaService) {
 
-        System.out.println("**** Aviso ****");
-        System.out.println("Una tasca SE PODRÁ BORRAR SIEMPRE Y CUANDO NO ESTÉ EN PROCESO");
+        System.out.println("**** Avís ****");
+        System.out.println("Una tasca ES PODRÀ ESBORRAR SEMPRE QUE NO ESTIGA EN PROCÉS");
         MainApp.esperarIntro();
 
-        System.out.println("¿Cómo deseas eliminar las tasques?");
-        System.out.println("1. Eliminar todas las tasques");
-        System.out.println("2. Eliminar una tasca por ID");
+        System.out.println("Com vols eliminar les tasques?");
+        System.out.println("1. Eliminar totes les tasques");
+        System.out.println("2. Eliminar una tasca per ID");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
 
         switch (opcion) {
             case 1:
-                System.out.print("Eliminando todas las tareas... \n");
+                System.out.print("Eliminant totes les tasques... \n");
                 if (tascaService.findAllTasques().isEmpty()) {
-                    System.out.println("No hay tareas para eliminar.");
+                    System.out.println("No hi ha tasques per a eliminar.");
                 } else {
                     // Se itera cada tarea, se revisa si se puede eliminar
                     List<Tascaas01> tasquesAEliminar = new ArrayList<>();
@@ -638,42 +636,42 @@ public class MethodsMainTasca {
                         if (info == null) {
                             tasquesAEliminar.add(tasca);
                         } else {
-                            System.out.println("No se puede eliminar la tarea con ID " + tasca.getIdTasca() + ": " + info);
+                            System.out.println("No es pot eliminar la tasca amb ID " + tasca.getIdTasca() + ": " + info);
                         }
                     }
 
                     if (!tasquesAEliminar.isEmpty()) {
                         // Mostrar el listado de tareas a eliminar
-                        System.out.println("Las siguientes tareas serán eliminadas:");
+                        System.out.println("Les següents tasques seran eliminades:");
                         for (Tascaas01 tasca : tasquesAEliminar) {
-                            System.out.println("Tarea: " + tasca.getDescripcio() + " (ID: " + tasca.getIdTasca() + ")");
+                            System.out.println("Tasca: " + tasca.getDescripcio() + " (ID: " + tasca.getIdTasca() + ")");
                         }
 
                         // Confirmación antes de eliminar
-                        System.out.print("¿Estás seguro de que deseas eliminar estas tareas? (S/N): ");
+                        System.out.print("Estàs segur que vols eliminar aquestes tasques? (S/N): ");
                         String confirmacion = tcl.nextLine();
                         if (confirmacion.equalsIgnoreCase("S")) {
                             for (Tascaas01 tasca : tasquesAEliminar) {
                                 try {
                                     tascaService.deleteTasca(tasca);
-                                    System.out.println("La tarea con ID " + tasca.getIdTasca() + " ha sido eliminada correctamente.");
+                                    System.out.println("La tasca amb ID " + tasca.getIdTasca() + " ha sigut eliminada correctament.");
                                 } catch (Exception e) {
-                                    System.out.println("Error al eliminar la tarea con ID " + tasca.getIdTasca() + ": " + e.getMessage());
+                                    System.out.println("Error en eliminar la tasca amb ID " + tasca.getIdTasca() + ": " + e.getMessage());
                                 }
                             }
                         } else {
-                            System.out.println("La eliminación ha sido cancelada.");
+                            System.out.println("L'eliminació ha sigut cancel·lada.");
                         }
                     } else {
-                        System.out.println("No hay tareas para eliminar.");
+                        System.out.println("No hi ha tasques per a eliminar.");
                     }
                 }
                 break;
 
             case 2:
-                System.out.println("Tareas disponibles:");
+                System.out.println("Tasques disponibles:");
                 listTasquesComplete(tascaService);
-                System.out.print("Introduce el ID de la tasca a eliminar: ");
+                System.out.print("Introdueix l'ID de la tasca a eliminar: ");
                 int idTasca = tcl.nextInt();
                 tcl.nextLine();
                 Tascaas01 tasca = tascaService.findTascaById(idTasca);
@@ -682,14 +680,15 @@ public class MethodsMainTasca {
                     if (info == null) {
                         try {
                             tascaService.deleteTasca(tasca);
+                            System.out.println("La tasca amb ID " + tasca.getIdTasca() + " ha sigut eliminada correctament.");
                         } catch (Exception e) {
-                            System.out.println("Error al eliminar la tarea: " + e.getMessage());
+                            System.out.println("Error en eliminar la tasca: " + e.getMessage());
                         }
                     } else {
-                        System.out.println("No se puede eliminar la tarea: " + info);
+                        System.out.println("No es pot eliminar la tasca: " + info);
                     }
                 } else {
-                    System.out.println("No se encontró una tarea con ese ID.");
+                    System.out.println("No s'ha trobat una tasca amb aquest ID.");
                 }
                 break;
         }
