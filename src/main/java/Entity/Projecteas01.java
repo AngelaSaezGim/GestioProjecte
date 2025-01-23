@@ -34,10 +34,7 @@ import javax.persistence.Temporal;
 @NamedQueries({
     // BUSCA TODOS LOS PROYECTOS O LOS PROYECTOS POR SUS ATRIBUTOS
     @NamedQuery(name = "Projecteas01.findAll", query = "SELECT p FROM Projecteas01 p"),
-    @NamedQuery(name = "Projecteas01.findByIdProjecte", query = "SELECT p FROM Projecteas01 p WHERE p.idProjecte = :idProjecte"),
-    @NamedQuery(name = "Projecteas01.findByDescripcio", query = "SELECT p FROM Projecteas01 p WHERE p.descripcio = :descripcio"),
-    @NamedQuery(name = "Projecteas01.findByEstat", query = "SELECT p FROM Projecteas01 p WHERE p.estat = :estat"
-    )})
+    @NamedQuery(name = "Projecteas01.findByIdProjecte", query = "SELECT p FROM Projecteas01 p WHERE p.idProjecte = :idProjecte"),})
 
 public class Projecteas01 implements Serializable {
 
@@ -60,7 +57,6 @@ public class Projecteas01 implements Serializable {
 
     //Un proyecto puede estar asociado a varias tareas
     //Modificaciones de proyecto se aplicarán sobre tareas relacionadas
-    //Si se elimina una tarea de la colección(se desvincula)será eliminada
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "idProjecte")
     private Collection<Tascaas01> tascaas01Collection;
 

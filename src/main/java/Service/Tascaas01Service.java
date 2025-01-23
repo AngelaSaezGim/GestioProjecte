@@ -29,14 +29,6 @@ public class Tascaas01Service {
         }
     }
 
-    public void updateTasca(Tascaas01 tascaas01) {
-        try {
-            tascaas01DAO.update(tascaas01);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar tarea", e);
-        }
-    }
-
     public Tascaas01 findTascaById(Object id) {
         try {
             return tascaas01DAO.findById(id);
@@ -65,7 +57,7 @@ public class Tascaas01Service {
     public String deleteTascaVerification(Tascaas01 tasca) {
         // Verificar si el estado de la tarea es "en procés"
         if ("En procés".equalsIgnoreCase(tasca.getEstat())) {
-            return "La tarea no se puede eliminar porque está en estado 'en procés'.";
+              return "La tasca no es pot eliminar perquè està en estat 'en procés'.";
         }
         // Se puede eliminar
         return null;

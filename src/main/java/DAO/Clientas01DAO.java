@@ -41,23 +41,6 @@ public class Clientas01DAO implements GenericDAO<Clientas01> {
     }
 
     @Override
-    @Transactional
-    public void update(Clientas01 entity) {
-        EntityTransaction et = em.getTransaction();
-        try {
-            et.begin();
-            em.merge(entity);
-            em.flush();
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            throw new PersistenceException("Error al actualizar cliente", e);
-        }
-    }
-
-    @Override
     public Clientas01 findById(Object id) {
         return em.find(Clientas01.class, id);
     }

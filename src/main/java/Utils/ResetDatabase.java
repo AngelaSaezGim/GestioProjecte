@@ -30,12 +30,12 @@ public class ResetDatabase {
             em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_PROJECT).executeUpdate();
             em.createNativeQuery("DROP TABLE IF EXISTS " + TABLE_CLIENT).executeUpdate();
             tx.commit();
-            System.out.println("Todas las tablas han sido eliminadas con DROP.");
+            System.out.println("Totes les taules han sigut eliminades amb DROP.");
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            System.err.println("Error al eliminar las tablas: " + e.getMessage());
+            System.err.println("Error en eliminar les taules: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -107,12 +107,12 @@ public class ResetDatabase {
             ).executeUpdate();
 
             tx.commit();
-            System.out.println("Todas las tablas han sido creadas.");
+             System.out.println("Totes les taules han sigut creades.");
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            System.err.println("Error al crear las tablas: " + e.getMessage());
+           System.err.println("Error en crear les taules: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -160,12 +160,12 @@ public class ResetDatabase {
             ).executeUpdate();
 
             tx.commit();
-            System.out.println("Datos predeterminados han sido insertados.");
+           System.out.println("Dades predeterminades han sigut inserides.");
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            System.err.println("Error al insertar datos predeterminados: " + e.getMessage());
+            System.err.println("Error en inserir les dades predeterminades: " + e.getMessage());
             e.printStackTrace();
         }
     }

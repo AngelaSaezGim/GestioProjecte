@@ -32,9 +32,7 @@ import javax.validation.constraints.NotNull;
     // BUSCA TODAS LAS FACTURAS O FACTURAS POR SUS ATRIBUTOS
     @NamedQuery(name = "Facturaas01.findAll", query = "SELECT f FROM Facturaas01 f"),
     @NamedQuery(name = "Facturaas01.findByIdFactura", query = "SELECT f FROM Facturaas01 f WHERE f.idFactura = :idFactura"),
-    @NamedQuery(name = "Facturaas01.findByData", query = "SELECT f FROM Facturaas01 f WHERE f.data = :data"),
-    @NamedQuery(name = "Facturaas01.findByImport1", query = "SELECT f FROM Facturaas01 f WHERE f.importTotal = :importTotal"),
-    @NamedQuery(name = "Facturaas01.findByObservacions", query = "SELECT f FROM Facturaas01 f WHERE f.observacions = :observacions")})
+})
 
 public class Facturaas01 implements Serializable {
 

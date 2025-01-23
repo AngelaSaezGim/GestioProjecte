@@ -36,15 +36,6 @@ public class Projecteas01Service {
         }
     }
 
-    // Actualizar un proyecto
-    public void updateProject(Projecteas01 project) {
-        try {
-            projecteDAO.update(project);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar proyecto", e);
-        }
-    }
-
     // Encontrar un proyecto por su ID
     public Projecteas01 findProjectById(Object id) {
         try {
@@ -99,10 +90,10 @@ public class Projecteas01Service {
                 if (areTasksFacturedMoreThanFiveYearsAgo(project)) {
                     return null;  // Si se cumple; El proyecto puede ser eliminado
                 } else {
-                    return "El proyecto no puede ser eliminado porque algunas tareas no han sido facturadas hace más de 5 años.";
+                     return "El projecte no pot ser eliminat perquè algunes tasques no han sigut facturades fa més de 5 anys.";
                 }
             } else {
-                return "El proyecto no se puede eliminar, tiene facturas asociadas y además no está en estado 'Finalitzat'.";
+                 return "El projecte no pot ser eliminat, té factures associades i a més no està en estat 'Finalitzat'.";
             }
         } else { // En general;
             return null;  // El proyecto no tiene facturas asociadas, puede eliminarse

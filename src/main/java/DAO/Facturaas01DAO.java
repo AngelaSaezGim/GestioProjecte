@@ -36,19 +36,6 @@ public class Facturaas01DAO implements GenericDAO<Facturaas01> {
     }
 
     @Override
-    public void update(Facturaas01 entity) {
-        EntityTransaction et = em.getTransaction();
-        try {
-            et.begin();
-            em.merge(entity);
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) et.rollback();
-            throw new PersistenceException("Error al actualizar factura", e);
-        }
-    }
-
-    @Override
     public Facturaas01 findById(Object id) {
         return em.find(Facturaas01.class, id);
     }

@@ -30,15 +30,6 @@ public class Operariresponsableas01Service {
         }
     }
     
-    // Actualizar un operario responsable
-    public void updateOperari(Operariresponsableas01 operari) {
-        try {
-            operariDAO.update(operari);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar operario responsable", e);
-        }
-    }
-    
     // Encontrar un operario responsable por su ID
     public Operariresponsableas01 findOperariById(Object id) {
         try {
@@ -68,7 +59,7 @@ public class Operariresponsableas01Service {
         // Verificar si el operario tiene tareas en estado "en procés"
         for (Tascaas01 tarea : operari.getTasques()) {
             if ("En procés".equalsIgnoreCase(tarea.getEstat())) {
-                return "El operario responsable no se puede eliminar porque tiene tareas en estado 'en procés'.";
+                 return "L'operari responsable no es pot eliminar perquè té tasques en estat 'en procés'.";
             }
         }
         return null;

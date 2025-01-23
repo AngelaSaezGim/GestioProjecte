@@ -38,21 +38,6 @@ public class Tascaas01DAO implements GenericDAO<Tascaas01> {
     }
 
     @Override
-    public void update(Tascaas01 entity) {
-        EntityTransaction et = em.getTransaction();
-        try {
-            et.begin();
-            em.merge(entity);
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            throw new PersistenceException("Error al actualizar tarea", e);
-        }
-    }
-
-    @Override
     public Tascaas01 findById(Object id) {
         return em.find(Tascaas01.class, id);
     }

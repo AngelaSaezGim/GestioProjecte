@@ -30,9 +30,6 @@ import javax.validation.constraints.NotNull;
     // BUSCA TODOS LOS CLIENTES O CLIENTES POR SUS ATRIBUTOS
     @NamedQuery(name = "Clientas01.findAll", query = "SELECT c FROM Clientas01 c"),
     @NamedQuery(name = "Clientas01.findByIdClient", query = "SELECT c FROM Clientas01 c WHERE c.idClient = :idClient"),
-    @NamedQuery(name = "Clientas01.findByNom", query = "SELECT c FROM Clientas01 c WHERE c.nom = :nom"),
-    @NamedQuery(name = "Clientas01.findByCognom", query = "SELECT c FROM Clientas01 c WHERE c.cognom = :cognom"),
-    @NamedQuery(name = "Clientas01.findByNif", query = "SELECT c FROM Clientas01 c WHERE c.nif = :nif")
 })
 
 public class Clientas01 implements Serializable {
@@ -59,6 +56,7 @@ public class Clientas01 implements Serializable {
     private String nif;
     
     //Un cliente puede tener muchas facturas
+    // SI ELIMINO CLIENTE SE ELIMINAN SUS FACTURAS
     @OneToMany(mappedBy = "idClient", cascade= CascadeType.ALL)
     private Collection<Facturaas01> facturaas01Collection;
     

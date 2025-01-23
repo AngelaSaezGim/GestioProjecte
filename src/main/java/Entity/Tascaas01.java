@@ -31,9 +31,7 @@ import javax.persistence.Table;
     // BUSCA TODAS LAS TAREAS O LAS TAREAS POR SUS ATRIBUTOS
     @NamedQuery(name = "Tascaas01.findAll", query = "SELECT t FROM Tascaas01 t"),
     @NamedQuery(name = "Tascaas01.findByIdTasca", query = "SELECT t FROM Tascaas01 t WHERE t.idTasca = :idTasca"),
-    @NamedQuery(name = "Tascaas01.findByDescripcio", query = "SELECT t FROM Tascaas01 t WHERE t.descripcio = :descripcio"),
-    @NamedQuery(name = "Tascaas01.findByEstat", query = "SELECT t FROM Tascaas01 t WHERE t.estat = :estat"
-    )})
+})
 
 public class Tascaas01 implements Serializable {
 
@@ -61,6 +59,7 @@ public class Tascaas01 implements Serializable {
     private Facturaas01 factura;
 
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO
+    //aunque borremos la tarea no se borrara el operario
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idOperari", referencedColumnName = "idOperariTasca", nullable = false, insertable = true, updatable = true)
     private Operariresponsableas01 idOperari;

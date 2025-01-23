@@ -38,21 +38,6 @@ public class Operariresponsableas01DAO implements GenericDAO<Operariresponsablea
     }
 
     @Override
-    public void update(Operariresponsableas01 entity) {
-        EntityTransaction et = em.getTransaction();
-        try {
-            et.begin();
-            em.merge(entity);
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            throw new PersistenceException("Error al actualizar operario responsable", e);
-        }
-    }
-
-    @Override
     public Operariresponsableas01 findById(Object id) {
         return em.find(Operariresponsableas01.class, id);
     }

@@ -32,15 +32,6 @@ public class Facturaas01Service {
         }
     }
 
-    // Actualizar una factura
-    public void updateFactura(Facturaas01 factura) {
-        try {
-            facturaDAO.update(factura);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar factura", e);
-        }
-    }
-
     // Encontrar una factura por su ID
     public Facturaas01 findFacturaById(Object id) {
         try {
@@ -77,7 +68,7 @@ public class Facturaas01Service {
 
             // Verificar si han pasado más de 5 años desde la fecha de creación
             if (fechaLimite.after(new Date())) {
-                return "La factura no se puede eliminar porque fue creada hace menos de 5 años.";
+                 return "La factura no es pot eliminar perquè va ser creada fa menys de 5 anys.";
             }
         }
         return null;

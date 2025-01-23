@@ -35,15 +35,6 @@ public class Clientas01Service {
         }
     }
 
-    // Actualizar un cliente
-    public void updateClient(Clientas01 client) {
-        try {
-            clientDAO.update(client);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar cliente", e);
-        }
-    }
-
     // Encontrar un cliente por su ID
     public Clientas01 findClientById(Object id) {
         try {
@@ -78,7 +69,7 @@ public class Clientas01Service {
 
             // Verificar si el proyecto está en estado "En procés"
             if (proyecto.getEstat() != null && proyecto.getEstat().equalsIgnoreCase("En procés")) {
-                return "El cliente no se puede eliminar porque tiene proyectos en curso.";
+               return "El client no es pot eliminar perquè té projectes en curs.";
             }
 
             // Verificar si el proyecto está finalizado y si la fecha es hace más de 5 años
@@ -91,7 +82,7 @@ public class Clientas01Service {
 
                     // Verificar si la fecha de finalización está dentro de los últimos 5 años
                     if (fechaLimite.after(new Date())) {
-                        return "El cliente no se puede eliminar porque tiene proyectos finalizados hace menos de 5 años.";
+                        return "El client no es pot eliminar perquè té projectes finalitzats fa menys de 5 anys.";
                     }
                 }
             }

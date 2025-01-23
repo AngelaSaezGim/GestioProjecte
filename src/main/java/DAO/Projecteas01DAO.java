@@ -41,23 +41,6 @@ public class Projecteas01DAO implements GenericDAO<Projecteas01> {
     }
 
     @Override
-    @Transactional
-    public void update(Projecteas01 entity) {
-        EntityTransaction et = em.getTransaction();
-        try {
-            et.begin();
-            em.merge(entity);
-            em.flush();
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            throw new PersistenceException("Error al actualizar proyecto", e);
-        }
-    }
-
-    @Override
     public Projecteas01 findById(Object id) {
         return em.find(Projecteas01.class, id);
     }
