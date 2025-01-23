@@ -195,7 +195,7 @@ public class MethodsMainProjecte {
 
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otro projecte? (si/no): ");
+                System.out.print("¿Quieres agregar otro projecto ? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
@@ -287,7 +287,7 @@ public class MethodsMainProjecte {
             // Preguntar si se desea agregar otro proyecto
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otro proyecto? (si/no): ");
+                System.out.print("¿Quieres agregar otro proyecto en modo completo? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {

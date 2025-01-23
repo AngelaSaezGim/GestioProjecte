@@ -257,7 +257,7 @@ public class MethodsMainTasca {
             // Preguntar si desea agregar otra tasca
             boolean validInput = false;
             while (!validInput) {
-                System.out.print("¿Quieres agregar otra tasca? (si/no): ");
+                System.out.print("¿Quieres agregar otra tasca en modo completo ? (si/no): ");
                 continueAdding = tcl.nextLine().trim().toLowerCase();
 
                 if (continueAdding.equals("si") || continueAdding.equals("no")) {
