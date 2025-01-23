@@ -83,6 +83,8 @@ public class MethodsMainOperari {
     
     // METODO SOBRECARGADO - CREA OPERARI (con tarea) Y LO DEVUELVE
      public static Integer agregarOperariBasic(Operariresponsableas01Service operariResponsableService, Integer idTasca) {
+         
+            System.out.println("[OPERARIO ASOCIADO A TAREA]");
 
             System.out.println("Introduce los datos del operario responsable:");
 

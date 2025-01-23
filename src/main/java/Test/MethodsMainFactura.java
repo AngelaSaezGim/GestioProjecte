@@ -215,7 +215,7 @@ public class MethodsMainFactura {
             Integer idFactura = newFactura.getIdFactura();
 
             // Asociar tarea a la factura
-            Integer idTasca = asociarTareaFactura(tascaService, projecteService, facturaService, operariService, idFactura);
+            Integer idTasca = asociarTareaFactura(tascaService, projecteService, facturaService, operariService, clientService, idFactura);
 
             // Asociar cliente a la factura
             Integer idClient = asociarClienteFactura(clientService, idFactura);
@@ -249,8 +249,11 @@ public class MethodsMainFactura {
             Projecteas01Service projecteService,
             Facturaas01Service facturaService,
             Operariresponsableas01Service operariService,
+            Clientas01Service clientService,
             Integer idFactura) {
 
+        System.out.println("[TAREA ASOCIADA A FACTURA]");
+        
         Integer idTasca = null;
         while (idTasca == null) {
             System.out.println("Opciones:");
@@ -275,7 +278,7 @@ public class MethodsMainFactura {
                 }
             } else if (option.equals("2")) {
                 System.out.println("Creando una nueva tarea...");
-                idTasca = MethodsMainTasca.agregarTascaComplete(tascaService, projecteService, facturaService, operariService, idFactura);
+                idTasca = MethodsMainTasca.agregarTascaComplete(tascaService, projecteService, clientService, facturaService, operariService, idFactura);
                 if (idTasca != null) {
                     System.out.println("Tasca creada con ID: " + idTasca);
                 } else {
@@ -290,6 +293,8 @@ public class MethodsMainFactura {
 
     // Método para asociar cliente
     private static Integer asociarClienteFactura(Clientas01Service clientService, Integer idFactura) {
+
+        System.out.println("[CLIENTE ASOCIADO A FACTURA]");
         
         Integer idClient = null;
         while (idClient == null) {
@@ -332,6 +337,8 @@ public class MethodsMainFactura {
     //CREAR FACTURA CON ID TASCA
     public static Integer agregarFacturaComplete(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientService,
             Projecteas01Service projecteService, Operariresponsableas01Service operariService, Integer idTasca) {
+        
+        System.out.println("[FACTURA ASOCIADA A TAREA]");
 
             System.out.println("Introduce los datos de la factura:");
 

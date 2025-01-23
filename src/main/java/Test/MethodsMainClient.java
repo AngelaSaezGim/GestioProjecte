@@ -85,6 +85,8 @@ public class MethodsMainClient {
     // METODO SOBRECARGADO CON IDFACTURA
     // CREA Y DEVUELVE EL ID DEL CLIENTE
     public static Integer agregarClienteBasic(Clientas01Service clientasService, Integer idFactura) {
+        
+         System.out.println("[ CLIENTE ASOCIADO A FACTURA ]");
 
             System.out.println("Introduce los datos del cliente:");
 

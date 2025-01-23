@@ -302,6 +302,8 @@ public class MethodsMainProjecte {
     public static List<Tascaas01> asociarTascasProjecte(Tascaas01Service tascaService, Projecteas01Service projecteService,
             Facturaas01Service facturaService, Operariresponsableas01Service operariService, Clientas01Service clientService, Integer idProjecte, String estat) {
 
+        System.out.println("[TAREA ASOCIADA A PROJECTE]");
+
         // Opciones para agregar tareas
         System.out.println("Opciones:");
         System.out.println("1. Buscar tareas existentes");
@@ -361,6 +363,8 @@ public class MethodsMainProjecte {
 
     public static Integer asociarClientProjecte(Clientas01Service clientService, Integer idProjecte) {
 
+        System.out.println("[CLIENTE ASOCIADO A PROJECTE]");
+
         Integer idClient = null;
 
         while (idClient == null) {
@@ -398,8 +402,11 @@ public class MethodsMainProjecte {
 
     //PROYECTO ASOCIADO A UNA TAREA SOBRECARGADO
     //SOBRECARGADO CON ID TASCA
+    //Si el estat tasca no es Finalizat NO SE PUEDE AGREGAR A UN PROJECTO FINALIZADO
     public static Integer agregarProjecteComplete(Projecteas01Service projecteService, Clientas01Service clientService, Facturaas01Service facturaService, Operariresponsableas01Service operariService, Tascaas01Service tascaService,
-             Integer idTasca) {
+            Integer idTasca, String estatTasca) {
+
+        System.out.println("[PROJECTE ASOCIADO A TAREA]");
 
         System.out.println("Introduce los datos del proyecto:");
 
@@ -432,6 +439,11 @@ public class MethodsMainProjecte {
                     System.out.println("Opción no válida. Intenta nuevamente.");
                     continue;
             }
+            if ("Finalitzat".equalsIgnoreCase(estat) && !"Finalitzat".equalsIgnoreCase(estatTasca)) {
+                System.out.println("Error: No puedes agregar una tarea que no esté finalizada a un proyecto finalizado.");
+                continue;
+            }
+
             break;
         }
 

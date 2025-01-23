@@ -35,16 +35,16 @@ public class MehtodsMainEntities {
     protected static void showContador(Clientas01Service clientService, Facturaas01Service facturaService,
             Operariresponsableas01Service operariResponsableService, Projecteas01Service projecteService, Tascaas01Service tascaService) {
         String border = "**************************************";
-        String title = "          Entidades Contador          ";
+        String title = "          Comptador d'Entitats        ";
 
         System.out.println(border);
         System.out.println(title);
         System.out.println(border);
-        System.out.printf("* %-35s *\n", "Nº Clientes: " + clientService.findAllClients().size());
-        System.out.printf("* %-35s *\n", "Nº Facturas: " + facturaService.findAllFacturas().size());
-        System.out.printf("* %-35s *\n", "Nº Operarios responsables: " + operariResponsableService.findAllOperaris().size());
-        System.out.printf("* %-35s *\n", "Nº Proyectos: " + projecteService.findAllProjects().size());
-        System.out.printf("* %-35s *\n", "Nº Tareas: " + tascaService.findAllTasques().size());
+        System.out.printf("* %-35s *\n", "Nº Clients: " + clientService.findAllClients().size());
+        System.out.printf("* %-35s *\n", "Nº Factures: " + facturaService.findAllFacturas().size());
+        System.out.printf("* %-35s *\n", "Nº Operaris responsables: " + operariResponsableService.findAllOperaris().size());
+        System.out.printf("* %-35s *\n", "Nº Projectes: " + projecteService.findAllProjects().size());
+        System.out.printf("* %-35s *\n", "Nº Tasques: " + tascaService.findAllTasques().size());
         System.out.println(border);
     }
 
@@ -54,19 +54,19 @@ public class MehtodsMainEntities {
             Operariresponsableas01Service operariResponsableService,
             Projecteas01Service projecteService,
             Tascaas01Service tascaService) {
-        System.out.println("Vaciando todas las tablas...");
+        System.out.println("Buidant totes les taules...");
         try {
             facturaService.deleteTable();
             tascaService.deleteTable();
             operariResponsableService.deleteTable();
             projecteService.deleteTable();
             clientService.deleteTable();
-            System.out.println("Todas las tablas han sido vaciadas.");
+            System.out.println("Totes les taules han estat buidades.");
         } catch (Exception e) {
-            log.error("Error al vaciar las tablas: ", e);
+            log.error("Error en buidar les taules: ", e);
         }
     }
-    
+
     // Método auxiliar para validar el formato del NIF
     protected static boolean esNifValido(String nif) {
         if (nif == null || nif.length() != 9) {

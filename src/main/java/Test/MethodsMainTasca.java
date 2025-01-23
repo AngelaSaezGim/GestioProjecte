@@ -49,7 +49,7 @@ public class MethodsMainTasca {
                 System.out.println("=== CREACIÓN TASCAS ===");
                 System.out.println("*=== [MODO COMPLETO] ===*");
                 agregarTascaComplete(tascaService, projecteService, facturaService, operariService,
-                         clientService);
+                        clientService);
                 break;
 
             default:
@@ -187,7 +187,7 @@ public class MethodsMainTasca {
     }
 
     public static void agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Facturaas01Service facturaService, Operariresponsableas01Service operariService,
-             Clientas01Service clientService) {
+            Clientas01Service clientService) {
         String continueAdding = "si";
 
         while (continueAdding.equalsIgnoreCase("si")) {
@@ -234,8 +234,8 @@ public class MethodsMainTasca {
 
             // Asociar proyecto a tarea
             //COGEMOS ESTAT PARA VALIDAR
-            Integer idProjecte = asociarProyectoTasca(projecteService, clientService, idTasca,facturaService,
-            operariService,tascaService,estat);
+            Integer idProjecte = asociarProjecteTasca(projecteService, clientService, idTasca, facturaService,
+                    operariService, tascaService, estat);
 
             //Asociar factura a tarea
             Integer idFactura = asociarFacturaTasca(facturaService, tascaService, clientService, projecteService, operariService, idTasca);
@@ -268,9 +268,11 @@ public class MethodsMainTasca {
             }
         }
     }
-  
-    private static Integer asociarProyectoTasca(Projecteas01Service projecteService, Clientas01Service clientService, Integer idTasca,Facturaas01Service facturaService,
-            Operariresponsableas01Service operariService,Tascaas01Service tascaService, String estat) {
+
+    private static Integer asociarProjecteTasca(Projecteas01Service projecteService, Clientas01Service clientService, Integer idTasca, Facturaas01Service facturaService,
+            Operariresponsableas01Service operariService, Tascaas01Service tascaService, String estat) {
+
+        System.out.println("[PROJECTE ASOCIADO A TAREA]");
 
         Integer idProjecte = null;
         while (idProjecte == null) {
@@ -303,8 +305,8 @@ public class MethodsMainTasca {
                     System.out.println("ID de proyecto inválido. Inténtalo nuevamente.");
                 }
             } else if (option.equals("2")) {
-                System.out.println("Creando un nuevo proyecto..."); 
-                idProjecte = MethodsMainProjecte.agregarProjecteComplete(projecteService, clientService, facturaService, operariService, tascaService, idTasca);
+                System.out.println("Creando un nuevo proyecto...");
+                idProjecte = MethodsMainProjecte.agregarProjecteComplete(projecteService, clientService, facturaService, operariService, tascaService, idTasca, estat);
             } else {
                 System.out.println("Opción no válida. Inténtalo nuevamente.");
             }
@@ -314,6 +316,8 @@ public class MethodsMainTasca {
 
     private static Integer asociarFacturaTasca(Facturaas01Service facturaService, Tascaas01Service tascaService, Clientas01Service clientService,
             Projecteas01Service projecteService, Operariresponsableas01Service operariService, Integer idTasca) {
+
+        System.out.println("[FACTURA ASOCIADA A TAREA]");
 
         Integer idFactura = null;
 
@@ -353,6 +357,8 @@ public class MethodsMainTasca {
     }
 
     private static Integer asociarOperariTasca(Operariresponsableas01Service operariService, Integer idTasca) {
+
+        System.out.println("[OPERARI ASOCIADO A TAREA]");
 
         Integer idOperari = null;
 
@@ -395,7 +401,10 @@ public class MethodsMainTasca {
 
     // METODO SOBRECARGADO CON IDFACTURA
     // CREA Y DEVUELVE EL ID DE LA TAREA
-    public static Integer agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Facturaas01Service facturaService, Operariresponsableas01Service operariService, Integer idFactura) {
+    public static Integer agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Clientas01Service clientService,
+            Facturaas01Service facturaService, Operariresponsableas01Service operariService, Integer idFactura) {
+
+        System.out.println("TAREA ASOCIADA A FACTURA");
 
         System.out.println("Introduce los datos de la tasca:");
 
@@ -429,104 +438,44 @@ public class MethodsMainTasca {
             break;
         }
 
-        Integer idProjecte = null;
-        while (idProjecte == null) {
-            System.out.println("Opciones:");
-            System.out.println("1. Buscar proyecto existente");
-            System.out.println("2. Crear un nuevo proyecto asociado a esa tarea");
-            System.out.print("Elige una opción para el proyecto (1/2): ");
-            String option = tcl.nextLine();
+        Tascaas01 newTasca = new Tascaas01();
+        newTasca.setDescripcio(descripcio);
+        newTasca.setEstat(estat);
 
-            if (option.equals("1")) {
-                // Buscar proyecto
-                System.out.print("ID del proyecto asociado (debe ser válido y existir): ");
-                System.out.println("Lista de proyectos disponibles: ");
-                MethodsMainProjecte.listProjecteBasic(projecteService);
-                String inputIdProjecte = tcl.nextLine();
-                try {
-                    idProjecte = Integer.parseInt(inputIdProjecte);
-                    Projecteas01 project = projecteService.findProjectById(idProjecte);
-                    if (project == null) {
-                        System.out.println("El proyecto con ID " + idProjecte + " no existe.");
-                        idProjecte = null;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("ID de proyecto inválido. Inténtalo nuevamente.");
-                }
-            } else if (option.equals("2")) {
-                System.out.println("Creando un nuevo proyecto...");
+        tascaService.createTasca(newTasca);
+        // CON ESTO PODREMOS ACCEDER A SU ID AUTOGENERADO
+        Integer idTasca = newTasca.getIdTasca();
 
-            } else {
-                System.out.println("Opción no válida. Inténtalo nuevamente.");
-            }
+        Integer idProjecte = asociarProjecteTasca(projecteService, clientService, idTasca, facturaService, operariService, tascaService, estat);
+
+        Integer idOperari = asociarOperariTasca(operariService, idTasca);
+
+        newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
+        newTasca.setFactura(facturaService.findFacturaById(idFactura)); // Asignar el objeto Facturaas01 a la tasca
+        newTasca.setOperariResponsable(operariService.findOperariById(idOperari));
+
+        try {
+            tascaService.createTasca(newTasca);
+            System.out.println("Tasca agregada exitosamente.");
+            return newTasca.getIdTasca();
+        } catch (Exception e) {
+            System.out.println("Error al agregar la tasca: " + e.getMessage());
         }
 
-        // Selección de la factura asociada a la tasca
-        Facturaas01 factura = facturaService.findFacturaById(idFactura); // Obtener el objeto Facturaas01 por su ID
-
-        if (factura != null) {
-            // Selección del operario asociado
-            Integer idOperari = null;
-            while (idOperari == null) {
-                System.out.println("Opciones:");
-                System.out.println("1. Buscar un operario existente");
-                System.out.println("2. Crear un nuevo operario asociado a esa tarea");
-                System.out.print("Elige una opción para el operario (1/2): ");
-                String option = tcl.nextLine();
-
-                if (option.equals("1")) {
-                    // Buscar operario
-                    System.out.print("ID del operario asociado (debe ser válido y existir): ");
-                    System.out.println("Lista de operarios disponibles: ");
-                    MethodsMainOperari.listOperariBasic(operariService);
-                    String inputIdOperari = tcl.nextLine();
-                    try {
-                        idOperari = Integer.parseInt(inputIdOperari);
-                        if (operariService.findOperariById(idOperari) == null) {
-                            System.out.println("El operario con ID " + idOperari + " no existe.");
-                            idOperari = null;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("ID de operario inválido. Inténtalo nuevamente.");
-                    }
-                } else if (option.equals("2")) {
-                    // Crear nuevo operario
-                    System.out.println("Creando un nuevo operario...");
-                    // Aquí podrías agregar lógica para crear un nuevo operario si es necesario
-                } else {
-                    System.out.println("Opción no válida. Inténtalo nuevamente.");
-                }
-            }
-
-            Tascaas01 newTasca = new Tascaas01();
-            newTasca.setDescripcio(descripcio);
-            newTasca.setEstat(estat);
-            newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
-            newTasca.setFactura(factura); // Asignar el objeto Facturaas01 a la tasca
-            newTasca.setOperariResponsable(operariService.findOperariById(idOperari));
-
-            try {
-                tascaService.createTasca(newTasca);
-                System.out.println("Tasca agregada exitosamente.");
-                return newTasca.getIdTasca();
-            } catch (Exception e) {
-                System.out.println("Error al agregar la tasca: " + e.getMessage());
-            }
-
-        } else {
-            System.out.println("La factura con ID " + idFactura + " no existe.");
-        }
         return null; // Devuelve null si hubo un error
     }
-    
+
     //METODO SOBRECARGADO PARA PROJECTE
     //Creamos tasca para proyecte 
     //Crea y devuelve la List<Tascaas01> de las tasques
-    public static List<Tascaas01> agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Facturaas01Service facturaService, Operariresponsableas01Service operariService, 
-            Clientas01Service clientService, Integer idProjecte, String Estat) {
+    //Si el estado que le paso es FINALIZADO no puedo asignarle una tasca con Estat "No iniciat" o "En progrés".
+    public static List<Tascaas01> agregarTascaComplete(Tascaas01Service tascaService, Projecteas01Service projecteService, Facturaas01Service facturaService, Operariresponsableas01Service operariService,
+            Clientas01Service clientService, Integer idProjecte, String EstatProjecte) {
+
+        System.out.println("TAREA ASOCIADA A PROYECTO ");
 
         List<Tascaas01> tasques = new ArrayList<>();
-        
+
         System.out.println("Introduce los datos de la tasca:");
 
         System.out.print("Descripción de la tasca: ");
@@ -556,33 +505,37 @@ public class MethodsMainTasca {
                     System.out.println("Opción no válida. Intenta nuevamente.");
                     continue;
             }
+            // Validar que el estado de la tarea no sea incompatible con el estado del proyecto
+            if ("Finalitzat".equalsIgnoreCase(EstatProjecte) && !estat.equals("Finalitzat")) {
+                System.out.println("No puedes asignar una tarea con estado 'No iniciat' o 'En procés' a un proyecto finalizado.");
+                continue; // Volver a pedir
+            }
             break;
         }
-        
-            Tascaas01 newTasca = new Tascaas01();
-            newTasca.setDescripcio(descripcio);
-            newTasca.setEstat(estat);
-            
+
+        Tascaas01 newTasca = new Tascaas01();
+        newTasca.setDescripcio(descripcio);
+        newTasca.setEstat(estat);
+
+        tascaService.createTasca(newTasca);
+        // CON ESTO PODREMOS ACCEDER A SU ID AUTOGENERADO
+        Integer idTasca = newTasca.getIdTasca();
+
+        Integer idFactura = asociarFacturaTasca(facturaService, tascaService, clientService, projecteService, operariService, idTasca);
+        Integer idOperari = asociarOperariTasca(operariService, idTasca);
+
+        newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
+        newTasca.setFactura(facturaService.findFacturaById(idFactura));
+        newTasca.setOperariResponsable(operariService.findOperariById(idOperari));
+
+        try {
             tascaService.createTasca(newTasca);
-            // CON ESTO PODREMOS ACCEDER A SU ID AUTOGENERADO
-            Integer idTasca = newTasca.getIdTasca();
-       
-
-            Integer idFactura = asociarFacturaTasca(facturaService, tascaService, clientService, projecteService, operariService, idTasca);
-            Integer idOperari = asociarOperariTasca(operariService, idTasca);
-            
-            newTasca.setIdProjecte(projecteService.findProjectById(idProjecte));
-            newTasca.setFactura(facturaService.findFacturaById(idFactura)); 
-            newTasca.setOperariResponsable(operariService.findOperariById(idOperari));
-
-            try {
-                tascaService.createTasca(newTasca);
-                System.out.println("Tasca agregada exitosamente.");
-                tasques.add(newTasca);
-            } catch (Exception e) {
-                System.out.println("Error al agregar la tasca: " + e.getMessage());
-            }
-        return tasques; 
+            System.out.println("Tasca agregada exitosamente.");
+            tasques.add(newTasca);
+        } catch (Exception e) {
+            System.out.println("Error al agregar la tasca: " + e.getMessage());
+        }
+        return tasques;
     }
 
     //*****************************************************************//

@@ -4,7 +4,6 @@
  */
 package Test;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -20,12 +19,13 @@ import Utils.EntityManagerProvider;
 import Utils.ResetDatabase;
 
 import java.util.Scanner;
+
 /**
  *
  * @author angsaegim
  */
 public class MainApp {
-    
+
     private enum MenuOption {
         QUERY_CLEAN_ALL, QUERY_INSERT, QUERY_LIST, QUERY_DELETE, QUERY_RESET, EXIT
     };
@@ -81,7 +81,7 @@ public class MainApp {
                     case QUERY_INSERT:
                         do {
                             showContador(clientService, facturaService, operariService, projecteService, tascaService);
-                            System.out.println("-- INSERTAR DATOS --");
+                            System.out.println("-- AFEGIR DADES --");
                             printOptionsEntity();
                             opcionElegidaInsert = readChoiceInsert();
                             switch (opcionElegidaInsert) {
@@ -106,7 +106,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case EXIT:
-                                    System.out.println("Atrás");
+                                    System.out.println("Arrere");
                                     break;
                             }
                         } while (opcionElegidaInsert != MenuOptionInsert.EXIT);
@@ -114,7 +114,7 @@ public class MainApp {
                     case QUERY_LIST:
                         do {
                             showContador(clientService, facturaService, operariService, projecteService, tascaService);
-                            System.out.println("-- LISTAR DATOS --");
+                            System.out.println("-- LLISTAR DADES --");
                             printOptionsEntity();
                             opcionElegidaList = readChoiceList();
                             switch (opcionElegidaList) {
@@ -139,7 +139,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case EXIT:
-                                    System.out.println("Atrás");
+                                    System.out.println("Arrere");
                                     break;
                             }
                         } while (opcionElegidaList != MenuOptionList.EXIT);
@@ -147,7 +147,7 @@ public class MainApp {
                     case QUERY_DELETE:
                         do {
                             showContador(clientService, facturaService, operariService, projecteService, tascaService);
-                            System.out.println("-- BORRAR DATOS --");
+                            System.out.println("-- ESBORRAR DADES --");
                             printOptionsEntity();
                             opcionElegidaDelete = readChoiceDelete();
                             switch (opcionElegidaDelete) {
@@ -172,72 +172,72 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case EXIT:
-                                    System.out.println("Atrás");
+                                    System.out.println("Arrere");
                                     break;
                             }
                         } while (opcionElegidaDelete != MenuOptionDelete.EXIT);
                         break;
                     case QUERY_RESET:
-                        System.out.println("Restaurando bd a la configuración inicial..");
+                        System.out.println("Restaurant la BD a la configuració inicial...");
                         ResetDatabase.dropAllTablesSQL(em);
                         ResetDatabase.crearTablasSQLde0(em);
                         ResetDatabase.insertarDadesPredeterminats(em);
                         esperarIntro();
                         break;
                     case EXIT:
-                        System.out.println("Saliendo del programa");
+                        System.out.println("Eixint del programa..");
                         break;
                 }
             } while (opcionElegidaPrincipal != MenuOption.EXIT);
 
         } catch (Exception e) {
-            log.error("Error durante la ejecución: ", e);
+            log.error("Error durant l'execució: ", e);
         } finally {
             emf.close();
         }
     }
 
     protected static void esperarIntro() {
-        System.out.println("Presione Enter para continuar...");
+        System.out.println("Prem Enter per a continuar...");
         tcl.nextLine();
     }
 
     protected static void printOptions() {
         String border = "========================================";
-        String title = "          GESTOR DE ENTIDADES           ";
+        String title = "          GESTOR D'ENTITATS             ";
 
         System.out.println("\n" + border);
         System.out.println(title);
         System.out.println(border);
-        System.out.println("Elija una opción:");
-        System.out.println("\t1) Vaciar TODAS las tablas");
-        System.out.println("\t2) Añadir nuevos elementos");
-        System.out.println("\t3) Listar elementos");
-        System.out.println("\t4) Borrar elementos");
-        System.out.println("\t5) Restaurar BD con datos predeterminados");
-        System.out.println("\t0) Salir");
+        System.out.println("Tria una opció:");
+        System.out.println("\t1) Buidar TOTES les taules");
+        System.out.println("\t2) Afegir nous elements");
+        System.out.println("\t3) Llistar elements");
+        System.out.println("\t4) Esborrar elements");
+        System.out.println("\t5) Restaurar BD amb dades predeterminades");
+        System.out.println("\t0) Eixir");
         System.out.println(border);
-        System.out.print("Opción: ");
+        System.out.print("Opció: ");
     }
 
     protected static void printOptionsEntity() {
         String border = "----------------------------------------";
         String corner = "+--------------------------------------+";
-        String title = "|    >> SELECCIÓN DE ENTIDAD <<        |";
+        String title = "|    >> SELECCIÓ D'ENTITAT <<          |";
 
         System.out.println(corner);
         System.out.println(title);
         System.out.println(corner);
-        System.out.println("| Elija una entidad a gestionar:       |");
+        System.out.println("| Tria una entitat a gestionar:        |");
         System.out.println("|--------------------------------------|");
-        System.out.println("|  1) Cliente                          |");
+        System.out.println("|  1) Client                           |");
         System.out.println("|  2) Factura                          |");
-        System.out.println("|  3) Operario Responsable             |");
-        System.out.println("|  4) Proyecto                         |");
-        System.out.println("|  5) Tarea                            |");
-        System.out.println("|  0) Atrás                            |");
+        System.out.println("|  3) Operari Responsable              |");
+        System.out.println("|  4) Projecte                         |");
+        System.out.println("|  5) Tasca                            |");
+        System.out.println("|  0) Enrere                           |");
         System.out.println(corner);
-        System.out.print("Opción: ");
+        System.out.print("Opció: ");
     }
 
     protected static MainApp.MenuOption readChoiceMain() {
@@ -248,7 +248,7 @@ public class MainApp {
             }
             return MainApp.MenuOption.values()[choiceInt - 1];
         } catch (RuntimeException re) {
-            System.out.println("Opción inválida... Inténtelo otra vez.");
+            System.out.println("Opció no vàlida... Torna a intentar-ho.");
             return readChoiceMain();
         }
     }
@@ -261,7 +261,7 @@ public class MainApp {
             }
             return MainApp.MenuOptionInsert.values()[choiceInt - 1];
         } catch (RuntimeException re) {
-            System.out.println("Opción de añadir inválida... Inténtelo otra vez.");
+            System.out.println("Opció d'afegir no vàlida... Torna a intentar-ho.");
             return readChoiceInsert();
         }
     }
@@ -274,7 +274,7 @@ public class MainApp {
             }
             return MainApp.MenuOptionList.values()[choiceInt - 1];
         } catch (RuntimeException re) {
-            System.out.println("Opción de listado inválida... Inténtelo otra vez.");
+            System.out.println("Opció de llistat no vàlida... Torna a intentar-ho.");
             return readChoiceList();
         }
     }
@@ -287,7 +287,7 @@ public class MainApp {
             }
             return MainApp.MenuOptionDelete.values()[choiceInt - 1];
         } catch (RuntimeException re) {
-            System.out.println("Opción de borrado inválida... Inténtelo otra vez.");
+            System.out.println("Opció d'esborrat no vàlida... Torna a intentar-ho.");
             return readChoiceDelete();
         }
     }
