@@ -225,6 +225,8 @@ public class MethodsMainClient {
         System.out.println("Es podrà eliminar el client que ja no tinga projectes actius O tots els projectes estiguen finalitzats fa més de 5 anys.");
         MainApp.esperarIntro();
 
+        // 
+        //
         System.out.println("\nCom vols eliminar els clients?");
         System.out.println("1. Eliminar tots els clients");
         System.out.println("2. Eliminar un client per ID");
@@ -233,7 +235,7 @@ public class MethodsMainClient {
         tcl.nextLine();
 
         switch (opcion) {
-            case 1:
+            case 1: // 
                 System.out.print("Eliminant tots els clients... \n");
                 if (clientService.findAllClients().isEmpty()) {
                      System.out.println("No hi ha clients per a eliminar.");
@@ -277,6 +279,7 @@ public class MethodsMainClient {
                     }
                 }
                 break;
+                // INFORMAR 
             case 2:
                  System.out.println("Clients disponibles:");
                 listClientsComplete(clientService); // Lista todos los clients disponibles
