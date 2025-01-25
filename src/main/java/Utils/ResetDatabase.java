@@ -102,7 +102,7 @@ public class ResetDatabase {
                     + "importTotal DOUBLE NOT NULL, "
                     + "observacions VARCHAR(255), "
                     + "FOREIGN KEY (idTasca) REFERENCES " + TABLE_TASK + "(idTasca), "
-                    + "FOREIGN KEY (idClient) REFERENCES " + TABLE_CLIENT + "(idClient)"
+                    + "FOREIGN KEY (idClient) REFERENCES " + TABLE_CLIENT + "(idClient) ON DELETE CASCADE"
                     + ")"
             ).executeUpdate();
 

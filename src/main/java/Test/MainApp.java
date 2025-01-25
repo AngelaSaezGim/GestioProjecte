@@ -168,7 +168,7 @@ public class MainApp {
                                     esperarIntro();
                                     break;
                                 case QUERY_DELETE_TASCA:
-                                    MethodsMainTasca.eliminarTasques(tascaService);
+                                    MethodsMainTasca.eliminarTasques(tascaService, facturaService);
                                     esperarIntro();
                                     break;
                                 case EXIT:

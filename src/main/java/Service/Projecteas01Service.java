@@ -8,11 +8,10 @@ import DAO.Projecteas01DAO;
 import Entity.Facturaas01;
 import Entity.Projecteas01;
 import Entity.Tascaas01;
-import java.util.Calendar;
-import java.util.Date;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -77,6 +76,31 @@ public class Projecteas01Service {
             return projecteDAO.findProjectsByClientId(clientId);
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener los proyectos del cliente con ID " + clientId, e);
+        }
+    }
+    
+     public Boolean hasTasquesVerification(Projecteas01 project) {
+
+        // Obtener la lista de tareas asociadas al projecto
+        Collection<Tascaas01> tasquesProjecte = project.getTascaas01Collection();
+
+        // Verificar si el projecte tiene tareas
+        if (tasquesProjecte != null && !tasquesProjecte.isEmpty()) {
+            // Si tiene tareas, mostrar las tareas asociadas
+            System.out.println("Projecte amb ID " + project.getIdProjecte() + " té aquestes tasques:");
+            System.out.println("|--------------------------------------|");
+
+            for (Tascaas01 tasca : tasquesProjecte) {
+                System.out.println("---> [" + tasca.getIdTasca() + "] "
+                        + tasca.getDescripcio() + " | "
+                        + tasca.getEstat() + " | ");
+            }
+            System.out.println("|--------------------------------------|");
+            return true;
+        } else {
+            // Si no tiene tareas, informar que no tiene tareas asociadas
+            System.out.println("Projecte amb ID " + project.getIdProjecte() + " no té tasques associades.");
+            return false;
         }
     }
 

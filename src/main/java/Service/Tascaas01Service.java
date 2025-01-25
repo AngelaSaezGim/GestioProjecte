@@ -5,7 +5,9 @@
 package Service;
 
 import DAO.Tascaas01DAO;
+import Entity.Facturaas01;
 import Entity.Tascaas01;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -52,6 +54,26 @@ public class Tascaas01Service {
             throw new RuntimeException("Error al obtener todas las tareas y las tablas relacionadas", e);
         }
 
+    }
+    
+    public Boolean HasFacturesVerification(Tascaas01 tasca) {
+        // Obtener la lista de facturas de la tasca
+        Facturaas01 facturaTasca = tasca.getFactura();
+
+        if (facturaTasca != null) {
+            System.out.println("La tasca amb ID " + tasca.getIdTasca() + " tiene esta factura:");
+            System.out.println("|--------------------------------------|");
+
+                System.out.println("---> [" + facturaTasca.getIdFactura() + "] "
+                        + facturaTasca.getObservacions() + " | "
+                        + facturaTasca.getData() + " | "
+                        + facturaTasca.getImportTotal());
+            System.out.println("|--------------------------------------|");
+            return true;
+        } else {
+            System.out.println("La tasca amb ID " + tasca.getIdTasca() + " no té factures associades.");
+            return false;
+        }
     }
 
     public String deleteTascaVerification(Tascaas01 tasca) {

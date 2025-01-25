@@ -610,7 +610,7 @@ public class MethodsMainTasca {
     //********************** DELETE ************************************//
     //*****************************************************************//
     //*************** DELETE TASCA  *****************************//
-    protected static void eliminarTasques(Tascaas01Service tascaService) {
+    protected static void eliminarTasques(Tascaas01Service tascaService, Facturaas01Service facturaService) {
 
         System.out.println("**** Avís ****");
         System.out.println("Una tasca ES PODRÀ ESBORRAR SEMPRE QUE NO ESTIGA EN PROCÉS");
@@ -618,7 +618,7 @@ public class MethodsMainTasca {
 
         System.out.println("Com vols eliminar les tasques?");
         System.out.println("1. Eliminar totes les tasques");
-        System.out.println("2. Eliminar una tasca per ID");
+        System.out.println("2. Eliminar una tasca per ID [BASIC y COMPLETE]");
 
         int opcion = tcl.nextInt();
         tcl.nextLine();
@@ -671,25 +671,110 @@ public class MethodsMainTasca {
             case 2:
                 System.out.println("Tasques disponibles:");
                 listTasquesComplete(tascaService);
+
                 System.out.print("Introdueix l'ID de la tasca a eliminar: ");
                 int idTasca = tcl.nextInt();
                 tcl.nextLine();
-                Tascaas01 tasca = tascaService.findTascaById(idTasca);
-                if (tasca != null) {
-                    String info = tascaService.deleteTascaVerification(tasca);
-                    if (info == null) {
-                        try {
-                            tascaService.deleteTasca(tasca);
-                            System.out.println("La tasca amb ID " + tasca.getIdTasca() + " ha sigut eliminada correctament.");
-                        } catch (Exception e) {
-                            System.out.println("Error en eliminar la tasca: " + e.getMessage());
+
+                System.out.println("Elige un MODO DE ELIMINACIÓN");
+                System.out.println("\nCom vols eliminar les tasques ?");
+                System.out.println("1. BASIC (Borramos, si hay datos relacionados sensibles no se podrá borrar)");
+                System.out.println("2. COMPLETE (Borramos tascas y facturas asociadas) ");
+                System.out.println("*Ambas cumplirán la restricció de projectes mencionada prèviament.");
+                int opcionMode = tcl.nextInt();
+                tcl.nextLine();
+
+                switch (opcionMode) {
+                    case 1:
+                        Tascaas01 tascaBasic = tascaService.findTascaById(idTasca);
+                        System.out.println("Se eliminará la tasca " + tascaBasic.getIdTasca());
+                        if (tascaBasic != null) {
+                            //1º - SE REVISAN RESTRICCIONES CONCRETAS
+                            String verificationResult = tascaService.deleteTascaVerification(tascaBasic);
+                            if (verificationResult != null) {
+                                System.out.println(verificationResult); // Si hay restricciones, mostrar mensaje.
+                                return;
+                            }
+
+                            // 2 º SE REVISA SI TIENE FACTURAS (BASIC - NO SE BORRARA)
+                            if (tascaService.HasFacturesVerification(tascaBasic)) {
+                                System.out.println("La tasca con id " + tascaBasic.getIdTasca() + " - TIENE FACTURAS ASOCIADAS");
+                                System.out.println("NO SE BORRARÁ");
+                            } else {
+                                try {
+                                    // HECHO TODO - SE BORRA LA TAREA
+                                    //RESTRICCIONES CONCRETAS EN SERVICE
+                                    tascaService.deleteTasca(tascaBasic);
+                                    System.out.println("tasca " + tascaBasic.getIdTasca() + " ha sigut eliminat/da correctament.");
+                                } catch (RuntimeException e) {
+                                    System.out.println("Error en eliminar la tasca : " + e.getMessage());
+                                }
+                            }
+                        } else {
+                            System.out.println("No s'ha trobat una tasca amb aquest ID.");
                         }
-                    } else {
-                        System.out.println("No es pot eliminar la tasca: " + info);
-                    }
-                } else {
-                    System.out.println("No s'ha trobat una tasca amb aquest ID.");
+                        break;
+
+                    case 2:
+                        Tascaas01 tascaComplete = tascaService.findTascaById(idTasca);
+                        System.out.println("Se eliminará la tasca " + tascaComplete.getIdTasca());
+                        if (tascaComplete != null) {
+
+                            //1º RESTRICCIONES CONCRETAS
+                            String verificationResult = tascaService.deleteTascaVerification(tascaComplete);
+                            if (verificationResult != null) {
+                                System.out.println(verificationResult); // Si hay restricciones, mostrar mensaje.
+                                return;
+                            }
+
+                            //2 º FACTURAS - COMPLETO - SE ELIMINAN
+                            if (tascaService.HasFacturesVerification(tascaComplete)) {
+
+                                System.out.println("La tasca té factures associades, se ELIMINARÁN:");
+                                System.out.println("¿Estás seguro de que quieres eliminar esta tasca y sus facturas? (Si/No):");
+                                String respuesta = tcl.nextLine();
+
+                                if ("Si".equalsIgnoreCase(respuesta)) {
+                                    Facturaas01 factura = tascaComplete.getFactura();
+
+                                    if (factura != null) {
+                                        // Elimina primero la factura asociada
+                                        facturaService.deleteFactura(factura);
+                                        System.out.println("Factura eliminada.");
+                                    }
+
+                                    try {
+                                        tascaService.deleteTasca(tascaComplete);
+                                        System.out.println(tascaComplete.getIdTasca() + " ha sigut eliminat/da correctament.");
+                                    } catch (RuntimeException e) {
+                                        System.out.println("Error en eliminar el client: " + e.getMessage());
+                                    }
+                                } else {
+                                    System.out.println("Eliminación cancelada.");
+                                }
+                            } else {
+                                // NO TIENE FACTURAS - No borramos nada, seguimos mirando projectes;
+                                System.out.println("La tasca no tiene facturas asociadas.");
+                                try {
+                                    tascaService.deleteTasca(tascaComplete);
+                                    System.out.println(tascaComplete.getIdTasca() + " ha sigut eliminat/da correctament.");
+                                } catch (RuntimeException e) {
+                                    System.out.println("Error en eliminar la tasca: " + e.getMessage());
+                                }
+                            }
+                        } else {
+                            System.out.println("No s'ha trobat una tasca amb aquest ID.");
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Opció no vàlida.");
+                        break;
                 }
+                break;
+
+            default:
+                System.out.println("Opció no vàlida.");
                 break;
         }
     }

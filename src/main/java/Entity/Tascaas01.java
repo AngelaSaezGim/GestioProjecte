@@ -55,7 +55,7 @@ public class Tascaas01 implements Serializable {
 
     //Una tarea esta asociada a UNA FACTURA
     //Si BORRAMOS una tarea, se borrará su factura asociada
-    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "idTasca", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idTasca", orphanRemoval = true)
     private Facturaas01 factura;
 
     // UNA TAREA ESTA ASOCIADA A UN OPEARIO

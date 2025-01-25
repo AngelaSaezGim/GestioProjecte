@@ -6,7 +6,9 @@ package Service;
 
 import DAO.Clientas01DAO;
 import Entity.Clientas01;
+import Entity.Facturaas01;
 import Entity.Projecteas01;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -64,12 +66,16 @@ public class Clientas01Service {
     public String deleteClientVerification(Clientas01 cliente) {
         // Obtener la lista de proyectos del cliente
         Collection<Projecteas01> proyectos = cliente.getProjecteas01Collection();
+        
+         if (proyectos == null) {
+        proyectos = new ArrayList<>();  // Inicializar la colección si es nula
+    }
 
         for (Projecteas01 proyecto : proyectos) {
 
             // Verificar si el proyecto está en estado "En procés"
             if (proyecto.getEstat() != null && proyecto.getEstat().equalsIgnoreCase("En procés")) {
-               return "El client no es pot eliminar perquè té projectes en curs.";
+                return "El client no es pot eliminar perquè té projectes en curs.";
             }
 
             // Verificar si el proyecto está finalizado y si la fecha es hace más de 5 años
@@ -94,6 +100,56 @@ public class Clientas01Service {
         }
         // Si todas las condiciones de los proyectos son válidas, permitir la eliminación
         return null;
+    }
+
+    // BOLEEAN Y LA LISTA DE FACTURAS DEL CLIENTE
+    // SI TIENE FACTURAS == true - SI NO TIENE - false
+    public Boolean HasFacturesVerification(Clientas01 cliente) {
+        // Obtener la lista de facturas del cliente
+        Collection<Facturaas01> facturasCliente = cliente.getFacturaas01Collection();
+
+        // Verificar si el cliente tiene facturas
+        if (facturasCliente != null && !facturasCliente.isEmpty()) {
+            // Si tiene facturas, mostrar las facturas asociadas
+            System.out.println("El client amb ID " + cliente.getIdClient() + " té aquestes factures:");
+            System.out.println("|--------------------------------------|");
+
+            for (Facturaas01 factura : facturasCliente) {
+                System.out.println("---> [" + factura.getIdFactura() + "] "
+                        + factura.getObservacions() + " | "
+                        + factura.getData() + " | "
+                        + factura.getImportTotal());
+            }
+            System.out.println("|--------------------------------------|");
+            return true;
+        } else {
+            System.out.println("El client amb ID " + cliente.getIdClient() + " no té factures associades.");
+            return false;
+        }
+    }
+        
+
+    public Boolean hasProjectsVerification(Clientas01 cliente) {
+        // Obtener la lista de proyectos del cliente
+        Collection<Projecteas01> proyectosCliente = cliente.getProjecteas01Collection();
+
+        // Verificar si el cliente tiene proyectos
+        if (proyectosCliente != null && !proyectosCliente.isEmpty()) {
+            // Si tiene proyectos, mostrar los proyectos asociados
+            System.out.println("El client amb ID " + cliente.getIdClient() + " té aquests projectes:");
+            System.out.println("|--------------------------------------|");
+
+            for (Projecteas01 proyecto : proyectosCliente) {
+                System.out.println("---> [" + proyecto.getIdProjecte() + "] "
+                        + proyecto.getDescripcio() + " | "
+                        + proyecto.getEstat() + " | ");
+            }
+            System.out.println("|--------------------------------------|");
+            return true;  
+        } else {
+            System.out.println("El client amb ID " + cliente.getIdClient() + " no té projectes associats.");
+            return false; 
+        }
     }
 
     // Eliminar un cliente

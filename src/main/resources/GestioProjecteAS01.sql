@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS FacturaAS01 (
     importTotal DOUBLE NOT NULL,
     observacions VARCHAR(255),
     FOREIGN KEY (idTasca) REFERENCES TascaAS01(idTasca),
-    FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient)
+    FOREIGN KEY (idClient) REFERENCES ClientAS01(idClient) ON DELETE CASCADE
 );
 
 -- Insertar datos predeterminados en ClientAS01
